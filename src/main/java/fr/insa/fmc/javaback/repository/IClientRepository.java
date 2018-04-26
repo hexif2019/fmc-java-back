@@ -5,7 +5,12 @@ import fr.insa.fmc.javaback.entity.Client;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ClientRepository extends CrudRepository<Client,Long> {
+import java.util.Optional;
 
-    public Client findById(long id);
+public interface IClientRepository extends CrudRepository<Client,Long> {
+
+    Optional<Client> findById(String s);
+
+    @Override
+    void delete(Client entity);
 }

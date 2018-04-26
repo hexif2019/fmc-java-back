@@ -1,7 +1,6 @@
 package fr.insa.fmc.javaback;
 
-import fr.insa.fmc.javaback.entity.Client;
-import fr.insa.fmc.javaback.repository.ClientRepository;
+import fr.insa.fmc.javaback.repository.IClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JavaBackApplication implements CommandLineRunner {
 
 	@Autowired
-	private ClientRepository repository;
+	private IClientRepository repository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(JavaBackApplication.class, args);
