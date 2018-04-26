@@ -1,6 +1,6 @@
 package fr.insa.fmc.javaback.entity;
 
-import fr.insa.fmc.javaback.model.CasierDisponibilite;
+import fr.insa.fmc.javaback.wrapper.CasierDisponibilite;
 import org.springframework.data.annotation.Id;
 
 import java.util.Queue;

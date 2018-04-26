@@ -1,4 +1,4 @@
-package fr.insa.fmc.javaback.entity;
+package fr.insa.fmc.javaback.entity.enums;
 
 public enum enumEtatCommande {
     annule,
