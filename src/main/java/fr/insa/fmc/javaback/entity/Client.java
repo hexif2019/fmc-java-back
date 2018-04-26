@@ -107,4 +107,7 @@ public class Client {
         this.prenom = prenom;
         this.mdp = mdp;
     }
+    public Client(){
+
+    }
 }

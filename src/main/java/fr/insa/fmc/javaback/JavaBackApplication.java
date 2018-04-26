@@ -6,25 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-public class JavaBackApplication implements CommandLineRunner {
+@RestController
+public class JavaBackApplication  {
 
-	@Autowired
-	private ClientRepository repository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(JavaBackApplication.class, args);
 	}
 
-	@Override
-	public void run(String[] args) throws Exception{
-		//repository.deleteAll();
-		System.out.println("123");
 
-		//repository.save(new Client("insa@lyon","yuan","ye","123"));
-		//for(Client client:repository.findAll()){
-		//	System.out.println(client);
-		//}
-	}
 }
