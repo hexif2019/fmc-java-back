@@ -1,4 +1,4 @@
-package fr.insa.fmc.javaback.model;
+package fr.insa.fmc.javaback.wrapper;
 
 import java.util.Date;
 

@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.entity;
 
+import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
