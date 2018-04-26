@@ -100,4 +100,11 @@ public class Client {
     public void setResidence(Long residence) {
         this.residence = residence;
     }
+
+    public Client(String email, String nom, String prenom, String mdp) {
+        this.email = email;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.mdp = mdp;
+    }
 }
