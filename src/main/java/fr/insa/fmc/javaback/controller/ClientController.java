@@ -48,7 +48,7 @@ public class ClientController {
         return client;
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/client/auth",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
     public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params) {
         String email = params.getEmail();
         String mdp = params.getMdp();
