@@ -15,7 +15,7 @@ public class Residence {
     private Set<Long> idClient;
     private Map<Long,Casier> casiers;
     private Set<Long> idMagasins;
-    private String vile;
+    private String ville;
     private String codePostal;
     private String img;
 
@@ -67,12 +67,12 @@ public class Residence {
         this.idMagasins = idMagasins;
     }
 
-    public String getVile() {
-        return vile;
+    public String getVille() {
+        return ville;
     }
 
-    public void setVile(String vile) {
-        this.vile = vile;
+    public void setVille(String ville) {
+        this.ville = ville;
     }
 
     public String getCodePostal() {
