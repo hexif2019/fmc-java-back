@@ -2,6 +2,7 @@ package fr.insa.fmc.javaback.controller;
 
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.ProduitsCommande;
+import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
@@ -37,12 +38,17 @@ public class CommandeController {
         //TODO: verfier userid == commande.getIdClient()
 
         commande.setId(commandeWrap.getId());
-        //commande.setEtat(commandeWrap.getEtat());
+        commande.setEtat(enumEtatCommande.valueOf(commandeWrap.getEtat()));
         commande.setPrixTotal(commandeWrap.getPrix());
-        commande.setMagasinsCommande(commandeWrap.getMagasinsCommande());
+        //TODO: verifier le prix plus loin dans la mise a jour
+        commande.setIdClient(commandeWrap.getUserid());
+
+        
+        //commande.setMagasinsCommande(commandeWrap.getMagasinsCommande());
 
 
-         //c.setEtat(commande.getEtat());
+
+        //c.setEtat(commande.getEtat());
          //Map<Long, ProduitsCommande> map = new HashMap<>();
 
         //c.setMagasinsCommande(map);
