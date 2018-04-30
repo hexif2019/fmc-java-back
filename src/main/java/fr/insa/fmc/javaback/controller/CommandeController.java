@@ -38,7 +38,7 @@ public class CommandeController {
          //Map<Long, ProduitsCommande> map = new HashMap<>();
 
         for(int i = 0; i < commande.getMagasinsCommande().length; i++){
-
+        //caca
             //map.put(i, )
         }
         //c.setMagasinsCommande(map);
