@@ -18,6 +18,7 @@ public class ProduitsCommande {
     private int largeurUnitaire;
     private int hauteurUnitaire;
     private String img;
+    private Long idProduit;
 
     public Long getId() {
         return id;
@@ -129,5 +130,13 @@ public class ProduitsCommande {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public Long getIdProduit() {
+        return idProduit;
+    }
+
+    public void setIdProduit(Long idProduit) {
+        this.idProduit = idProduit;
     }
 }

@@ -24,7 +24,7 @@ public class Commande {
     private Long idCoursier;
     private Long idClient;
     private Position positionLivraison;
-    private Map<Long, MagasinsCommande> magasinsCommande;
+    private ArrayList<MagasinsCommande> magasinsCommande;
 
     public Long getId() {
         return id;
@@ -130,11 +130,11 @@ public class Commande {
         this.positionLivraison = positionLivraison;
     }
 
-    public Map<Long, MagasinsCommande> getMagasinsCommande() {
+    public ArrayList<MagasinsCommande> getMagasinsCommande() {
         return magasinsCommande;
     }
 
-    public void setMagasinsCommande(Map<Long, MagasinsCommande> magasinsCommande) {
+    public void setMagasinsCommande(ArrayList<MagasinsCommande> magasinsCommande) {
         this.magasinsCommande = magasinsCommande;
     }
 }

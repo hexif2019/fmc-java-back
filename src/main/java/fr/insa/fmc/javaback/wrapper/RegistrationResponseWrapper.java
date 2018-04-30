@@ -1,6 +1,6 @@
 package fr.insa.fmc.javaback.wrapper;
 
-public class AuthentificationResponseWrapper {
+public class RegistrationResponseWrapper {
     private String token;
     private UserWrapper user;
 
@@ -19,6 +19,4 @@ public class AuthentificationResponseWrapper {
     public void setUser(UserWrapper user) {
         this.user = user;
     }
-
-
 }

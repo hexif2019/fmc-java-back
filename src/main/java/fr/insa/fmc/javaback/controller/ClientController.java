@@ -4,13 +4,16 @@ import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
-import fr.insa.fmc.javaback.wrapper.AuthentificationResponseWrapper;
-import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
-import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
-import fr.insa.fmc.javaback.wrapper.UserWrapper;
+import fr.insa.fmc.javaback.wrapper.*;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.rmi.registry.Registry;
 import java.util.Optional;
 
 
@@ -48,12 +51,35 @@ public class ClientController {
         return client;
     }
 
+    @RequestMapping(method=RequestMethod.POST,value="/api/register",consumes="application/json")
+    public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params){
+        String mdp = params.getMdp();
+        UserWrapper user = params.getUser();
+        String token = "blabla";
+        Client client = new Client();
+        client.setId(user.getId());
+        client.setNom(user.getNom());
+        client.setPrenom(user.getPrenom());
+        client.setEmail(user.getEmail());
+        client.setResidence(user.getResidence().getId());
+        client.setMdp(mdp);
+        clientRepository.save(client);
+        RegistrationResponseWrapper registerResponse = new RegistrationResponseWrapper();
+        registerResponse.setToken(token);
+        registerResponse.setUser(user);
+        return registerResponse;
+        //TODO:exception
+    }
+
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
-    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params) {
+    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params){
         String email = params.getEmail();
         String mdp = params.getPassword();
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
+        if(client == null) {
+            //TODO: Trouver comment fqirre une erreur 401 avec un format different de celui du json attendu
+        }
         String token = "je_suis_le_token";
         authResponse.setToken(token);
         UserWrapper user = new UserWrapper();

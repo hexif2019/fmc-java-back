@@ -1,11 +1,11 @@
 package fr.insa.fmc.javaback.wrapper;
 
 public class UserWrapper {
-    Long id;
-    String nom;
-    String prenom;
-    String email;
-    ResidenceWrapper residence;
+    private Long id;
+    private String nom;
+    private String prenom;
+    private String email;
+    private ResidenceWrapper residence;
 
     public Long getId() {
         return id;
