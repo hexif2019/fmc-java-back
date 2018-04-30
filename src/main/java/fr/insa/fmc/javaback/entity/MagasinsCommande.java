@@ -12,7 +12,6 @@ public class MagasinsCommande {
     private String description;
     private String denomination;
     private String email;
-    private String mdp;
     private Position position;
     private ArrayList<ProduitsCommande> produitsCommande;
     private Long idMagasin;
@@ -58,13 +57,7 @@ public class MagasinsCommande {
         this.email = email;
     }
 
-    public String getMdp() {
-        return mdp;
-    }
 
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
 
     public Position getPosition() {
         return position;
