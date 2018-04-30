@@ -8,6 +8,7 @@ import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
+import fr.insa.fmc.javaback.wrapper.ProduitWrapper;
 import fr.insa.fmc.javaback.wrapper.UserWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class CommandeController {
         commande.setId(commandeWrap.getId());
         commande.setEtat(enumEtatCommande.valueOf(commandeWrap.getEtat()));
         commande.setPrixTotal(commandeWrap.getPrix());
-        //TODO: verifier le prix plus loin dans la mise a jour
+        //TODO: verifier le prix plus loin dans la mise a jour, pour chaque produit par rapport a la BDD, pour le total pour chaque magasin et pour le total de la commande
         commande.setIdClient(commandeWrap.getUserid());
 
         ArrayList<MagasinsCommande> listMag = new ArrayList<MagasinsCommande>();
@@ -61,23 +62,54 @@ public class CommandeController {
             magasin.setIdMagasin(magasinWrap.getId());
             magasin.setImg(magasinWrap.getImg());
 
+            ArrayList<ProduitsCommande> listProd = new ArrayList<ProduitsCommande>();
+
             for (int j = 0; j < magasinWrap.getProduits().size(); j++) {
                 ProduitsCommande produit = new ProduitsCommande();
+                produit.setId((long) j);
+
+                ProduitWrapper produitWrap = magasinWrap.getProduits().get(j);
+
+                produit.setDenomination(produitWrap.getDenomination());
+                produit.setDescription(produitWrap.getDescription());
+                produit.setQuantite(produitWrap.getNb());
+
+                //Debut Implementation si donnee unitaire stocké dans le json
+                produit.setPrixUnitaire(produitWrap.getPrix());
+                produit.setPrixTotal(produitWrap.getPrix()*produitWrap.getNb());
+                produit.setPoidsUnitaire(produitWrap.getPoids());
+                produit.setPoidsTotal(produitWrap.getPoids()*produitWrap.getNb());
+                produit.setVolumeUnitaire(produitWrap.getVolume());
+                produit.setVolumeTotal(produitWrap.getVolume()*produitWrap.getNb());
+                //Fin Implementation si donne unitaire
+
+                produit.setLongueurUnitaire(produitWrap.getLongueur());
+                produit.setLargeurUnitaire(produitWrap.getLargeur());
+                produit.setHauteurUnitaire(produitWrap.getHauteur());
+
+                produit.setImg(produitWrap.getImg());
+
+                produit.setIdProduit(produitWrap.getId());
+
+                listProd.add(produit);
+
                 //TODO: finir d ajouter element produit et l ajouter a la liste
             }
+            magasin.setProduitsCommande(listProd);
+
             listMag.add(magasin);
         }
 
         commande.setMagasinsCommande(listMag);
 
-
+        commandeRepository.save(commande);
 
         //c.setEtat(commande.getEtat());
          //Map<Long, ProduitsCommande> map = new HashMap<>();
 
         //c.setMagasinsCommande(map);
-
-        return "todo";
+        String statue = "ok";
+        return statue;
     }
 
 }
