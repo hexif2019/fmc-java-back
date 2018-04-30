@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.entity;
 
+import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
@@ -15,6 +16,15 @@ public class MagasinsCommande {
     private ArrayList<ProduitsCommande> produitsCommande;
     private Long idMagasin;
     private String img;
+    private enumEtatMagasinCommande etatMagasinCommande;
+
+    public enumEtatMagasinCommande getEtatMagasinCommande() {
+        return etatMagasinCommande;
+    }
+
+    public void setEtatMagasinCommande(enumEtatMagasinCommande etatMagasinCommande) {
+        this.etatMagasinCommande = etatMagasinCommande;
+    }
 
     public Long getId() {
         return id;
