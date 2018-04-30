@@ -2,6 +2,7 @@ package fr.insa.fmc.javaback.entity;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MagasinsCommande {
@@ -13,7 +14,7 @@ public class MagasinsCommande {
     private String email;
     private String mdp;
     private Position position;
-    private Map<Long, Produit> produitsCommande;
+    private ArrayList<ProduitsCommande> produitsCommande;
     private Long idMagasin;
     private String img;
 
@@ -73,11 +74,11 @@ public class MagasinsCommande {
         this.position = position;
     }
 
-    public Map<Long, Produit> getProduitsCommande() {
+    public ArrayList<ProduitsCommande> getProduitsCommande() {
         return produitsCommande;
     }
 
-    public void setProduitsCommande(Map<Long, Produit> produitsCommande) {
+    public void setProduitsCommande(ArrayList<ProduitsCommande> produitsCommande) {
         this.produitsCommande = produitsCommande;
     }
 
