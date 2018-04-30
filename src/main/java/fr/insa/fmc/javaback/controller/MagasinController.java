@@ -11,10 +11,7 @@ import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
 import fr.insa.fmc.javaback.wrapper.MarchandWrapper;
 import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
