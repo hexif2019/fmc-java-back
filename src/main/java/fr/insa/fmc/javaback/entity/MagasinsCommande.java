@@ -3,7 +3,6 @@ package fr.insa.fmc.javaback.entity;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MagasinsCommande {
     @Id

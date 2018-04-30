@@ -1,16 +1,12 @@
 package fr.insa.fmc.javaback.repository;
+
 import fr.insa.fmc.javaback.entity.Client;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-//import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.repository.query.Param;
 
-import javax.swing.text.html.parser.Entity;
+//import org.springframework.data.mongodb.repository.Query;
 
 public class ClientRepositoryCustomImpl implements ClientRepositoryCustom {
 

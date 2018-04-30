@@ -1,6 +1,5 @@
 package fr.insa.fmc.javaback.controller;
 
-import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Produit;
 import fr.insa.fmc.javaback.entity.Residence;
@@ -12,7 +11,10 @@ import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
 import fr.insa.fmc.javaback.wrapper.MarchandWrapper;
 import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 

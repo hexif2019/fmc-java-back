@@ -14,6 +14,14 @@ public class ProduitWrapper {
     private int largeur;
     private int hauteur;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getDenomination() {
         return denomination;
     }

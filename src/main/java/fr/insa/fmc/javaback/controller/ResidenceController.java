@@ -1,15 +1,16 @@
 package fr.insa.fmc.javaback.controller;
 
-import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Set;
 
 
 @RestController

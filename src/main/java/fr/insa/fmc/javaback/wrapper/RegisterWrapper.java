@@ -1,7 +1,5 @@
 package fr.insa.fmc.javaback.wrapper;
 
-import fr.insa.fmc.javaback.entity.Client;
-
 public class RegisterWrapper {
     private UserWrapper user;
     private String mdp;

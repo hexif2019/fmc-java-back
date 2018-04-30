@@ -5,15 +5,9 @@ import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import fr.insa.fmc.javaback.wrapper.*;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.rmi.registry.Registry;
 import java.util.Optional;
 
 
@@ -78,7 +72,7 @@ public class ClientController {
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
-            //TODO: Trouver comment fqirre une erreur 401 avec un format different de celui du json attendu
+            throw new NullPointerException();
         }
         String token = "je_suis_le_token";
         authResponse.setToken(token);
