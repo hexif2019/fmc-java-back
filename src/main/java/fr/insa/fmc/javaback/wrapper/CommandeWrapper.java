@@ -2,13 +2,14 @@ package fr.insa.fmc.javaback.wrapper;
 
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class CommandeWrapper {
     private Long id;
     private String etat;
     private int prix;
-    private MagasinsCommande[] magasinsCommande;
+    private ArrayList<MagasinsCommande> magasinsCommande;
     private Long userid;
     private Optional<UserWrapper> user;
 
@@ -36,11 +37,11 @@ public class CommandeWrapper {
         this.prix = prix;
     }
 
-    public MagasinsCommande[] getMagasinsCommande() {
+    public ArrayList<MagasinsCommande> getMagasinsCommande() {
         return magasinsCommande;
     }
 
-    public void setMagasinsCommande(MagasinsCommande[] magasinsCommande) {
+    public void setMagasinsCommande(ArrayList<MagasinsCommande> magasinsCommande) {
         this.magasinsCommande = magasinsCommande;
     }
 

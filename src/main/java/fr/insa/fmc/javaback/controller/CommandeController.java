@@ -28,19 +28,23 @@ public class CommandeController {
     }
 
     @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/{userid}")
-    public String updatePanier(@RequestBody CommandeWrapper commande){
-        Long userid = commande.getUserid();
-        Optional<Commande> commandeOpt = commandeRepository.findById(commande.getId());
-        //TODO: verifier etat commande et correspondance id user BDD et json
-        //TODO: verfier userid == commandeOpt.get().getIdClient()
-         Commande c = commandeOpt.get();
+    public String updatePanier(@RequestBody CommandeWrapper commandeWrap){
+        Long userid = commandeWrap.getUserid();
+        Optional<Commande> commandeOpt = commandeRepository.findById(commandeWrap.getId());
+
+        Commande commande = commandeOpt.get();
+        //TODO: verifier etat commande (en BDD et celle json) et correspondance id user BDD et json
+        //TODO: verfier userid == commande.getIdClient()
+
+        commande.setId(commandeWrap.getId());
+        //commande.setEtat(commandeWrap.getEtat());
+        commande.setPrixTotal(commandeWrap.getPrix());
+        commande.setMagasinsCommande(commandeWrap.getMagasinsCommande());
+
+
          //c.setEtat(commande.getEtat());
          //Map<Long, ProduitsCommande> map = new HashMap<>();
 
-        for(int i = 0; i < commande.getMagasinsCommande().length; i++){
-        //caca
-            //map.put(i, )
-        }
         //c.setMagasinsCommande(map);
 
         return "todo";
