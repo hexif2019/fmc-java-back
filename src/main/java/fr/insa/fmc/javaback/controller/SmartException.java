@@ -23,7 +23,7 @@ public class SmartException {
 
         ExceptionMessage message = new ExceptionMessage((LocalDateTime.now().format(formatter)), (request.getRequestURI().toString() + "?" + request.getQueryString())
                 , (exception.getClass().getName())
-                ,("Tu veux éviter les null"));
+                ,("Message d'erreur d'ali à avoir"));
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
