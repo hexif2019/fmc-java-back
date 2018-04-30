@@ -1,14 +1,10 @@
 package fr.insa.fmc.javaback.repository;
 
-import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Repository
 public interface ResidenceRepository extends CrudRepository<Residence,Long>, ClientRepositoryCustom {

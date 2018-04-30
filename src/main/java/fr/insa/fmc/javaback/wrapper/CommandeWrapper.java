@@ -1,7 +1,5 @@
 package fr.insa.fmc.javaback.wrapper;
 
-import fr.insa.fmc.javaback.entity.MagasinsCommande;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
