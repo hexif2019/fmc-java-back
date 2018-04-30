@@ -2,6 +2,7 @@ package fr.insa.fmc.javaback.wrapper;
 
 public class ProduitWrapper {
 
+    private Long id;
     private String denomination;
     private String description;
     private int nb;
