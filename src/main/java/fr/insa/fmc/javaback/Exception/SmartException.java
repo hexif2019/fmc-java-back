@@ -1,9 +1,6 @@
-package fr.insa.fmc.javaback.controller;
+package fr.insa.fmc.javaback.Exception;
 
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
-import fr.insa.fmc.javaback.Exception.ExceptionMessage;
-import org.omg.IOP.ExceptionDetailMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +18,7 @@ public class SmartException {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ExceptionMessage> nullPointerExceptionHandler(HttpServletRequest request, NullPointerException exception) {
 
-        ExceptionMessage message = new ExceptionMessage((LocalDateTime.now().format(formatter)), (request.getRequestURI().toString() + "?" + request.getQueryString())
+        ExceptionMessage message = new ExceptionMessage((LocalDateTime.now().format(formatter)), (request.getRequestURI() + "?" + request.getQueryString())
                 , (exception.getClass().getName())
                 ,("Message d'erreur d'ali à avoir"));
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
