@@ -2,7 +2,7 @@ package fr.insa.fmc.javaback.wrapper;
 
 public class AuthentificationWrapper {
     private String email;
-    private String mdp;
+    private String password;
 
     public String getEmail() {
         return email;
@@ -12,11 +12,11 @@ public class AuthentificationWrapper {
         this.email = email;
     }
 
-    public String getMdp() {
-        return mdp;
+    public String getPassword() {
+        return password;
     }
 
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

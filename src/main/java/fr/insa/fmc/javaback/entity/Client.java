@@ -20,6 +20,7 @@ public class Client {
     private Set<Long> commandesFinis;
     private Map<Long ,Commande> commandesCours;
     private Long residence;
+    private Long commandeEnCreation;
 
     public Long getId() {
         return id;
@@ -100,6 +101,15 @@ public class Client {
     public void setResidence(Long residence) {
         this.residence = residence;
     }
+
+    public Long getCommandesEnCreation() {
+        return commandeEnCreation;
+    }
+
+    public void setCommandeEnCreation(Long commandeEnCreation) {
+        this.commandeEnCreation = commandeEnCreation;
+    }
+
 
     public Client(String email, String nom, String prenom, String mdp) {
         this.email = email;

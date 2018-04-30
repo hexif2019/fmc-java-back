@@ -1,21 +1,20 @@
-package fr.insa.fmc.javaback.entity;
+package fr.insa.fmc.javaback.wrapper;
 
-import org.springframework.data.annotation.Id;
+import fr.insa.fmc.javaback.entity.Position;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-public class MagasinsCommande {
-    @Id
+public class MagasinWrapper {
     private Long id;
     private String adresse;
     private String description;
     private String denomination;
     private String email;
-    private Position position;
-    private ArrayList<ProduitsCommande> produitsCommande;
-    private Long idMagasin;
+    private ArrayList<ProduitWrapper> produits;
+    private String ville;
+    private String codePostal;
     private String img;
+    private Position position;
 
     public Long getId() {
         return id;
@@ -57,30 +56,28 @@ public class MagasinsCommande {
         this.email = email;
     }
 
-
-
-    public Position getPosition() {
-        return position;
+    public ArrayList<ProduitWrapper> getProduits() {
+        return produits;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setProduits(ArrayList<ProduitWrapper> produits) {
+        this.produits = produits;
     }
 
-    public ArrayList<ProduitsCommande> getProduitsCommande() {
-        return produitsCommande;
+    public String getVille() {
+        return ville;
     }
 
-    public void setProduitsCommande(ArrayList<ProduitsCommande> produitsCommande) {
-        this.produitsCommande = produitsCommande;
+    public void setVille(String ville) {
+        this.ville = ville;
     }
 
-    public Long getIdMagasin() {
-        return idMagasin;
+    public String getCodePostal() {
+        return codePostal;
     }
 
-    public void setIdMagasin(Long idMagasin) {
-        this.idMagasin = idMagasin;
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
     }
 
     public String getImg() {
@@ -89,5 +86,13 @@ public class MagasinsCommande {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

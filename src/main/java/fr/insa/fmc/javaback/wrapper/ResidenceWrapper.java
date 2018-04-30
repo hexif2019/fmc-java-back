@@ -1,10 +1,10 @@
 package fr.insa.fmc.javaback.wrapper;
 
 public class ResidenceWrapper {
-    Long id;
-    String adresse;
-    String codePostal;
-    String ville;
+    private Long id;
+    private String adresse;
+    private String codePostal;
+    private String ville;
 
     public Long getId() {
         return id;
