@@ -51,7 +51,7 @@ public class ClientController {
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
     public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params) {
         String email = params.getEmail();
-        String mdp = params.getMdp();
+        String mdp = params.getPassword();
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         String token = "je_suis_le_token";
@@ -63,13 +63,15 @@ public class ClientController {
         user.setPrenom(client.getPrenom());
         ResidenceWrapper residenceWarp = new ResidenceWrapper();
         Optional<Residence> residence = residenceRepository.findById(client.getResidence());
-        residenceWarp.setId(residence.get().getId());
-        residenceWarp.setAdresse(residence.get().getAdresse());
-        residenceWarp.setCodePostal(residence.get().getCodePostal());
-        residenceWarp.setVille(residence.get().getVille());
-        user.setResidence(residenceWarp);
-        authResponse.setUser(user);
-        return authResponse;
+        if(residence.isPresent()){
+            residenceWarp.setId(residence.get().getId());
+            residenceWarp.setAdresse(residence.get().getAdresse());
+            residenceWarp.setCodePostal(residence.get().getCodePostal());
+            residenceWarp.setVille(residence.get().getVille());
+            user.setResidence(residenceWarp);
+            authResponse.setUser(user);
+            return authResponse;
+        }else return null;
     }
 }
 
