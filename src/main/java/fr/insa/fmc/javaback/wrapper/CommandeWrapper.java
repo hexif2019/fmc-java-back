@@ -9,7 +9,7 @@ public class CommandeWrapper {
     private Long id;
     private String etat;
     private int prix;
-    private ArrayList<MagasinWrapper> magasinsWrap;
+    private ArrayList<MagasinWrapper> magasins;
     private Long userid;
     private Optional<UserWrapper> user;
 
@@ -37,12 +37,12 @@ public class CommandeWrapper {
         this.prix = prix;
     }
 
-    public ArrayList<MagasinWrapper> getMagasinsCommande() {
-        return magasinsWrap;
+    public ArrayList<MagasinWrapper> getMagasins() {
+        return magasins;
     }
 
-    public void setMagasinsCommande(ArrayList<MagasinWrapper> magasinsCommande) {
-        this.magasinsWrap = magasinsCommande;
+    public void setMagasins(ArrayList<MagasinWrapper> magasins) {
+        this.magasins = magasins;
     }
 
     public Long getUserid() {

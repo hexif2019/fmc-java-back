@@ -43,7 +43,7 @@ public class CommandeController {
         //TODO: verifier le prix plus loin dans la mise a jour
         commande.setIdClient(commandeWrap.getUserid());
 
-        
+
         //commande.setMagasinsCommande(commandeWrap.getMagasinsCommande());
 
 
