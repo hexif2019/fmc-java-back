@@ -1,8 +1,8 @@
 package fr.insa.fmc.javaback.wrapper;
 
 public class AuthentificationResponseWrapper {
-    String token;
-    UserWrapper user;
+    private String token;
+    private UserWrapper user;
 
     public String getToken() {
         return token;
