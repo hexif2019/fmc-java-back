@@ -17,6 +17,24 @@ public class MagasinsCommande {
     private Long idMagasin;
     private String img;
     private enumEtatMagasinCommande etatMagasinCommande;
+    private String ville;
+    private String codePostal;
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
 
     public enumEtatMagasinCommande getEtatMagasinCommande() {
         return etatMagasinCommande;
