@@ -21,7 +21,6 @@ public class MagasinController {
     @Autowired
     ResidenceRepository residenceRepository;
 
-
     @RequestMapping(method=RequestMethod.POST, value="/magasin")
     public Magasin saveMagasin(@RequestBody Magasin magasin) {
         magasinRepository.save(magasin);
@@ -32,10 +31,10 @@ public class MagasinController {
     public Iterable<Produit> findProduitByMagasinId(@PathVariable Long id){
         Optional <Magasin> m = magasinRepository.findById(id);
         Magasin magasin = new Magasin();
-        if(magasin==null){
-            //TODO:Exception
-        } else {
+        if(m.isPresent()){
             magasin = m.get();
+        } else {
+            //todo exception
         }
         return magasin.getProduitsList().values();
     }
@@ -67,6 +66,7 @@ public class MagasinController {
         String mdp = params.getPassword();
         Magasin magasin = magasinRepository.connectionQuery(email,mdp);
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
+        //todo : générer un vrai token
         String token = "je suis le token";
         authResponse.setToken(token);
         MarchandWrapper marchand = new MarchandWrapper();

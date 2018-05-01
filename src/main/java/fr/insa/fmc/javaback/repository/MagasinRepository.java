@@ -9,5 +9,4 @@ public interface MagasinRepository extends CrudRepository<Magasin,Long>,MagasinR
     @Override
     Optional<Magasin> findById(Long id);
 
-
 }

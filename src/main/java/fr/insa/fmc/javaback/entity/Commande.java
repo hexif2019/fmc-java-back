@@ -14,9 +14,9 @@ public class Commande {
     private Date heureCommande;
     private Date heureLivraison;
     private Date heureRecuperationParClient;
-    private int poidsTotal;
-    private int prixTotal;
-    private int volumeTotal;
+    private Double poidsTotal;
+    private Double prixTotal;
+    private Double volumeTotal;
     private enumEtatCommande etat;
     private Long idResidence;
     private ArrayList<Long> casiers;
@@ -24,6 +24,25 @@ public class Commande {
     private Long idClient;
     private Position positionLivraison;
     private ArrayList<MagasinsCommande> magasinsCommande;
+    private String paymentId;
+    private String authorizationId;
+
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public String getAuthorizationId() {
+        return authorizationId;
+    }
+
+    public void setAuthorizationId(String authorizationId) {
+        this.authorizationId = authorizationId;
+    }
 
     public Long getId() {
         return id;
@@ -57,27 +76,27 @@ public class Commande {
         this.heureRecuperationParClient = heureRecuperationParClient;
     }
 
-    public int getPoidsTotal() {
+    public Double getPoidsTotal() {
         return poidsTotal;
     }
 
-    public void setPoidsTotal(int poidsTotal) {
+    public void setPoidsTotal(Double poidsTotal) {
         this.poidsTotal = poidsTotal;
     }
 
-    public int getPrixTotal() {
+    public Double getPrixTotal() {
         return prixTotal;
     }
 
-    public void setPrixTotal(int prixTotal) {
+    public void setPrixTotal(Double prixTotal) {
         this.prixTotal = prixTotal;
     }
 
-    public int getVolumeTotal() {
+    public Double getVolumeTotal() {
         return volumeTotal;
     }
 
-    public void setVolumeTotal(int volumeTotal) {
+    public void setVolumeTotal(Double volumeTotal) {
         this.volumeTotal = volumeTotal;
     }
 

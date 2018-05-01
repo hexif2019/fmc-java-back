@@ -14,6 +14,8 @@ public interface CommandeRepository extends CrudRepository<Commande,Long>{
     @Override
     Optional<Commande> findById(Long id);
 
+    @Override
+    <S extends Commande> S save(S entity);
 }
 
 
