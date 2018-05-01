@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.Exception.SmartException;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
@@ -66,13 +67,14 @@ public class ClientController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
-    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params){
+    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws NullPointerException{
         String email = params.getEmail();
         String mdp = params.getPassword();
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
             throw new NullPointerException();
+
         }
         String token = "je_suis_le_token";
         authResponse.setToken(token);
@@ -89,9 +91,10 @@ public class ClientController {
             residenceWarp.setCodePostal(residence.get().getCodePostal());
             residenceWarp.setVille(residence.get().getVille());
             user.setResidence(residenceWarp);
-            authResponse.setUser(user);
-            return authResponse;
-        }else return null;
+        }
+        authResponse.setUser(user);
+        return authResponse;
+
     }
 }
 

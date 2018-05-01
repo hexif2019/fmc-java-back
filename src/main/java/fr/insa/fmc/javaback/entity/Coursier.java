@@ -17,6 +17,8 @@ public class Coursier {
     private Map<Long,Commande> commandesEnCours;
     private Set<Long> listResidences;
     private Set<Long> commandesFinis;
+    private String nom;
+    private String prenom;
 
     public Long getId() {
         return id;
@@ -80,5 +82,21 @@ public class Coursier {
 
     public void setCommandesFinis(Set<Long> commandesFinis) {
         this.commandesFinis = commandesFinis;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 }
