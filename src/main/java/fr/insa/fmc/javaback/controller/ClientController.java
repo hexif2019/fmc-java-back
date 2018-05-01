@@ -47,7 +47,7 @@ public class ClientController {
 
     @RequestMapping(method=RequestMethod.POST,value="/api/register",consumes="application/json")
     public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params){
-        String mdp = params.getMdp();
+        String mdp = params.getPassword();
         UserWrapper user = params.getUser();
         String token = "blabla";
         Client client = new Client();

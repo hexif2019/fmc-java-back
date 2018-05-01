@@ -6,10 +6,7 @@ import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
-import fr.insa.fmc.javaback.wrapper.AuthentificationMarchandResponseWrapper;
-import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
-import fr.insa.fmc.javaback.wrapper.MarchandWrapper;
-import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
+import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +31,27 @@ public class MagasinController {
             magasin = m.get();
         }
         return magasin.getProduitsList().values();
+    }
+
+    @RequestMapping(method=RequestMethod.POST,value="api/registerMarchand",consumes="application/json")
+    public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params){
+        String mdp = params.getPassword();
+        MarchandWrapper marchand = params.getMarchand();
+        String token = "blabla";
+        Magasin magasin = new Magasin();
+        magasin.setId(marchand.getId());
+        magasin.setAdresse(marchand.getAdresse());
+        magasin.setDescription(marchand.getDescription());
+        magasin.setEmail(marchand.getEmail());
+        magasin.setMdp(mdp);
+        magasin.setVille(marchand.getVille());
+        magasin.setCodePostal(marchand.getCodePostal());
+        magasinRepository.save(magasin);
+        RegistrationMarchandResponseWrapper registrationMarchandResponse = new RegistrationMarchandResponseWrapper();
+        registrationMarchandResponse.setToken(token);
+        registrationMarchandResponse.setMarchand(marchand);
+        return registrationMarchandResponse;
+
     }
 
     @RequestMapping(method=RequestMethod.POST,value="api/authenticateMarchand",consumes="application/json")
