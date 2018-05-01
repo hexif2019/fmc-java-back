@@ -26,6 +26,21 @@ public class SmartException extends ResponseEntityExceptionHandler {
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return MessageDeRetour;
     }
+    @ResponseBody
+    @ExceptionHandler(WrongAddressException.class)
+    public ResponseEntity<ExceptionMessage> wrongAddressExceptionHandler(HttpServletRequest request, WrongAddressException exception) {
+
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter));
+        ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        return MessageDeRetour;
+    }
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionMessage> genericExceptionHandler(HttpServletRequest request, Exception exception) {
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter));
+        ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
+        return MessageDeRetour;
+    }
 
 
 }
