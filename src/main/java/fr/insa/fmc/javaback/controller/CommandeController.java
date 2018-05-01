@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.ProduitsCommande;
@@ -11,11 +12,9 @@ import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
 import fr.insa.fmc.javaback.wrapper.ProduitWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -28,10 +27,50 @@ public class CommandeController {
     @Autowired
     CommandeRepository commandeRepository;
 
+    @RequestMapping(method=RequestMethod.POST, value="/client")
+    public Commande saveCommande(@RequestBody Commande commande) {
+        commandeRepository.save(commande);
+
+        return commande;
+    }
+
     @RequestMapping(method= RequestMethod.GET, value="/commande")
     public Iterable<Commande> findResidence() {
         return commandeRepository.findAll();
     }
+
+    @RequestMapping(method=RequestMethod.GET,value="/api/getPanier/{userid}")
+    public CommandeWrapper getPanier(@PathVariable Long id) {
+
+        //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
+        Client client = clientRepository.findById(id).get();
+
+        Commande commande = commandeRepository.findById(client.getCommandesEnCreation()).get();
+
+        CommandeWrapper commandeWrap = new CommandeWrapper(commande);
+
+        return commandeWrap;
+    }
+
+    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesEnCour/{userid}")
+    public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable Long id) {
+
+        //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
+        Client client = clientRepository.findById(id).get();
+
+        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<CommandeWrapper>();
+
+        //verif si liste vide
+
+        ArrayList<Commande> commandesList = new ArrayList<Commande>(client.getCommandesCours().values());
+
+        for(int i = 0; i < commandesList.size(); i++) {
+            commandeWrapList.add(new CommandeWrapper(commandesList.get(i)));
+        }
+
+        return commandeWrapList;
+    }
+
 
     @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/{userid}")
     public String updatePanier(@RequestBody CommandeWrapper commandeWrap){
@@ -64,6 +103,8 @@ public class CommandeController {
             magasin.setIdMagasin(magasinWrap.getId());
             magasin.setImg(magasinWrap.getImg());
             magasin.setEtatMagasinCommande(enumEtatMagasinCommande.EDITION);
+            magasin.setVille(magasinWrap.getVille());
+            magasin.setCodePostal(magasinWrap.getCodePostal());
 
             ArrayList<ProduitsCommande> listProd = new ArrayList<ProduitsCommande>();
 

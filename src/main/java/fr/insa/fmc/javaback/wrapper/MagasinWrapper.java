@@ -1,5 +1,7 @@
 package fr.insa.fmc.javaback.wrapper;
 
+import fr.insa.fmc.javaback.entity.Magasin;
+import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.Position;
 
 import java.util.ArrayList;
@@ -15,6 +17,21 @@ public class MagasinWrapper {
     private String codePostal;
     private String img;
     private Position position;
+
+    public MagasinWrapper(MagasinsCommande magasinsCommande) {
+        this.id = magasinsCommande.getIdMagasin();
+        this.adresse = magasinsCommande.getAdresse();
+        this.description = magasinsCommande.getDescription();
+        this.denomination = magasinsCommande.getDenomination();
+        this.email = magasinsCommande.getEmail();
+        for(int i = 0; i < magasinsCommande.getProduitsCommande().size(); i++) {
+            this.produits.add(new ProduitWrapper(magasinsCommande.getProduitsCommande().get(i)));
+        }
+        this.ville = magasinsCommande.getVille();
+        this.codePostal = magasinsCommande.getCodePostal();
+        this.img = magasinsCommande.getImg();
+        this.position = magasinsCommande.getPosition();
+    }
 
     public Long getId() {
         return id;
