@@ -4,6 +4,7 @@ import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.ProduitsCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
+import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
@@ -39,6 +40,7 @@ public class CommandeController {
 
         Commande commande = commandeOpt.get();
         //TODO: verifier etat commande (en BDD et celle json) et correspondance id user BDD et json
+        commande.setEtat(enumEtatCommande.EDITION);
         //TODO: verfier userid == commande.getIdClient()
 
         commande.setId(commandeWrap.getId());
@@ -61,6 +63,7 @@ public class CommandeController {
             magasin.setPosition(magasinWrap.getPosition());
             magasin.setIdMagasin(magasinWrap.getId());
             magasin.setImg(magasinWrap.getImg());
+            magasin.setEtatMagasinCommande(enumEtatMagasinCommande.EDITION);
 
             ArrayList<ProduitsCommande> listProd = new ArrayList<ProduitsCommande>();
 
