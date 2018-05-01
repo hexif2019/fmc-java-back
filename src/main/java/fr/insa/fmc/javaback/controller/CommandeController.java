@@ -27,7 +27,7 @@ public class CommandeController {
     @Autowired
     CommandeRepository commandeRepository;
 
-    @RequestMapping(method=RequestMethod.POST, value="/client")
+    @RequestMapping(method=RequestMethod.POST, value="/commande")
     public Commande saveCommande(@RequestBody Commande commande) {
         commandeRepository.save(commande);
 
@@ -71,12 +71,59 @@ public class CommandeController {
         return commandeWrapList;
     }
 
+    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesArchiver/{userid}")
+    public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable Long id) {
+        //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
+        Client client = clientRepository.findById(id).get();
+
+        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<CommandeWrapper>();
+
+        //verif si liste vide ce que ca fait
+
+        //ArrayList<Long> commandesList = new ArrayList<Long>(client);
+
+        for(Long i : client.getCommandesFinis()) {
+            //Verifier si probleme requete, commande non existante en base
+            commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(i).get()));
+        }
+
+        return commandeWrapList;
+
+    }
+
+    @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{userid}")
+    public ArrayList<CommandeWrapper> getLastCommandes(@PathVariable Long id) {
+        //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
+        Client client = clientRepository.findById(id).get();
+
+        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<CommandeWrapper>();
+
+        //verif si liste vide ce que ca fait
+
+        //ArrayList<Long> commandesList = new ArrayList<Long>(client);
+
+        ArrayList<Long> lastCommandesList = new ArrayList<Long>(client.getCommandesFinis());
+
+        for(long i = lastCommandesList.size()-1; i >=0 && i >= lastCommandesList.size()-3; i--) {
+            commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(i).get()));
+        }
+
+        return commandeWrapList;
+
+    }
+
 
     @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/{userid}")
     public String updatePanier(@RequestBody CommandeWrapper commandeWrap){
         Long userid = commandeWrap.getUserid();
+
         Optional<Commande> commandeOpt = commandeRepository.findById(commandeWrap.getId());
 
+        //ATTENTION, si requete donne du null, remplacer
+        //        Commande commande = commandeOpt.get();
+        //      par
+        //        Commande commande = new Commande();
+        //Simple if(commandeOpt.get() == null) est-il suffisant ?
         Commande commande = commandeOpt.get();
         //TODO: verifier etat commande (en BDD et celle json) et correspondance id user BDD et json
         commande.setEtat(enumEtatCommande.EDITION);
