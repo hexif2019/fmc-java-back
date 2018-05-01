@@ -73,7 +73,7 @@ public class ClientController {
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
-            System.out.println("caca");
+            throw new NullPointerException();
 
         }
         String token = "je_suis_le_token";
