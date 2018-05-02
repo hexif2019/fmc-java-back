@@ -22,7 +22,7 @@ public class TokenGenerationService {
 
     public static String GenerateToken(){
         UUID id = UUID.randomUUID();
-        System.out.println("UUID generated with timestamp : "+id.timestamp());
+        //System.out.println("UUID generated with timestamp : "+id.timestamp());
         return id.toString().replace("-",".");
     }
 }

@@ -55,7 +55,7 @@ public class ResidenceController {
         return "";
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getMagasinsOfResidence/{residenceid}")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getMagasinsOfResidence/{id}")
     public ArrayList<MagasinWrapper> findNearMagasinsByResidenceId(@PathVariable String id) throws Exception {
         Optional<Residence> residenceOpt = residenceRepository.findById(id);
         Residence residence = new Residence();

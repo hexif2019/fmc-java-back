@@ -63,7 +63,7 @@ public class CousierController {
         return "";
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/getCommandesEnCour/{userid}")
+    @RequestMapping(method=RequestMethod.POST,value="api/livreur/getCommandesEnCour/{coursierId}")
     public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String coursierId){
         Optional<Coursier> coursier = coursierRepository.findById(coursierId);
         if(!coursier.isPresent())
