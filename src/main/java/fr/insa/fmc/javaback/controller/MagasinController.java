@@ -21,6 +21,11 @@ public class MagasinController {
     @Autowired
     ResidenceRepository residenceRepository;
 
+    @RequestMapping(method=RequestMethod.GET, value="/magasin")
+    public Iterable<Magasin> findClient() {
+        return magasinRepository.findAll();
+    }
+
     @RequestMapping(method=RequestMethod.POST, value="/magasin")
     public Magasin saveMagasin(@RequestBody Magasin magasin) {
         magasinRepository.save(magasin);
