@@ -19,7 +19,7 @@ public class Commande {
     private int volumeTotal;
     private enumEtatCommande etat;
     private String idResidence;
-    private String casiers;
+    private ArrayList<String> casiers;
     private String idCoursier;
     private String idClient;
     private Position positionLivraison;
@@ -99,11 +99,11 @@ public class Commande {
         this.idResidence = idResidence;
     }
 
-    public String getCasiers() {
+    public ArrayList<String> getCasiers() {
         return casiers;
     }
 
-    public void setCasiers(String casiers) {
+    public void setCasiers(ArrayList<String> casiers) {
         this.casiers = casiers;
     }
 
