@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.entity;
 
+import fr.insa.fmc.javaback.wrapper.ProduitWrapper;
 import org.springframework.data.annotation.Id;
 
 public class Produit {
@@ -94,4 +95,20 @@ public class Produit {
     public void setImg(String img) {
         this.img = img;
     }
+
+    public Produit(ProduitWrapper produitWrap){
+        this.denomination = produitWrap.getDenomination();
+        this.description = produitWrap.getDescription();
+        this.prix = produitWrap.getPrix();
+        this.poids = produitWrap.getPoids();
+        this.volume = produitWrap.getVolume();
+        this.longeur = produitWrap.getLongueur();
+        this.largeur = produitWrap.getLargeur();
+        this.hauteur = produitWrap.getHauteur();
+        this.img = produitWrap.getImg();
+    }
+
+    public Produit() {}
+
+
 }

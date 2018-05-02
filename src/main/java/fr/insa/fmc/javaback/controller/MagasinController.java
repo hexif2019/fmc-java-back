@@ -100,4 +100,55 @@ public class MagasinController {
         authResponse.setMarchand(marchand);
         return authResponse;
     }
+
+    @RequestMapping(method=RequestMethod.POST,value="api/updateproduit",consumes="application/json")
+    public String updateProduit(@RequestBody ProduitMagWrapper params) {
+        String magasinId = params.getIdMagasin();
+
+        Optional<Magasin> magasinOpt = magasinRepository.findById(magasinId);
+
+        if(!magasinOpt.isPresent())
+            throw new NullPointerException("Le magasin est introuvable");
+
+        Magasin magasin = magasinOpt.get();
+
+        ProduitWrapper produitWrap = params.getProduit();
+
+        Produit product = new Produit();
+
+        if(params.getProduit().getId() == null){
+            product = new Produit(produitWrap);
+            String token = "1";
+            int i = 1;
+            while(magasin.getProduitsList().get(token) != null) {
+                i++;
+                token = String.valueOf(i);
+            }
+            //TODO: getToken
+            product.setId(token);
+        } else {
+            product = magasin.getProduitsList().get(params.getProduit().getId());
+
+
+            if(product == null)
+                throw new NullPointerException("Aucun produit avec cet ID n est present dans le magasin");
+
+            product.setDenomination(produitWrap.getDenomination());
+            product.setDescription(produitWrap.getDescription());
+            product.setPrix(produitWrap.getPrix());
+            product.setPoids(produitWrap.getPoids());
+            product.setImg(produitWrap.getImg());
+            product.setVolume(produitWrap.getVolume());
+            product.setLongeur(produitWrap.getLongueur());
+            product.setLargeur(produitWrap.getLargeur());
+            product.setHauteur(produitWrap.getHauteur());
+        }
+
+        magasin.addProduit(product);
+
+        magasinRepository.save(magasin);
+
+
+        return "ok";
+    }
 }

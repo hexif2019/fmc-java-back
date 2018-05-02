@@ -107,4 +107,8 @@ public class Magasin {
     public void setImg(String img) {
         this.img = img;
     }
+
+    public void addProduit(Produit produit){
+        produitsList.put(produit.getId(), produit);
+    }
 }
