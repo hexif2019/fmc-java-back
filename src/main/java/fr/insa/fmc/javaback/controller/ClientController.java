@@ -31,48 +31,57 @@ public class ClientController {
 
         return client;
     }
+    @RequestMapping(method=RequestMethod.DELETE, value="/client")
+    public String deleteAllClient() {
+        clientRepository.deleteAll();
+        //Optional<Client> client = clientRepository.findById(id);
+        //clientRepository.delete(client);
+        return "";
+    }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/client/{id}")
-    public String deleteClientById(@PathVariable Long id) {
+    public String deleteClientById(@PathVariable String id) {
         clientRepository.deleteById(id);
         //Optional<Client> client = clientRepository.findById(id);
         //clientRepository.delete(client);
         return "";
     }
     @RequestMapping(method=RequestMethod.GET, value="/client/{id}")
-    public Optional<Client> findClientById(@PathVariable Long id) {
+    public Optional<Client> findClientById(@PathVariable String id) {
         Optional<Client> client = clientRepository.findById(id);
         return client;
     }
 
     @RequestMapping(method=RequestMethod.POST,value="/api/register",consumes="application/json")
     public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params){
-        String mdp = params.getMdp();
+        String mdp = params.getPassword();
         UserWrapper user = params.getUser();
         String token = "blabla";
         Client client = new Client();
-        client.setId(user.getId());
+        //client.setId(user.getId());
         client.setNom(user.getNom());
         client.setPrenom(user.getPrenom());
-        client.setEmail(user.getEmail());
+        client.setEmail(user.getEmail());//TODO: verifier si il y a le meme adresse
         client.setResidence(user.getResidence().getId());
         client.setMdp(mdp);
         clientRepository.save(client);
         RegistrationResponseWrapper registerResponse = new RegistrationResponseWrapper();
         registerResponse.setToken(token);
+        user.setId(client.getId());
         registerResponse.setUser(user);
         return registerResponse;
         //TODO:exception
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
-    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params){
+    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws NullPointerException{
         String email = params.getEmail();
         String mdp = params.getPassword();
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("le client est introuvable");
+
         }
         String token = "je_suis_le_token";
         authResponse.setToken(token);
@@ -89,9 +98,10 @@ public class ClientController {
             residenceWarp.setCodePostal(residence.get().getCodePostal());
             residenceWarp.setVille(residence.get().getVille());
             user.setResidence(residenceWarp);
-            authResponse.setUser(user);
-            return authResponse;
-        }else return null;
+        }
+        authResponse.setUser(user);
+        return authResponse;
+
     }
 }
 

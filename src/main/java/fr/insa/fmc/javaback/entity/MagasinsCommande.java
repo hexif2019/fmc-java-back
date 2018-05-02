@@ -1,26 +1,54 @@
 package fr.insa.fmc.javaback.entity;
 
+import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 
 public class MagasinsCommande {
     @Id
-    private Long id;
+    private String id;
     private String adresse;
     private String description;
     private String denomination;
     private String email;
     private Position position;
     private ArrayList<ProduitsCommande> produitsCommande;
-    private Long idMagasin;
+    private String idMagasin;
     private String img;
+    private enumEtatMagasinCommande etatMagasinCommande;
+    private String ville;
+    private String codePostal;
 
-    public Long getId() {
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public enumEtatMagasinCommande getEtatMagasinCommande() {
+        return etatMagasinCommande;
+    }
+
+    public void setEtatMagasinCommande(enumEtatMagasinCommande etatMagasinCommande) {
+        this.etatMagasinCommande = etatMagasinCommande;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -74,11 +102,11 @@ public class MagasinsCommande {
         this.produitsCommande = produitsCommande;
     }
 
-    public Long getIdMagasin() {
+    public String getIdMagasin() {
         return idMagasin;
     }
 
-    public void setIdMagasin(Long idMagasin) {
+    public void setIdMagasin(String idMagasin) {
         this.idMagasin = idMagasin;
     }
 

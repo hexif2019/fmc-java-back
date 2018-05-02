@@ -1,24 +1,13 @@
-package fr.insa.fmc.javaback.entity;
+package fr.insa.fmc.javaback.wrapper;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Map;
-
-@Document(collection="ColMagasin")
-public class Magasin {
-    @Id
+public class MarchandWrapper {
     private String id;
     private String adresse;
     private String description;
     private String denomination;
     private String email;
-    private String mdp;
-    private Position position;
-    private Map<String, Produit> produitsList; // l'index est l'id du produit
     private String ville;
     private String codePostal;
-    private String img;
 
     public String getId() {
         return id;
@@ -60,30 +49,6 @@ public class Magasin {
         this.email = email;
     }
 
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Map<String, Produit> getProduitsList() {
-        return produitsList;
-    }
-
-    public void setProduitsList(Map<String, Produit> produitsList) {
-        this.produitsList = produitsList;
-    }
-
     public String getVille() {
         return ville;
     }
@@ -98,13 +63,5 @@ public class Magasin {
 
     public void setCodePostal(String codePostal) {
         this.codePostal = codePostal;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
     }
 }

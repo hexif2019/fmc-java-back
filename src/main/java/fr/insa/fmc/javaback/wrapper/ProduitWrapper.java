@@ -1,8 +1,10 @@
 package fr.insa.fmc.javaback.wrapper;
 
+import fr.insa.fmc.javaback.entity.ProduitsCommande;
+
 public class ProduitWrapper {
 
-    private Long id;
+    private String id;
     private String denomination;
     private String description;
     private int nb;
@@ -14,11 +16,25 @@ public class ProduitWrapper {
     private int largeur;
     private int hauteur;
 
-    public Long getId() {
+    public ProduitWrapper(ProduitsCommande produitsCommande) {
+        this.id = produitsCommande.getIdProduit();
+        this.denomination = produitsCommande.getDenomination();
+        this.description = produitsCommande.getDescription();
+        this.nb = produitsCommande.getQuantite();
+        this.prix = produitsCommande.getPrixUnitaire();
+        this.poids = produitsCommande.getPoidsUnitaire();
+        this.img = produitsCommande.getImg();
+        this.volume = produitsCommande.getVolumeUnitaire();
+        this.longueur = produitsCommande.getLongueurUnitaire();
+        this.largeur = produitsCommande.getLargeurUnitaire();
+        this.hauteur = produitsCommande.getHauteurUnitaire();
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

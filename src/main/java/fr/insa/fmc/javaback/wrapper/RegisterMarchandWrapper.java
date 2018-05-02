@@ -1,15 +1,15 @@
 package fr.insa.fmc.javaback.wrapper;
 
-public class RegisterWrapper {
-    private UserWrapper user;
+public class RegisterMarchandWrapper {
+    private MarchandWrapper marchand;
     private String password;
 
-    public UserWrapper getUser() {
-        return user;
+    public MarchandWrapper getMarchand() {
+        return marchand;
     }
 
-    public void setUser(UserWrapper user) {
-        this.user = user;
+    public void setMarchand(MarchandWrapper marchand) {
+        this.marchand = marchand;
     }
 
     public String getPassword() {

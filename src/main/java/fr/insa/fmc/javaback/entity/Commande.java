@@ -10,7 +10,7 @@ import java.util.Date;
 @Document(collection="ColCommande")
 public class Commande {
     @Id
-    private Long id;
+    private String id;
     private Date heureCommande;
     private Date heureLivraison;
     private Date heureRecuperationParClient;
@@ -18,18 +18,20 @@ public class Commande {
     private int prixTotal;
     private int volumeTotal;
     private enumEtatCommande etat;
-    private Long idResidence;
-    private ArrayList<Long> casiers;
-    private Long idCoursier;
-    private Long idClient;
+    private String idResidence;
+    private ArrayList<String> casiers;
+    private String idCoursier;
+    private String idClient;
     private Position positionLivraison;
     private ArrayList<MagasinsCommande> magasinsCommande;
+    private String paymentId;
+    private String authorizationId;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -89,35 +91,35 @@ public class Commande {
         this.etat = etat;
     }
 
-    public Long getIdResidence() {
+    public String getIdResidence() {
         return idResidence;
     }
 
-    public void setIdResidence(Long idResidence) {
+    public void setIdResidence(String idResidence) {
         this.idResidence = idResidence;
     }
 
-    public ArrayList<Long> getCasiers() {
+    public ArrayList<String> getCasiers() {
         return casiers;
     }
 
-    public void setCasiers(ArrayList<Long> casiers) {
+    public void setCasiers(ArrayList<String> casiers) {
         this.casiers = casiers;
     }
 
-    public Long getIdCoursier() {
+    public String getIdCoursier() {
         return idCoursier;
     }
 
-    public void setIdCoursier(Long idCoursier) {
+    public void setIdCoursier(String idCoursier) {
         this.idCoursier = idCoursier;
     }
 
-    public Long getIdClient() {
+    public String getIdClient() {
         return idClient;
     }
 
-    public void setIdClient(Long idClient) {
+    public void setIdClient(String idClient) {
         this.idClient = idClient;
     }
 
@@ -135,5 +137,21 @@ public class Commande {
 
     public void setMagasinsCommande(ArrayList<MagasinsCommande> magasinsCommande) {
         this.magasinsCommande = magasinsCommande;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public String getAuthorizationId() {
+        return authorizationId;
+    }
+
+    public void setAuthorizationId(String authorizationId) {
+        this.authorizationId = authorizationId;
     }
 }

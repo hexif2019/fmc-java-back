@@ -1,11 +1,14 @@
 package fr.insa.fmc.javaback.wrapper;
 
-public class UserWrapper {
+import fr.insa.fmc.javaback.entity.Position;
+
+public class LivreurWrapper {
     private String id;
     private String nom;
     private String prenom;
     private String email;
-    private ResidenceWrapper residence;
+    private int rayon;
+    private Position position;
 
     public String getId() {
         return id;
@@ -39,11 +42,19 @@ public class UserWrapper {
         this.email = email;
     }
 
-    public ResidenceWrapper getResidence() {
-        return residence;
+    public int getRayon() {
+        return rayon;
     }
 
-    public void setResidence(ResidenceWrapper residence) {
-        this.residence = residence;
+    public void setRayon(int rayon) {
+        this.rayon = rayon;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

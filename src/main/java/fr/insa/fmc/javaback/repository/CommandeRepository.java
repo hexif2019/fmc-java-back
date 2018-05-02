@@ -7,13 +7,15 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CommandeRepository extends CrudRepository<Commande,Long>{
+public interface CommandeRepository extends CrudRepository<Commande,String>{
     @Override
-    void deleteById(Long id);
+    void deleteById(String id);
 
     @Override
-    Optional<Commande> findById(Long id);
+    Optional<Commande> findById(String id);
 
+    @Override
+    <S extends Commande> S save(S entity);
 }
 
 
