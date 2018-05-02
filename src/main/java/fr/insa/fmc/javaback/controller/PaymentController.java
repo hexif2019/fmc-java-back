@@ -66,12 +66,11 @@ public class PaymentController {
                 return "success";
             }
 
+
         return "redirect:/";
 
 
         }
-
-
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/cancel",consumes = "application/json")
     public String cancelPayment(Commande commande){
