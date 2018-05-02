@@ -56,7 +56,7 @@ public class ResidenceController {
         return nearMagasins;
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/findResidenceFormCodePostal/${codePostal}")
+    @RequestMapping(method=RequestMethod.GET,value="/api/findResidenceFormCodePostal/{codePostal}")
     public ArrayList<ResidenceWrapper> findResidenceFormCodePostal(@PathVariable String codePostal) {
 
         List<Residence> residences = residenceRepository.findResidenceByCodePostal(codePostal);
