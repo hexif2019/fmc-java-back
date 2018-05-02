@@ -14,9 +14,9 @@ public class Commande {
     private Date heureCommande;
     private Date heureLivraison;
     private Date heureRecuperationParClient;
-    private Double poidsTotal;
-    private Double prixTotal;
-    private Double volumeTotal;
+    private int poidsTotal;
+    private int prixTotal;
+    private int volumeTotal;
     private enumEtatCommande etat;
     private Long idResidence;
     private ArrayList<Long> casiers;
@@ -26,23 +26,6 @@ public class Commande {
     private ArrayList<MagasinsCommande> magasinsCommande;
     private String paymentId;
     private String authorizationId;
-
-
-    public String getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public String getAuthorizationId() {
-        return authorizationId;
-    }
-
-    public void setAuthorizationId(String authorizationId) {
-        this.authorizationId = authorizationId;
-    }
 
     public Long getId() {
         return id;
@@ -76,27 +59,27 @@ public class Commande {
         this.heureRecuperationParClient = heureRecuperationParClient;
     }
 
-    public Double getPoidsTotal() {
+    public int getPoidsTotal() {
         return poidsTotal;
     }
 
-    public void setPoidsTotal(Double poidsTotal) {
+    public void setPoidsTotal(int poidsTotal) {
         this.poidsTotal = poidsTotal;
     }
 
-    public Double getPrixTotal() {
+    public int getPrixTotal() {
         return prixTotal;
     }
 
-    public void setPrixTotal(Double prixTotal) {
+    public void setPrixTotal(int prixTotal) {
         this.prixTotal = prixTotal;
     }
 
-    public Double getVolumeTotal() {
+    public int getVolumeTotal() {
         return volumeTotal;
     }
 
-    public void setVolumeTotal(Double volumeTotal) {
+    public void setVolumeTotal(int volumeTotal) {
         this.volumeTotal = volumeTotal;
     }
 
@@ -154,5 +137,21 @@ public class Commande {
 
     public void setMagasinsCommande(ArrayList<MagasinsCommande> magasinsCommande) {
         this.magasinsCommande = magasinsCommande;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public String getAuthorizationId() {
+        return authorizationId;
+    }
+
+    public void setAuthorizationId(String authorizationId) {
+        this.authorizationId = authorizationId;
     }
 }
