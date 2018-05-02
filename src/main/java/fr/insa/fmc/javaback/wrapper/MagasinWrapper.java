@@ -3,6 +3,7 @@ package fr.insa.fmc.javaback.wrapper;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.Position;
+import fr.insa.fmc.javaback.entity.Produit;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,18 @@ public class MagasinWrapper {
     }
 
     public MagasinWrapper(Magasin magasin) {
+        this.id = magasin.getId();
+        this.adresse = magasin.getAdresse();
+        this.description = magasin.getDescription();
+        this.denomination = magasin.getDenomination();
+        this.email = magasin.getEmail();
+        for(Produit product: magasin.getProduitsList().values()) {
+            this.produits.add(new ProduitWrapper(product));
+        }
+        this.ville = magasin.getVille();
+        this.codePostal = magasin.getCodePostal();
+        this.img = magasin.getImg();
+        this.position = magasin.getPosition();
     }
 
     public MagasinWrapper() {
