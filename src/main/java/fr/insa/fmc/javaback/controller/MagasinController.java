@@ -21,6 +21,11 @@ public class MagasinController {
     @Autowired
     ResidenceRepository residenceRepository;
 
+    @RequestMapping(method=RequestMethod.GET, value="/magasin")
+    public Iterable<Magasin> findClient() {
+        return magasinRepository.findAll();
+    }
+
     @RequestMapping(method=RequestMethod.POST, value="/magasin")
     public Magasin saveMagasin(@RequestBody Magasin magasin) {
         magasinRepository.save(magasin);
@@ -30,7 +35,7 @@ public class MagasinController {
     @RequestMapping(method= RequestMethod.GET, value="/api/getItemMagasin/{id}")
     public Iterable<Produit> findProduitByMagasinId(@PathVariable String id){
         Optional <Magasin> m = magasinRepository.findById(id);
-        Magasin magasin;
+        Magasin magasin = new Magasin();
         if(m.isPresent()){
             magasin = m.get();
         } else {
@@ -40,20 +45,29 @@ public class MagasinController {
     }
 
     @RequestMapping(method=RequestMethod.POST,value="api/registerMarchand",consumes="application/json")
-    public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params){
+    public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params) throws Exception{
         String mdp = params.getPassword();
+        if(mdp.isEmpty()){
+            throw new Exception("you must assign a password");
+        }
         MarchandWrapper marchand = params.getMarchand();
-        String token = TokenGenerationService.GenerateToken();
+        //String token = TokenGenerationService.GenerateToken();
+        String token = "je suis un token" ;
         Magasin magasin = new Magasin();
-        magasin.setId(marchand.getId());
+        //magasin.setId(marchand.getId());
         magasin.setAdresse(marchand.getAdresse());
         magasin.setDescription(marchand.getDescription());
         magasin.setEmail(marchand.getEmail());
+        magasin.setDenomination(marchand.getDenomination());
+        if(magasinRepository.findMagasinByEmail(marchand.getEmail())!=null){
+            throw new Exception("Cet adresse email existe deja");
+        }
         magasin.setMdp(mdp);
         magasin.setVille(marchand.getVille());
         magasin.setCodePostal(marchand.getCodePostal());
         magasinRepository.save(magasin);
         RegistrationMarchandResponseWrapper registrationMarchandResponse = new RegistrationMarchandResponseWrapper();
+        marchand.setId(magasin.getId());
         registrationMarchandResponse.setToken(token);
         registrationMarchandResponse.setMarchand(marchand);
         return registrationMarchandResponse;
@@ -65,7 +79,9 @@ public class MagasinController {
         String email = params.getEmail();
         String mdp = params.getPassword();
         Magasin magasin = magasinRepository.connectionQuery(email,mdp);
-        if(magasin==null) throw new NullPointerException("Le magasin est introuvable");
+        if(magasin==null){
+            throw new NullPointerException("Le magasin est introuvable");
+        }
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
         //todo : g�n�rer un vrai token
         String token = TokenGenerationService.GenerateToken();

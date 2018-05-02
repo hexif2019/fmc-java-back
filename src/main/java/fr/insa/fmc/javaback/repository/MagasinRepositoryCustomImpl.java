@@ -18,4 +18,11 @@ public class MagasinRepositoryCustomImpl implements MagasinRepositoryCustom {
         return operations.findOne(query,Magasin.class);
     }
 
+    @Override
+    public Magasin findMagasinByEmail(String email){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(email));
+        return operations.findOne(query,Magasin.class);
+    }
+
 }

@@ -87,10 +87,12 @@ public class CommandeController {
 
         //verif si liste vide
 
-        ArrayList<Commande> commandesList = new ArrayList<>(client.getCommandesCours().values());
+        for(String commandeId: client.getCommandesCours().keySet()) {
+            Optional<Commande> commandeTempo = commandeRepository.findById(commandeId);
+            if(!commandeTempo.isPresent())
+                throw new NullPointerException("Une commande est introuvable");
 
-        for(int i = 0; i < commandesList.size(); i++) {
-            commandeWrapList.add(new CommandeWrapper(commandesList.get(i)));
+            commandeWrapList.add(new CommandeWrapper(commandeTempo.get()));
         }
 
         return commandeWrapList;
