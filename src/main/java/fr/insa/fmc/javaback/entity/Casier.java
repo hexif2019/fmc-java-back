@@ -7,14 +7,14 @@ import java.util.Queue;
 
 public class Casier {
     @Id
-    private Long id;
+    private String id;
     private int volume;
     private int longueur;
     private int largeur;
     private int hauteur;
     private Queue<CasierDisponibilite> disponibilites;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -38,7 +38,7 @@ public class Casier {
         return disponibilites;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

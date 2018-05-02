@@ -10,22 +10,22 @@ import java.util.Set;
 @Document(collection="ColCoursier")
 public class Coursier {
     @Id
-    private Long id;
+    private String id;
     private String email;
     private String mdp;
     private int rayon;
     private Position position;
-    private Map<Long,Commande> commandesEnCours;
-    private Set<Long> listResidences;
-    private Set<Long> commandesFinis;
+    private Map<String, Commande> commandesEnCours;
+    private String listResidences;
+    private Set<String> commandesFinis;
     private String nom;
     private String prenom;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -61,27 +61,27 @@ public class Coursier {
         this.position = position;
     }
 
-    public Map<Long, Commande> getCommandesEnCours() {
+    public Map<String, Commande> getCommandesEnCours() {
         return commandesEnCours;
     }
 
-    public void setCommandesEnCours(Map<Long, Commande> commandesEnCours) {
+    public void setCommandesEnCours(Map<String, Commande> commandesEnCours) {
         this.commandesEnCours = commandesEnCours;
     }
 
-    public Set<Long> getListResidences() {
+    public String getListResidences() {
         return listResidences;
     }
 
-    public void setListResidences(Set<Long> listResidences) {
+    public void setListResidences(String listResidences) {
         this.listResidences = listResidences;
     }
 
-    public Set<Long> getCommandesFinis() {
+    public Set<String> getCommandesFinis() {
         return commandesFinis;
     }
 
-    public void setCommandesFinis(Set<Long> commandesFinis) {
+    public void setCommandesFinis(Set<String> commandesFinis) {
         this.commandesFinis = commandesFinis;
     }
 

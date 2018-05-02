@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 //import org.springframework.data.mongodb.repository.Query;
 
@@ -23,6 +24,12 @@ public class ClientRepositoryCustomImpl implements ClientRepositoryCustom {
         //Criteria c = Criteria.where("email").is(email).and("mdp").is(mdp);
         //return operations.find(Query.query(c),Client.class);
 
+    }
+
+    @Override
+
+    public void insert(Client client){
+        operations.insert(client,"ColClient");
     }
 
 //    @Override

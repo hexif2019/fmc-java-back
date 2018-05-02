@@ -1,17 +1,17 @@
 package fr.insa.fmc.javaback.wrapper;
 
 public class UserWrapper {
-    private Long id;
+    private String id;
     private String nom;
     private String prenom;
     private String email;
     private ResidenceWrapper residence;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

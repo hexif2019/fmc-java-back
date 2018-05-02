@@ -6,7 +6,9 @@ import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.CoursierRepository;
 import fr.insa.fmc.javaback.service.PaypalService;
-import fr.insa.fmc.javaback.wrapper.*;
+import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
+import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
+import fr.insa.fmc.javaback.wrapper.LivreurWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +29,7 @@ public class CousierController {
         return coursier;
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/authenticate",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value="api/livreur/authenticate",consumes="appplication/json")
     public AuthentificationCoursierResponseWrapper connectionCoursier(@RequestBody AuthentificationWrapper params){
         String email = params.getEmail();
         String mdp = params.getPassword();

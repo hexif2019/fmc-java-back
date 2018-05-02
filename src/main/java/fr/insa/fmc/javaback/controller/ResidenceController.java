@@ -35,23 +35,23 @@ public class ResidenceController {
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/residence/{id}")
-    public String deleteResidenceById(@PathVariable Long id) {
+    public String deleteResidenceById(@PathVariable String id) {
         residenceRepository.deleteById(id);
         //Optional<residence> residence = residenceRepository.findById(id);
         //residenceRepository.delete(residence);
         return "";
     }
     @RequestMapping(method=RequestMethod.GET, value="/residence/{id}")
-    public Optional<Residence> findResidenceById(@PathVariable Long id) {
+    public Optional<Residence> findResidenceById(@PathVariable String id) {
         Optional<Residence> residence = residenceRepository.findById(id);
         return residence;
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/api/getMagasinsOfResidence/{residenceid}")
-    public ArrayList<Magasin> findNearMagasinsByResidenceId(@PathVariable Long id) {
+    public ArrayList<Magasin> findNearMagasinsByResidenceId(@PathVariable String id) {
         Optional<Residence> residenceOpt = residenceRepository.findById(id);
         Residence residence = residenceOpt.get();
-        Set<Long> residenceId = residence.getIdMagasins();
+        Set<String> residenceId = residence.getIdMagasins();
         ArrayList<Magasin> nearMagasins = new ArrayList<>();
         Iterator<Magasin> it = (Iterator<Magasin>) magasinRepository.findAll();
         it.forEachRemaining(nearMagasins::add);

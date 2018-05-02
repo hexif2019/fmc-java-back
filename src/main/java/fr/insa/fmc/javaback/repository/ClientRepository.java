@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ClientRepository extends CrudRepository<Client,Long>, ClientRepositoryCustom {
+public interface ClientRepository extends CrudRepository<Client,String>, ClientRepositoryCustom {
 
     @Override
-   void deleteById(Long id);
+   void deleteById(String id);
 
     @Override
-    Optional<Client> findById(Long id);
+    Optional<Client> findById(String id);
 
 
     //@Query("select c from Client c where c.email = :email")

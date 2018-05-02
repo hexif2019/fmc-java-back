@@ -2,7 +2,6 @@ package fr.insa.fmc.javaback.controller;
 
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Produit;
-import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
@@ -28,13 +27,13 @@ public class MagasinController {
     }
 
     @RequestMapping(method= RequestMethod.GET, value="/api/getItemMagasin/{id}")
-    public Iterable<Produit> findProduitByMagasinId(@PathVariable Long id){
+    public Iterable<Produit> findProduitByMagasinId(@PathVariable String id){
         Optional <Magasin> m = magasinRepository.findById(id);
         Magasin magasin = new Magasin();
         if(m.isPresent()){
             magasin = m.get();
         } else {
-            //todo exception
+            throw new NullPointerException("Magasin introuvable");
         }
         return magasin.getProduitsList().values();
     }

@@ -1,21 +1,19 @@
 package fr.insa.fmc.javaback.controller;
 
-import fr.insa.fmc.javaback.entity.Client;
-import fr.insa.fmc.javaback.entity.Commande;
-import fr.insa.fmc.javaback.entity.MagasinsCommande;
-import fr.insa.fmc.javaback.entity.ProduitsCommande;
+import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
+import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
 import fr.insa.fmc.javaback.wrapper.ProduitWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -26,6 +24,9 @@ public class CommandeController {
 
     @Autowired
     CommandeRepository commandeRepository;
+
+    @Autowired
+    ResidenceRepository residenceRepository;
 
     @RequestMapping(method=RequestMethod.POST, value="/commande")
     public Commande saveCommande(@RequestBody Commande commande) {
@@ -40,20 +41,48 @@ public class CommandeController {
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/api/getPanier/{userid}")
-    public CommandeWrapper getPanier(@PathVariable Long id) {
+    public CommandeWrapper getPanier(@PathVariable String id) {
 
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
-        Commande commande = commandeRepository.findById(client.getCommandesEnCreation()).get();
+        Optional<Commande> commandeOpt = commandeRepository.findById(client.getCommandesEnCreation());
 
-        CommandeWrapper commandeWrap = new CommandeWrapper(commande);
+        CommandeWrapper commandeWrap;
+
+        if(commandeOpt.isPresent()) {
+
+            commandeWrap = new CommandeWrapper(commandeOpt.get());
+
+        } else {
+
+            Commande commande = new Commande();
+
+            commande.setEtat(enumEtatCommande.EDITION);
+            commande.setPoidsTotal(0);
+            commande.setPrixTotal(0);
+            commande.setVolumeTotal(0);
+            commande.setIdResidence(client.getResidence());
+            commande.setCasiers(new ArrayList<String>());
+
+            Residence residence = residenceRepository.findById(client.getResidence()).get();
+            if(residence == null)
+                throw new NullPointerException("Residence introuvable");
+
+            commande.setPositionLivraison(residence.getPosition());
+
+            commande.setMagasinsCommande(new ArrayList<MagasinsCommande>());
+
+            commandeRepository.save(commande);
+
+            commandeWrap = new CommandeWrapper(commande);
+        }
 
         return commandeWrap;
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesEnCour/{userid}")
-    public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable Long id) {
+    public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String id) {
 
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
@@ -72,7 +101,7 @@ public class CommandeController {
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesArchiver/{userid}")
-    public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable Long id) {
+    public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
@@ -82,9 +111,10 @@ public class CommandeController {
 
         //ArrayList<Long> commandesList = new ArrayList<Long>(client);
 
-        for(Long i : client.getCommandesFinis()) {
+        for(String i : client.getCommandesFinis()) {
             //Verifier si probleme requete, commande non existante en base
-            commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(i).get()));
+
+            commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(i.toString()).get()));
         }
 
         return commandeWrapList;
@@ -92,7 +122,7 @@ public class CommandeController {
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{userid}")
-    public ArrayList<CommandeWrapper> getLastCommandes(@PathVariable Long id) {
+    public ArrayList<CommandeWrapper> getLastCommandes(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
@@ -102,10 +132,10 @@ public class CommandeController {
 
         //ArrayList<Long> commandesList = new ArrayList<Long>(client);
 
-        ArrayList<Long> lastCommandesList = new ArrayList<Long>(client.getCommandesFinis());
+        ArrayList<String> lastCommandesList = new ArrayList<String>(client.getCommandesFinis());
 
-        for(long i = lastCommandesList.size()-1; i >=0 && i >= lastCommandesList.size()-3; i--) {
-            commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(i).get()));
+        for(int i = lastCommandesList.size()-1; i >=0 && i >= lastCommandesList.size()-3; i--) {
+            commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(lastCommandesList.get(i)).get()));
         }
 
         return commandeWrapList;
@@ -115,7 +145,7 @@ public class CommandeController {
 
     @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/{userid}")
     public String updatePanier(@RequestBody CommandeWrapper commandeWrap){
-        Long userid = commandeWrap.getUserid();
+        String userid = commandeWrap.getUserid();
 
         Optional<Commande> commandeOpt = commandeRepository.findById(commandeWrap.getId());
 
@@ -140,7 +170,7 @@ public class CommandeController {
         for(int i = 0; i<commandeWrap.getMagasins().size(); i++) {
 
             MagasinsCommande magasin = new MagasinsCommande();
-            magasin.setId((long) i);
+            magasin.setId(String.valueOf(i));
             MagasinWrapper magasinWrap = commandeWrap.getMagasins().get(i);
             magasin.setAdresse(magasinWrap.getAdresse());
             magasin.setDescription(magasinWrap.getDescription());
@@ -157,7 +187,7 @@ public class CommandeController {
 
             for (int j = 0; j < magasinWrap.getProduits().size(); j++) {
                 ProduitsCommande produit = new ProduitsCommande();
-                produit.setId((long) j);
+                produit.setId(String.valueOf(j));
 
                 ProduitWrapper produitWrap = magasinWrap.getProduits().get(j);
 

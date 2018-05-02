@@ -1,13 +1,12 @@
 package fr.insa.fmc.javaback.wrapper;
 
-import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.Position;
 
 import java.util.ArrayList;
 
 public class MagasinWrapper {
-    private Long id;
+    private String id;
     private String adresse;
     private String description;
     private String denomination;
@@ -33,11 +32,11 @@ public class MagasinWrapper {
         this.position = magasinsCommande.getPosition();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

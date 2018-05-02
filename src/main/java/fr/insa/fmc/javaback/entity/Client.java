@@ -10,23 +10,23 @@ import java.util.Set;
 public class Client {
 
     @Id
-    private Long id;
+    private String id;
     private String email;
     private String nom;
     private String prenom;
     private String adresse;
     private String mdp;
     private String cartePaiement;
-    private Set<Long> commandesFinis;
-    private Map<Long ,Commande> commandesCours;
-    private Long residence;
-    private Long commandeEnCreation;
+    private Set<String> commandesFinis;
+    private Map<String, Commande> commandesCours;
+    private String residence;
+    private String commandeEnCreation;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,35 +78,35 @@ public class Client {
         this.cartePaiement = cartePaiement;
     }
 
-    public Set<Long> getCommandesFinis() {
+    public Set<String> getCommandesFinis() {
         return commandesFinis;
     }
 
-    public void setCommandesFinis(Set<Long> commandesFinis) {
+    public void setCommandesFinis(Set<String> commandesFinis) {
         this.commandesFinis = commandesFinis;
     }
 
-    public Map<Long, Commande> getCommandesCours() {
+    public Map<String, Commande> getCommandesCours() {
         return commandesCours;
     }
 
-    public void setCommandesCours(Map<Long, Commande> commandesCours) {
+    public void setCommandesCours(Map<String, Commande> commandesCours) {
         this.commandesCours = commandesCours;
     }
 
-    public Long getResidence() {
+    public String getResidence() {
         return residence;
     }
 
-    public void setResidence(Long residence) {
+    public void setResidence(String residence) {
         this.residence = residence;
     }
 
-    public Long getCommandesEnCreation() {
+    public String getCommandesEnCreation() {
         return commandeEnCreation;
     }
 
-    public void setCommandeEnCreation(Long commandeEnCreation) {
+    public void setCommandeEnCreation(String commandeEnCreation) {
         this.commandeEnCreation = commandeEnCreation;
     }
 
