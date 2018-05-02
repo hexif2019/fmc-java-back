@@ -39,15 +39,21 @@ public class MagasinController {
     }
 
     @RequestMapping(method=RequestMethod.POST,value="api/registerMarchand",consumes="application/json")
-    public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params){
+    public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params) throws Exception{
         String mdp = params.getPassword();
+        if(mdp.isEmpty()){
+            throw new Exception("you must assign a password");
+        }
         MarchandWrapper marchand = params.getMarchand();
-        String token = "blabla";
+        String token = "token";
         Magasin magasin = new Magasin();
         magasin.setId(marchand.getId());
         magasin.setAdresse(marchand.getAdresse());
         magasin.setDescription(marchand.getDescription());
         magasin.setEmail(marchand.getEmail());
+        if(magasinRepository.findMagasinByEmail(marchand.getEmail())!=null){
+            throw new Exception("Cet adresse email existe deja");
+        }
         magasin.setMdp(mdp);
         magasin.setVille(marchand.getVille());
         magasin.setCodePostal(marchand.getCodePostal());
@@ -64,7 +70,9 @@ public class MagasinController {
         String email = params.getEmail();
         String mdp = params.getPassword();
         Magasin magasin = magasinRepository.connectionQuery(email,mdp);
-        if(magasin==null) throw new NullPointerException("Le magasin est introuvable");
+        if(magasin==null){
+            throw new NullPointerException("Le magasin est introuvable");
+        }
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
         //todo : g�n�rer un vrai token
         String token = "je suis le token";
