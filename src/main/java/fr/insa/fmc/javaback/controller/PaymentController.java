@@ -5,6 +5,7 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import fr.insa.fmc.javaback.entity.Commande;
+import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.service.PaymentCreationNotification;
 import fr.insa.fmc.javaback.service.PaymentExecuteNotification;
@@ -31,6 +32,7 @@ public class PaymentController {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
             Payment payment = paypalService.createPayment((double) commande.getPrixTotal(),"Commande à régler",baseUrl+"cancel",baseUrl+"success");
             res.setPaymentID(payment.getId());
+            //todo : mettre à jour la date de la commande
         }catch (PayPalRESTException e){
             System.err.println(e.getMessage());
         }
@@ -51,23 +53,25 @@ public class PaymentController {
     }
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/success",consumes = "application/json")
-    public String proceedPayment(@RequestBody PaymentExecuteNotification authorize){
-        try {
+    public String proceedPayment(@RequestBody PaymentExecuteNotification authorize) throws PayPalRESTException{
             Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getAuthorizationId(),authorize.getPayerId());
             if(authorization.getState().equals("success")){
                 Optional<Commande> commande = commandeRepository.findById(authorize.getCommandeId());
                 if(commande.isPresent()){
                     Commande in = commande.get();
                     in.setAuthorizationId(authorization.getId());
+                    in.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
                     commandeRepository.save(in);
                 }
                 return "success";
             }
-        }catch (PayPalRESTException e){
-            System.err.println(e.getMessage());
-        }
+
         return "redirect:/";
-    }
+
+
+        }
+
+
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/cancel",consumes = "application/json")
     public String cancelPayment(Commande commande){
