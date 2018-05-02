@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ResidenceRepository extends CrudRepository<Residence,String>, ClientRepositoryCustom {
+public interface ResidenceRepository extends CrudRepository<Residence,String>, ResidenceRepositoryCustom {
 
     @Override
     void deleteById(String id);

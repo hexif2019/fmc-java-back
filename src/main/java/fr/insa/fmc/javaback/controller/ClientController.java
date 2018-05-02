@@ -1,5 +1,7 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.Exception.NoPasswordException;
+import fr.insa.fmc.javaback.Exception.SameEmailException;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
@@ -19,6 +21,8 @@ public class ClientController {
 
     @Autowired
     ResidenceRepository residenceRepository;
+
+
 
     @RequestMapping(method=RequestMethod.GET, value="/client")
     public Iterable<Client> findClient() {
@@ -53,15 +57,21 @@ public class ClientController {
     }
 
     @RequestMapping(method=RequestMethod.POST,value="/api/register",consumes="application/json")
-    public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params){
+    public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params) throws Exception {
         String mdp = params.getPassword();
+        if(mdp.isEmpty()){
+            throw new Exception("you must assign a password");
+        }
         UserWrapper user = params.getUser();
         String token = "blabla";
         Client client = new Client();
         //client.setId(user.getId());
         client.setNom(user.getNom());
         client.setPrenom(user.getPrenom());
-        client.setEmail(user.getEmail());//TODO: verifier si il y a le meme adresse
+        if(clientRepository.findClientByEmail(user.getEmail())!=null){
+            throw new Exception("Cet adresse email existe deja");
+        }
+        client.setEmail(user.getEmail());
         client.setResidence(user.getResidence().getId());
         client.setMdp(mdp);
         clientRepository.save(client);
@@ -74,14 +84,13 @@ public class ClientController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
-    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws NullPointerException{
+    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws Exception{
         String email = params.getEmail();
         String mdp = params.getPassword();
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
-            throw new NullPointerException("le client est introuvable");
-
+            throw new Exception("le client est introuvable");
         }
         String token = "je_suis_le_token";
         authResponse.setToken(token);
@@ -90,15 +99,15 @@ public class ClientController {
         user.setEmail(client.getEmail());
         user.setNom(client.getNom());
         user.setPrenom(client.getPrenom());
-        ResidenceWrapper residenceWarp = new ResidenceWrapper();
+
         Optional<Residence> residence = residenceRepository.findById(client.getResidence());
-        if(residence.isPresent()){
-            residenceWarp.setId(residence.get().getId());
-            residenceWarp.setAdresse(residence.get().getAdresse());
-            residenceWarp.setCodePostal(residence.get().getCodePostal());
-            residenceWarp.setVille(residence.get().getVille());
-            user.setResidence(residenceWarp);
+
+        if(!(residence.isPresent())){
+            throw new Exception("there is no residence");
         }
+
+        user.setResidence(new ResidenceWrapper(residenceRepository.findById(client.getResidence()).get()));
+
         authResponse.setUser(user);
         return authResponse;
 

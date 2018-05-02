@@ -4,13 +4,11 @@ import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @RestController
@@ -47,6 +45,14 @@ public class ResidenceController {
         return residence;
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/residence")
+    public String deleteAllResidence() {
+        residenceRepository.deleteAll();
+        //Optional<Client> client = clientRepository.findById(id);
+        //clientRepository.delete(client);
+        return "";
+    }
+
     @RequestMapping(method=RequestMethod.GET,value="/api/getMagasinsOfResidence/{residenceid}")
     public ArrayList<Magasin> findNearMagasinsByResidenceId(@PathVariable String id) {
         Optional<Residence> residenceOpt = residenceRepository.findById(id);
@@ -57,6 +63,25 @@ public class ResidenceController {
         it.forEachRemaining(nearMagasins::add);
         return nearMagasins;
     }
+
+    @RequestMapping(method=RequestMethod.GET,value="/api/findResidenceFormCodePostal/{codePostal}")
+    public ArrayList<ResidenceWrapper> findResidenceFormCodePostal(@PathVariable String codePostal) {
+
+        List<Residence> residences = residenceRepository.findResidenceByCodePostal(codePostal);
+
+        ArrayList<ResidenceWrapper> residenceWrapList = new ArrayList<ResidenceWrapper>();
+
+        //TODO: si liste vide, exception?
+
+        for(Residence resid: residences){
+            residenceWrapList.add(new ResidenceWrapper(resid));
+        }
+
+        return residenceWrapList;
+
+    }
+
+
 
 
 }
