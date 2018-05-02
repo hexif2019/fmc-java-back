@@ -45,6 +45,12 @@ public class SmartException extends ResponseEntityExceptionHandler {
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return MessageDeRetour;
     }
-
+    @ResponseBody
+    @ExceptionHandler(SameEmailException.class)
+    public ResponseEntity<ExceptionMessage> nullPointerExceptionHandler(HttpServletRequest request, SameEmailException exception) {
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter),HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
+        return MessageDeRetour;
+    }
 
 }

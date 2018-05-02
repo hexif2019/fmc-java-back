@@ -59,8 +59,7 @@ public class PaymentController {
     }
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/success",consumes = "application/json")
-    public String proceedPayment(@RequestBody PaymentExecuteNotification authorize){
-        try {
+    public String proceedPayment(@RequestBody PaymentExecuteNotification authorize) throws PayPalRESTException{
             Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getAuthorizationId(),authorize.getPayerId());
             if(authorization.getState().equals("success")){
                 Optional<Commande> commande = commandeRepository.findById(authorize.getCommandeId());
@@ -72,11 +71,12 @@ public class PaymentController {
                 }
                 return "success";
             }
-        }catch (PayPalRESTException e){
-            System.err.println(e.getMessage());
+
+
+        return "redirect:/";
+
+
         }
-        return "failure";
-    }
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/cancel",consumes = "application/json")
     public String cancelPayment(Commande commande){
