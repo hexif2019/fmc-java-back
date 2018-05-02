@@ -4,6 +4,7 @@ import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.service.TokenGenerationService;
 import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +57,7 @@ public class ClientController {
     public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params){
         String mdp = params.getPassword();
         UserWrapper user = params.getUser();
-        String token = "blabla";
+        String token = TokenGenerationService.GenerateToken();
         Client client = new Client();
         //client.setId(user.getId());
         client.setNom(user.getNom());
@@ -83,7 +84,7 @@ public class ClientController {
             throw new NullPointerException("le client est introuvable");
 
         }
-        String token = "je_suis_le_token";
+        String token = TokenGenerationService.GenerateToken();
         authResponse.setToken(token);
         UserWrapper user = new UserWrapper();
         user.setId(client.getId());

@@ -5,6 +5,7 @@ import fr.insa.fmc.javaback.entity.Produit;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.service.TokenGenerationService;
 import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class MagasinController {
     @RequestMapping(method= RequestMethod.GET, value="/api/getItemMagasin/{id}")
     public Iterable<Produit> findProduitByMagasinId(@PathVariable String id){
         Optional <Magasin> m = magasinRepository.findById(id);
-        Magasin magasin = new Magasin();
+        Magasin magasin;
         if(m.isPresent()){
             magasin = m.get();
         } else {
@@ -42,7 +43,7 @@ public class MagasinController {
     public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params){
         String mdp = params.getPassword();
         MarchandWrapper marchand = params.getMarchand();
-        String token = "blabla";
+        String token = TokenGenerationService.GenerateToken();
         Magasin magasin = new Magasin();
         magasin.setId(marchand.getId());
         magasin.setAdresse(marchand.getAdresse());
@@ -67,7 +68,7 @@ public class MagasinController {
         if(magasin==null) throw new NullPointerException("Le magasin est introuvable");
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
         //todo : g�n�rer un vrai token
-        String token = "je suis le token";
+        String token = TokenGenerationService.GenerateToken();
         authResponse.setToken(token);
         MarchandWrapper marchand = new MarchandWrapper();
         marchand.setId(magasin.getId());

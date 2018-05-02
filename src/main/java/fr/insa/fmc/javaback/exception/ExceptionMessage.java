@@ -1,4 +1,4 @@
-package fr.insa.fmc.javaback.Exception;
+package fr.insa.fmc.javaback.exception;
 
 
 
