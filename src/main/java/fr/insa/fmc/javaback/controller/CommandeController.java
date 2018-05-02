@@ -40,20 +40,23 @@ public class CommandeController {
         return commandeRepository.findAll();
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getPanier/{userid}")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getPanier/{id}")
     public CommandeWrapper getPanier(@PathVariable String id) {
 
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
-        Client client = clientRepository.findById(id).get();
+        Optional<Client> clientOpt = clientRepository.findById(id);
 
-        Optional<Commande> commandeOpt = commandeRepository.findById(client.getCommandesEnCreation());
+        if(!clientOpt.isPresent())
+            throw new NullPointerException("le client est introuvable");
+
+        Client client = clientOpt.get();
 
         CommandeWrapper commandeWrap;
 
-        if(commandeOpt.isPresent()) {
 
+        if(client.getCommandesEnCreation()!= null && commandeRepository.findById(client.getCommandesEnCreation()).isPresent()) {
+            Optional<Commande> commandeOpt = commandeRepository.findById(client.getCommandesEnCreation());
             commandeWrap = new CommandeWrapper(commandeOpt.get());
-
         } else {
 
             Commande commande = new Commande();
@@ -63,13 +66,20 @@ public class CommandeController {
             commande.setPrixTotal(0);
             commande.setVolumeTotal(0);
             commande.setIdResidence(client.getResidence());
-            commande.setCasiers(new ArrayList<>());
+            commande.setCasiers(new ArrayList<String>());
+            commande.setIdClient(id);
+
+            if(client.getResidence() == null) throw new NullPointerException("Client non relie a une residence");
 
             Optional<Residence> residence = residenceRepository.findById(client.getResidence());
             if(!residence.isPresent()) throw new NullPointerException("Residence introuvable");
             commande.setPositionLivraison(residence.get().getPosition());
-            commande.setMagasinsCommande(new ArrayList<>());
+            commande.setMagasinsCommande(new ArrayList<MagasinsCommande>());
             commandeRepository.save(commande);
+
+            client.setCommandeEnCreation(commande.getId());
+            clientRepository.save(client);
+
 
             commandeWrap = new CommandeWrapper(commande);
         }
@@ -77,7 +87,7 @@ public class CommandeController {
         return commandeWrap;
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesEnCour/{userid}")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesEnCour/{id}")
     public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String id) {
 
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
@@ -98,7 +108,7 @@ public class CommandeController {
         return commandeWrapList;
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesArchiver/{userid}")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesArchiver/{id}")
     public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
@@ -118,7 +128,7 @@ public class CommandeController {
 
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{userid}",consumes="application/json")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{id}",consumes="application/json")
     public ArrayList<CommandeWrapper> getLastCommandes(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
