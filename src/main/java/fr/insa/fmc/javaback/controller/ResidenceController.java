@@ -65,9 +65,16 @@ public class ResidenceController {
             throw new Exception("cannot find residence by id");
         }
         Set<String> magasinsId = residence.getIdMagasins();
-        ArrayList<MagasinWrapper> nearMagasins = new ArrayList<>();
-        Iterator<MagasinWrapper> it = (Iterator<MagasinWrapper>) new MagasinWrapper(magasinRepository.findAll());
-        it.forEachRemaining(nearMagasins::add);
+        ArrayList<MagasinWrapper> nearMagasins = new ArrayList<MagasinWrapper>();
+        for(String magId: magasinsId) {
+            Optional<Magasin> magasinTempo = magasinRepository.findById(magId);
+            if(magasinTempo.isPresent()){
+                nearMagasins.add(new MagasinWrapper(magasinTempo.get()));
+            } else {
+                throw new NullPointerException("Magasin de la residence introuvable");
+            }
+        }
+
         return nearMagasins;
     }
 
