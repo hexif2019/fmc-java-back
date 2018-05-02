@@ -83,6 +83,28 @@ public class ClientController {
         //TODO:exception
     }
 
+    @RequestMapping(method=RequestMethod.POST, value="/api/authenticateToken",consumes="application/json")
+    public UserWrapper anthentificationToken(@RequestBody AuthentificationTokenWrapper params)throws Exception{
+        String email = params.getEmail();
+        String token = params.getToken();
+        Client client = clientRepository.connectionQuery(email);
+        if(client==null){
+            throw new Exception("le client est introuvable");
+        }
+        UserWrapper user = new UserWrapper();
+        user.setId(client.getId());
+        user.setEmail(client.getEmail());
+        user.setNom(client.getNom());
+        user.setPrenom(client.getPrenom());
+        Optional<Residence> residence = residenceRepository.findById(client.getResidence());
+
+        if(!(residence.isPresent())){
+            throw new Exception("there is no residence");
+        }
+        user.setResidence(new ResidenceWrapper(residenceRepository.findById(client.getResidence()).get()));
+        return user;
+    }
+
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
     public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws Exception{
         String email = params.getEmail();
