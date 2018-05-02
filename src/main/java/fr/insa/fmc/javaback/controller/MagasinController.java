@@ -125,9 +125,10 @@ public class MagasinController {
                 token = String.valueOf(i);
             }
             //TODO: getToken
-            product.setId("1");
+            product.setId(token);
         } else {
             product = magasin.getProduitsList().get(params.getProduit().getId());
+
 
             if(product == null)
                 throw new NullPointerException("Aucun produit avec cet ID n est present dans le magasin");
@@ -144,6 +145,8 @@ public class MagasinController {
         }
 
         magasin.addProduit(product);
+
+        magasinRepository.save(magasin);
 
 
         return "ok";
