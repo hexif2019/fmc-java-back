@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.wrapper;
 
+import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.Position;
 
@@ -30,6 +31,12 @@ public class MagasinWrapper {
         this.codePostal = magasinsCommande.getCodePostal();
         this.img = magasinsCommande.getImg();
         this.position = magasinsCommande.getPosition();
+    }
+
+    public MagasinWrapper(Magasin magasin) {
+    }
+
+    public MagasinWrapper() {
     }
 
     public String getId() {
