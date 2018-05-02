@@ -101,6 +101,7 @@ public class ClientController {
         user.setPrenom(client.getPrenom());
         ResidenceWrapper residenceWarp = new ResidenceWrapper();
         Optional<Residence> residence = residenceRepository.findById(client.getResidence());
+
         if(residence.isPresent()){
             residenceWarp.setId(residence.get().getId());
             residenceWarp.setAdresse(residence.get().getAdresse());
