@@ -1,7 +1,7 @@
 package fr.insa.fmc.javaback.wrapper;
 
 public class MarchandWrapper {
-    private Long id;
+    private String id;
     private String adresse;
     private String description;
     private String denomination;
@@ -9,11 +9,11 @@ public class MarchandWrapper {
     private String ville;
     private String codePostal;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

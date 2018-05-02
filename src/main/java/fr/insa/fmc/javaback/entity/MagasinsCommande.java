@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class MagasinsCommande {
     @Id
-    private Long id;
+    private String id;
     private String adresse;
     private String description;
     private String denomination;
     private String email;
     private Position position;
     private ArrayList<ProduitsCommande> produitsCommande;
-    private Long idMagasin;
+    private String idMagasin;
     private String img;
     private enumEtatMagasinCommande etatMagasinCommande;
     private String ville;
@@ -44,11 +44,11 @@ public class MagasinsCommande {
         this.etatMagasinCommande = etatMagasinCommande;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -102,11 +102,11 @@ public class MagasinsCommande {
         this.produitsCommande = produitsCommande;
     }
 
-    public Long getIdMagasin() {
+    public String getIdMagasin() {
         return idMagasin;
     }
 
-    public void setIdMagasin(Long idMagasin) {
+    public void setIdMagasin(String idMagasin) {
         this.idMagasin = idMagasin;
     }
 

@@ -3,18 +3,18 @@ package fr.insa.fmc.javaback.wrapper;
 import fr.insa.fmc.javaback.entity.Position;
 
 public class LivreurWrapper {
-    private Long id;
+    private String id;
     private String nom;
     private String prenom;
     private String email;
     private int rayon;
     private Position position;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

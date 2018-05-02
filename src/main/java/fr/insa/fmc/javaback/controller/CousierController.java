@@ -3,7 +3,6 @@ package fr.insa.fmc.javaback.controller;
 import fr.insa.fmc.javaback.entity.Coursier;
 import fr.insa.fmc.javaback.repository.CoursierRepository;
 import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
-import fr.insa.fmc.javaback.wrapper.AuthentificationMarchandResponseWrapper;
 import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
 import fr.insa.fmc.javaback.wrapper.LivreurWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,8 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface MagasinRepository extends CrudRepository<Magasin,Long>,MagasinRepositoryCustom {
+public interface MagasinRepository extends CrudRepository<Magasin,String>,MagasinRepositoryCustom {
     @Override
-    Optional<Magasin> findById(Long id);
+    Optional<Magasin> findById(String id);
 
 }

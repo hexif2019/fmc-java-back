@@ -10,7 +10,7 @@ import java.util.Date;
 @Document(collection="ColCommande")
 public class Commande {
     @Id
-    private Long id;
+    private String id;
     private Date heureCommande;
     private Date heureLivraison;
     private Date heureRecuperationParClient;
@@ -20,18 +20,18 @@ public class Commande {
     private enumEtatCommande etat;
     private Long idResidence;
     private ArrayList<Long> casiers;
-    private Long idCoursier;
-    private Long idClient;
+    private String idCoursier;
+    private String idClient;
     private Position positionLivraison;
     private ArrayList<MagasinsCommande> magasinsCommande;
     private String paymentId;
     private String authorizationId;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -107,19 +107,19 @@ public class Commande {
         this.casiers = casiers;
     }
 
-    public Long getIdCoursier() {
+    public String getIdCoursier() {
         return idCoursier;
     }
 
-    public void setIdCoursier(Long idCoursier) {
+    public void setIdCoursier(String idCoursier) {
         this.idCoursier = idCoursier;
     }
 
-    public Long getIdClient() {
+    public String getIdClient() {
         return idClient;
     }
 
-    public void setIdClient(Long idClient) {
+    public void setIdClient(String idClient) {
         this.idClient = idClient;
     }
 

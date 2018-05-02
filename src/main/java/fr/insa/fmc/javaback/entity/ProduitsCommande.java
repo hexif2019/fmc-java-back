@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 
 public class ProduitsCommande {
     @Id
-    private Long id;
+    private String id;
     private String denomination;
     private String description;
     private int quantite;
@@ -18,13 +18,13 @@ public class ProduitsCommande {
     private int largeurUnitaire;
     private int hauteurUnitaire;
     private String img;
-    private Long idProduit;
+    private String idProduit;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -132,11 +132,11 @@ public class ProduitsCommande {
         this.img = img;
     }
 
-    public Long getIdProduit() {
+    public String getIdProduit() {
         return idProduit;
     }
 
-    public void setIdProduit(Long idProduit) {
+    public void setIdProduit(String idProduit) {
         this.idProduit = idProduit;
     }
 }

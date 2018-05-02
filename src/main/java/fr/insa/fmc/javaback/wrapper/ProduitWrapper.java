@@ -4,7 +4,7 @@ import fr.insa.fmc.javaback.entity.ProduitsCommande;
 
 public class ProduitWrapper {
 
-    private Long id;
+    private String id;
     private String denomination;
     private String description;
     private int nb;
@@ -30,11 +30,11 @@ public class ProduitWrapper {
         this.hauteur = produitsCommande.getHauteurUnitaire();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

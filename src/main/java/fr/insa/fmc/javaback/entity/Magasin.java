@@ -8,23 +8,23 @@ import java.util.Map;
 @Document(collection="ColMagasin")
 public class Magasin {
     @Id
-    private Long id;
+    private String id;
     private String adresse;
     private String description;
     private String denomination;
     private String email;
     private String mdp;
     private Position position;
-    private Map<Long, Produit> produitsList; // l'index est l'id du produit
+    private Map<String, Produit> produitsList; // l'index est l'id du produit
     private String ville;
     private String codePostal;
     private String img;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,11 +76,11 @@ public class Magasin {
         this.position = position;
     }
 
-    public Map<Long, Produit> getProduitsList() {
+    public Map<String, Produit> getProduitsList() {
         return produitsList;
     }
 
-    public void setProduitsList(Map<Long, Produit> produitsList) {
+    public void setProduitsList(Map<String, Produit> produitsList) {
         this.produitsList = produitsList;
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface CoursierRepository extends CrudRepository<Coursier,Long>,CoursierRepositoryCustom {
+public interface CoursierRepository extends CrudRepository<Coursier,String>,CoursierRepositoryCustom {
     @Override
-    Optional<Coursier> findById(Long id);
+    Optional<Coursier> findById(String id);
 }

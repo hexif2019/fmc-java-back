@@ -24,7 +24,7 @@ public class ProduitController {
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/produit/{id}")
-    public String deleteProduitById(@PathVariable Long id) {
+    public String deleteProduitById(@PathVariable String id) {
         produitRepository.deleteById(id);
         return "";
     }

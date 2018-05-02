@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 
 public class Produit {
     @Id
-    private Long id;
+    private String id;
     private String denomination;
     private String description;
     private int prix;
@@ -15,11 +15,11 @@ public class Produit {
     private int hauteur;
     private String img;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
