@@ -1,6 +1,7 @@
 package fr.insa.fmc.javaback.Exception;
 
 
+import com.paypal.base.rest.PayPalRESTException;
 import fr.insa.fmc.javaback.Exception.ExceptionMessage;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,13 @@ public class SmartException extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionMessage> genericExceptionHandler(HttpServletRequest request, Exception exception) {
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter),HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
+        return MessageDeRetour;
+    }
+    @ResponseBody
+    @ExceptionHandler(PayPalRESTException.class)
+    public ResponseEntity<ExceptionMessage> PaypalExceptionHandler(HttpServletRequest request, Exception exception) {
         ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter),HttpStatus.INTERNAL_SERVER_ERROR.toString());
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return MessageDeRetour;
