@@ -1,6 +1,7 @@
 package fr.insa.fmc.javaback.wrapper;
 
 import fr.insa.fmc.javaback.entity.Commande;
+import fr.insa.fmc.javaback.entity.Magasin;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -65,6 +66,7 @@ public class CommandeWrapper {
         this.id = commande.getId();
         this.etat = commande.getEtat().toString();
         this.prix = commande.getPrixTotal();
+        this.magasins = new ArrayList<MagasinWrapper>();
         for(int i = 0; i < commande.getMagasinsCommande().size(); i++) {
             this.magasins.add(new MagasinWrapper(commande.getMagasinsCommande().get(i)));
         }
