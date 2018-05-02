@@ -66,7 +66,7 @@ public class MagasinController {
         String mdp = params.getPassword();
         Magasin magasin = magasinRepository.connectionQuery(email,mdp);
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
-        //todo : générer un vrai token
+        //todo : gÃ©nÃ©rer un vrai token
         String token = "je suis le token";
         authResponse.setToken(token);
         MarchandWrapper marchand = new MarchandWrapper();
