@@ -1,7 +1,8 @@
 package fr.insa.fmc.javaback.service;
 
-public class PaymentNotification {
+public class PaymentExecuteNotification {
 
+    private Long commandeId;
     private String authorizationId;
     private String payerId;
 
@@ -21,6 +22,11 @@ public class PaymentNotification {
         this.payerId = payerId;
     }
 
+    public Long getCommandeId() {
+        return commandeId;
+    }
 
-
+    public void setCommandeId(Long commandeId) {
+        this.commandeId = commandeId;
+    }
 }
