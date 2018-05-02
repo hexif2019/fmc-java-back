@@ -1,20 +1,27 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Coursier;
+import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
+import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.CoursierRepository;
+import fr.insa.fmc.javaback.service.PaypalService;
 import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
 import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
 import fr.insa.fmc.javaback.wrapper.LivreurWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 public class CousierController {
     @Autowired
     CoursierRepository coursierRepository;
+    @Autowired
+    CommandeRepository commandeRepository;
+    @Autowired
+    PaypalService paypalService;
 
     @RequestMapping(method=RequestMethod.POST, value="/coursier")
     public Coursier saveCoursier(@RequestBody Coursier coursier) {
@@ -40,5 +47,17 @@ public class CousierController {
         livreur.setPosition(coursier.getPosition());
         authCoursierResponse.setUser(livreur);
         return authCoursierResponse;
+    }
+
+    @RequestMapping(method=RequestMethod.POST,value="api/livreur/terminerlivraison/{commandeId}",consumes="application/json")
+    public String terminerLivraison(@PathVariable String commandeId){
+        Optional<Commande> optCom = commandeRepository.findById(commandeId);
+        if(optCom.isPresent()){
+            Commande commande = optCom.get();
+            commande.setEtat(enumEtatCommande.DANS_CASIER);
+        }else{
+            return "failed:no such commande in db";
+        }
+        return "";
     }
 }
