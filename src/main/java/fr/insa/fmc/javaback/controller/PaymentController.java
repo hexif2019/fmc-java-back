@@ -3,17 +3,19 @@ package fr.insa.fmc.javaback.controller;
 import com.paypal.api.payments.Authorization;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
-import com.paypal.base.exception.PayPalException;
 import com.paypal.base.rest.PayPalRESTException;
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
-import fr.insa.fmc.javaback.service.PaymentNotification;
+import fr.insa.fmc.javaback.service.PaymentCreationNotification;
+import fr.insa.fmc.javaback.service.PaymentExecuteNotification;
 import fr.insa.fmc.javaback.service.PaypalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 public class PaymentController {
@@ -23,27 +25,42 @@ public class PaymentController {
     private PaypalService paypalService;
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay",consumes = "application/json")
-    public String pay(@RequestBody Commande commande){
+    public PaymentCreationNotification pay(@RequestBody Commande commande){
+        PaymentCreationNotification res = new PaymentCreationNotification();
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
-            Payment payment = paypalService.createPayment((double) commande.getPrixTotal(),"Commande � r�gler",baseUrl+"cancel",baseUrl+"success");
-            for(Links links : payment.getLinks()){
-                if(links.getRel().equals("approval_url")){
-                    return "redirect:" + links.getHref();
-                }
-            }
+            Payment payment = paypalService.createPayment((double) commande.getPrixTotal(),"Commande à régler",baseUrl+"cancel",baseUrl+"success");
+            res.setPaymentID(payment.getId());
         }catch (PayPalRESTException e){
             System.err.println(e.getMessage());
         }
-        return "redirect:/";
+        return res;
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value="mock/pay",consumes = "application/json")
+    public PaymentCreationNotification payMock(){
+        PaymentCreationNotification res = new PaymentCreationNotification();
+        try {
+            String baseUrl = "client.fais-mes-courses.fr/api/pay/";
+            Payment payment = paypalService.createPayment(31.11,"Commande à régler",baseUrl+"cancel",baseUrl+"success");
+            res.setPaymentID(payment.getId());
+        }catch (PayPalRESTException e){
+            System.err.println(e.getMessage());
+        }
+        return res;
     }
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/success",consumes = "application/json")
-    public String proceedPayment(@RequestBody PaymentNotification authorize){
+    public String proceedPayment(@RequestBody PaymentExecuteNotification authorize){
         try {
             Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getAuthorizationId(),authorize.getPayerId());
-            //todo : update la commande avec l'authorizeId pour pouvoir capturer les fonds plus tard
             if(authorization.getState().equals("success")){
+                Optional<Commande> commande = commandeRepository.findById(authorize.getCommandeId());
+                if(commande.isPresent()){
+                    Commande in = commande.get();
+                    in.setAuthorizationId(authorization.getId());
+                    commandeRepository.save(in);
+                }
                 return "success";
             }
         }catch (PayPalRESTException e){
