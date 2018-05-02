@@ -18,8 +18,8 @@ public class Commande {
     private int prixTotal;
     private int volumeTotal;
     private enumEtatCommande etat;
-    private Long idResidence;
-    private ArrayList<Long> casiers;
+    private String idResidence;
+    private String casiers;
     private String idCoursier;
     private String idClient;
     private Position positionLivraison;
@@ -91,19 +91,19 @@ public class Commande {
         this.etat = etat;
     }
 
-    public Long getIdResidence() {
+    public String getIdResidence() {
         return idResidence;
     }
 
-    public void setIdResidence(Long idResidence) {
+    public void setIdResidence(String idResidence) {
         this.idResidence = idResidence;
     }
 
-    public ArrayList<Long> getCasiers() {
+    public String getCasiers() {
         return casiers;
     }
 
-    public void setCasiers(ArrayList<Long> casiers) {
+    public void setCasiers(String casiers) {
         this.casiers = casiers;
     }
 
