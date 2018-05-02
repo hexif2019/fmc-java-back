@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,8 +12,11 @@ import java.util.Date;
 public class Commande {
     @Id
     private String id;
+    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
     private Date heureCommande;
+    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
     private Date heureLivraison;
+    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
     private Date heureRecuperationParClient;
     private int poidsTotal;
     private int prixTotal;

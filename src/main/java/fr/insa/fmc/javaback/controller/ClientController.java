@@ -1,11 +1,10 @@
 package fr.insa.fmc.javaback.controller;
 
-import fr.insa.fmc.javaback.Exception.NoPasswordException;
-import fr.insa.fmc.javaback.Exception.SameEmailException;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.service.TokenGenerationService;
 import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +62,7 @@ public class ClientController {
             throw new Exception("you must assign a password");
         }
         UserWrapper user = params.getUser();
-        String token = "blabla";
+        String token = TokenGenerationService.GenerateToken();
         Client client = new Client();
         //client.setId(user.getId());
         client.setNom(user.getNom());
@@ -83,6 +82,28 @@ public class ClientController {
         //TODO:exception
     }
 
+    @RequestMapping(method=RequestMethod.POST, value="/api/authenticateToken",consumes="application/json")
+    public UserWrapper anthentificationToken(@RequestBody AuthentificationTokenWrapper params)throws Exception{
+        String email = params.getEmail();
+        String token = params.getToken();
+        Client client = clientRepository.connectionQuery(email);
+        if(client==null){
+            throw new Exception("le client est introuvable");
+        }
+        UserWrapper user = new UserWrapper();
+        user.setId(client.getId());
+        user.setEmail(client.getEmail());
+        user.setNom(client.getNom());
+        user.setPrenom(client.getPrenom());
+        Optional<Residence> residence = residenceRepository.findById(client.getResidence());
+
+        if(!(residence.isPresent())){
+            throw new Exception("there is no residence");
+        }
+        user.setResidence(new ResidenceWrapper(residenceRepository.findById(client.getResidence()).get()));
+        return user;
+    }
+
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
     public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws Exception{
         String email = params.getEmail();
@@ -92,7 +113,7 @@ public class ClientController {
         if(client == null) {
             throw new Exception("le client est introuvable");
         }
-        String token = "je_suis_le_token";
+        String token = TokenGenerationService.GenerateToken();
         authResponse.setToken(token);
         UserWrapper user = new UserWrapper();
         user.setId(client.getId());

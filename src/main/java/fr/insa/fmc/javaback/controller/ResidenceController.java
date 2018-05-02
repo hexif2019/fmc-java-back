@@ -1,9 +1,11 @@
 package fr.insa.fmc.javaback.controller;
 
 import fr.insa.fmc.javaback.entity.Magasin;
+import fr.insa.fmc.javaback.entity.MagasinsCommande;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
 import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,13 +56,25 @@ public class ResidenceController {
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/api/getMagasinsOfResidence/{residenceid}")
-    public ArrayList<Magasin> findNearMagasinsByResidenceId(@PathVariable String id) {
+    public ArrayList<MagasinWrapper> findNearMagasinsByResidenceId(@PathVariable String id) throws Exception {
         Optional<Residence> residenceOpt = residenceRepository.findById(id);
-        Residence residence = residenceOpt.get();
-        Set<String> residenceId = residence.getIdMagasins();
-        ArrayList<Magasin> nearMagasins = new ArrayList<>();
-        Iterator<Magasin> it = (Iterator<Magasin>) magasinRepository.findAll();
-        it.forEachRemaining(nearMagasins::add);
+        Residence residence = new Residence();
+        if(residenceOpt.isPresent()){
+            residence = residenceOpt.get();
+        } else {
+            throw new Exception("cannot find residence by id");
+        }
+        Set<String> magasinsId = residence.getIdMagasins();
+        ArrayList<MagasinWrapper> nearMagasins = new ArrayList<MagasinWrapper>();
+        for(String magId: magasinsId) {
+            Optional<Magasin> magasinTempo = magasinRepository.findById(magId);
+            if(magasinTempo.isPresent()){
+                nearMagasins.add(new MagasinWrapper(magasinTempo.get()));
+            } else {
+                throw new NullPointerException("Magasin de la residence introuvable");
+            }
+        }
+
         return nearMagasins;
     }
 

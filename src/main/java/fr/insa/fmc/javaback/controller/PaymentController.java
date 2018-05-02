@@ -5,17 +5,22 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import fr.insa.fmc.javaback.entity.Commande;
+import fr.insa.fmc.javaback.entity.Coursier;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
+import fr.insa.fmc.javaback.repository.CoursierRepository;
+import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import fr.insa.fmc.javaback.service.PaymentCreationNotification;
 import fr.insa.fmc.javaback.service.PaymentExecuteNotification;
 import fr.insa.fmc.javaback.service.PaypalService;
+import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -23,16 +28,33 @@ public class PaymentController {
     @Autowired
     private CommandeRepository commandeRepository;
     @Autowired
+    private ResidenceRepository residenceRepository;
+    @Autowired
+    private CoursierRepository coursierRepository;
+    @Autowired
     private PaypalService paypalService;
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay",consumes = "application/json")
-    public PaymentCreationNotification pay(@RequestBody Commande commande){
+    public PaymentCreationNotification pay(@RequestBody CommandeWrapper commandeWrap, @RequestBody Date dateLivraison){
         PaymentCreationNotification res = new PaymentCreationNotification();
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
+            Optional<Commande> commandeOpt = commandeRepository.findById(commandeWrap.getId());
+            Commande commande;
+            if(commandeOpt.isPresent()) commande = commandeOpt.get();
+            else throw new NullPointerException("commande introuvable");
+            //recherche de casier et livreur disponible
+                //recherche casier
+
+
+
+
+
+            commande.setEtat(enumEtatCommande.ATTRIBUE_A_COURSIER);
             Payment payment = paypalService.createPayment((double) commande.getPrixTotal(),"Commande à régler",baseUrl+"cancel",baseUrl+"success");
             res.setPaymentID(payment.getId());
-            //todo : mettre à jour la date de la commande
+            //todo : mettre à jour la date de la commande, les casiers de la commande, le livreur et changer son etat et la sauvegarder en base
+
         }catch (PayPalRESTException e){
             System.err.println(e.getMessage());
         }
@@ -73,7 +95,8 @@ public class PaymentController {
         }
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay/cancel",consumes = "application/json")
-    public String cancelPayment(Commande commande){
-        return "operation cancelled";
+    public String cancelPayment(@RequestBody CommandeWrapper commandeWrap){
+        //todo annuler la commande et libérer casier et livreur
+        return "cancelled";
     }
 }

@@ -1,14 +1,10 @@
-package fr.insa.fmc.javaback.Exception;
+package fr.insa.fmc.javaback.exception;
 
 
 import com.paypal.base.rest.PayPalRESTException;
-import fr.insa.fmc.javaback.Exception.ExceptionMessage;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.handler.ResponseStatusExceptionHandler;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;

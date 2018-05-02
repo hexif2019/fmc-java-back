@@ -14,6 +14,12 @@ public class ClientRepositoryCustomImpl implements ClientRepositoryCustom {
     @Autowired
     private MongoOperations operations;
 
+    @Override
+    public Client connectionQuery(String email){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(email));
+        return operations.findOne(query,Client.class);
+    }
 
     @Override
     public Client connectionQuery(String email, String mdp){
