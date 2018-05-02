@@ -33,7 +33,7 @@ public class MagasinController {
         if(m.isPresent()){
             magasin = m.get();
         } else {
-            //todo exception
+            throw new NullPointerException("Magasin introuvable");
         }
         return magasin.getProduitsList().values();
     }
