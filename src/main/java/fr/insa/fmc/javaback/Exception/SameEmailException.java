@@ -1,6 +1,8 @@
 package fr.insa.fmc.javaback.Exception;
 
-public class SameEmailException extends RuntimeException{
+import java.io.IOException;
+
+public class SameEmailException extends IOException {
     public SameEmailException(String message) {
         super(message);
     }

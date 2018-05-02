@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.Exception.NoPasswordException;
 import fr.insa.fmc.javaback.Exception.SameEmailException;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
@@ -56,8 +57,11 @@ public class ClientController {
     }
 
     @RequestMapping(method=RequestMethod.POST,value="/api/register",consumes="application/json")
-    public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params){
+    public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params) throws Exception {
         String mdp = params.getPassword();
+        if(mdp.isEmpty()){
+            throw new Exception("you must assign a password");
+        }
         UserWrapper user = params.getUser();
         String token = "blabla";
         Client client = new Client();
@@ -65,7 +69,7 @@ public class ClientController {
         client.setNom(user.getNom());
         client.setPrenom(user.getPrenom());
         if(clientRepository.findClientByEmail(user.getEmail())!=null){
-            throw new SameEmailException("email already existe");
+            throw new Exception("Cet adresse email existe deja");
         }
         client.setEmail(user.getEmail());
         client.setResidence(user.getResidence().getId());
@@ -80,14 +84,13 @@ public class ClientController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/api/authenticate",consumes="application/json")
-    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws NullPointerException{
+    public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws Exception{
         String email = params.getEmail();
         String mdp = params.getPassword();
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
-            throw new NullPointerException("le client est introuvable");
-
+            throw new Exception("le client est introuvable");
         }
         String token = "je_suis_le_token";
         authResponse.setToken(token);
