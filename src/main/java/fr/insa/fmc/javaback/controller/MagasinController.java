@@ -46,9 +46,10 @@ public class MagasinController {
             throw new Exception("you must assign a password");
         }
         MarchandWrapper marchand = params.getMarchand();
-        String token = TokenGenerationService.GenerateToken();
+        //String token = TokenGenerationService.GenerateToken();
+        String token = "je suis un token" ;
         Magasin magasin = new Magasin();
-        magasin.setId(marchand.getId());
+        //magasin.setId(marchand.getId());
         magasin.setAdresse(marchand.getAdresse());
         magasin.setDescription(marchand.getDescription());
         magasin.setEmail(marchand.getEmail());
