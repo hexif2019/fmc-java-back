@@ -66,6 +66,7 @@ public class MagasinController {
         magasin.setCodePostal(marchand.getCodePostal());
         magasinRepository.save(magasin);
         RegistrationMarchandResponseWrapper registrationMarchandResponse = new RegistrationMarchandResponseWrapper();
+        marchand.setId(magasin.getId());
         registrationMarchandResponse.setToken(token);
         registrationMarchandResponse.setMarchand(marchand);
         return registrationMarchandResponse;
