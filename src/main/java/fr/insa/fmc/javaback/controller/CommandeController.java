@@ -1,13 +1,11 @@
 package fr.insa.fmc.javaback.controller;
 
-import fr.insa.fmc.javaback.entity.Client;
-import fr.insa.fmc.javaback.entity.Commande;
-import fr.insa.fmc.javaback.entity.MagasinsCommande;
-import fr.insa.fmc.javaback.entity.ProduitsCommande;
+import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
+import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
 import fr.insa.fmc.javaback.wrapper.ProduitWrapper;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +24,9 @@ public class CommandeController {
 
     @Autowired
     CommandeRepository commandeRepository;
+
+    @Autowired
+    ResidenceRepository residenceRepository;
 
     @RequestMapping(method=RequestMethod.POST, value="/commande")
     public Commande saveCommande(@RequestBody Commande commande) {
@@ -44,9 +46,37 @@ public class CommandeController {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
-        Commande commande = commandeRepository.findById(client.getCommandesEnCreation()).get();
+        Optional<Commande> commandeOpt = commandeRepository.findById(client.getCommandesEnCreation());
 
-        CommandeWrapper commandeWrap = new CommandeWrapper(commande);
+        CommandeWrapper commandeWrap;
+
+        if(commandeOpt.isPresent()) {
+
+            commandeWrap = new CommandeWrapper(commandeOpt.get());
+
+        } else {
+
+            Commande commande = new Commande();
+
+            commande.setEtat(enumEtatCommande.EDITION);
+            commande.setPoidsTotal(0);
+            commande.setPrixTotal(0);
+            commande.setVolumeTotal(0);
+            commande.setIdResidence(client.getResidence());
+            commande.setCasiers(new ArrayList<String>());
+
+            Residence residence = residenceRepository.findById(client.getResidence()).get();
+            if(residence == null)
+                throw new NullPointerException("Residence introuvable");
+
+            commande.setPositionLivraison(residence.getPosition());
+
+            commande.setMagasinsCommande(new ArrayList<MagasinsCommande>());
+
+            commandeRepository.save(commande);
+
+            commandeWrap = new CommandeWrapper(commande);
+        }
 
         return commandeWrap;
     }
