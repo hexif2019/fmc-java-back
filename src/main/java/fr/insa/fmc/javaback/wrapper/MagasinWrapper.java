@@ -25,6 +25,7 @@ public class MagasinWrapper {
         this.description = magasinsCommande.getDescription();
         this.denomination = magasinsCommande.getDenomination();
         this.email = magasinsCommande.getEmail();
+        this.produits = new ArrayList<ProduitWrapper>();
         for(int i = 0; i < magasinsCommande.getProduitsCommande().size(); i++) {
             this.produits.add(new ProduitWrapper(magasinsCommande.getProduitsCommande().get(i)));
         }
@@ -40,6 +41,7 @@ public class MagasinWrapper {
         this.description = magasin.getDescription();
         this.denomination = magasin.getDenomination();
         this.email = magasin.getEmail();
+        this.produits = new ArrayList<ProduitWrapper>();
         for(Produit product: magasin.getProduitsList().values()) {
             this.produits.add(new ProduitWrapper(product));
         }
