@@ -22,7 +22,7 @@ public class SmartException extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ExceptionMessage> nullPointerExceptionHandler(HttpServletRequest request, NullPointerException exception) {
-        ExceptionMessage message = new ExceptionMessage("entité null",exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter));
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter),HttpStatus.INTERNAL_SERVER_ERROR.toString());
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return MessageDeRetour;
     }
@@ -30,14 +30,14 @@ public class SmartException extends ResponseEntityExceptionHandler {
     @ExceptionHandler(WrongAddressException.class)
     public ResponseEntity<ExceptionMessage> wrongAddressExceptionHandler(HttpServletRequest request, WrongAddressException exception) {
 
-        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter));
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter),HttpStatus.BAD_REQUEST.toString());
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
         return MessageDeRetour;
     }
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionMessage> genericExceptionHandler(HttpServletRequest request, Exception exception) {
-        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter));
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(),request.getRequestURI().toString() ,LocalDateTime.now().format(formatter),HttpStatus.INTERNAL_SERVER_ERROR.toString());
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return MessageDeRetour;
     }

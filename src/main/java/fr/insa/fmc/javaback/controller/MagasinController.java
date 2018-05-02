@@ -65,8 +65,9 @@ public class MagasinController {
         String email = params.getEmail();
         String mdp = params.getPassword();
         Magasin magasin = magasinRepository.connectionQuery(email,mdp);
+        if(magasin==null) throw new NullPointerException("Le magasin est introuvable");
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
-        //todo : générer un vrai token
+        //todo : gï¿½nï¿½rer un vrai token
         String token = "je suis le token";
         authResponse.setToken(token);
         MarchandWrapper marchand = new MarchandWrapper();

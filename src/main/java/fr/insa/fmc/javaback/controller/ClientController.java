@@ -73,7 +73,7 @@ public class ClientController {
         Client client = clientRepository.connectionQuery(email,mdp);
         AuthentificationResponseWrapper authResponse = new AuthentificationResponseWrapper();
         if(client == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("le client est introuvable");
 
         }
         String token = "je_suis_le_token";

@@ -7,12 +7,14 @@ public class ExceptionMessage {
     private String className;
     private String path;
     private String date;
+    private String status;
 
-    public ExceptionMessage(String message, String className, String path, String date) {
+    public ExceptionMessage(String message, String className, String path, String date, String status) {
         this.message = message;
         this.className = className;
         this.path = path;
         this.date = date;
+        this.status = status;
     }
 
     public String getMessage() {
@@ -31,6 +33,10 @@ public class ExceptionMessage {
         return date;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setMessage(String message) {
         this.message = message;
     }
@@ -45,6 +51,10 @@ public class ExceptionMessage {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 
