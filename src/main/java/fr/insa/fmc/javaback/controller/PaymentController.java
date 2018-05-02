@@ -22,7 +22,7 @@ public class PaymentController {
     @Autowired
     private PaypalService paypalService;
 
-    @RequestMapping(method = RequestMethod.POST,value="pay",consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST,value="api/pay",consumes = "application/json")
     public String pay(@RequestBody Commande commande){
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
@@ -38,7 +38,7 @@ public class PaymentController {
         return "redirect:/";
     }
 
-    @RequestMapping(method = RequestMethod.POST,value="pay/success",consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST,value="api/pay/success",consumes = "application/json")
     public String proceedPayment(@RequestBody PaymentNotification authorize){
         try {
             Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getAuthorizationId(),authorize.getPayerId());
@@ -52,7 +52,7 @@ public class PaymentController {
         return "redirect:/";
     }
 
-    @RequestMapping(method = RequestMethod.POST,value="pay/cancel",consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST,value="api/pay/cancel",consumes = "application/json")
     public String cancelPayment(Commande commande){
         return "operation cancelled";
     }
