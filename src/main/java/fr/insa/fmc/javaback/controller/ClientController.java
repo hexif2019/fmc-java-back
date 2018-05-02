@@ -99,16 +99,15 @@ public class ClientController {
         user.setEmail(client.getEmail());
         user.setNom(client.getNom());
         user.setPrenom(client.getPrenom());
-        ResidenceWrapper residenceWarp = new ResidenceWrapper();
+
         Optional<Residence> residence = residenceRepository.findById(client.getResidence());
 
-        if(residence.isPresent()){
-            residenceWarp.setId(residence.get().getId());
-            residenceWarp.setAdresse(residence.get().getAdresse());
-            residenceWarp.setCodePostal(residence.get().getCodePostal());
-            residenceWarp.setVille(residence.get().getVille());
-            user.setResidence(residenceWarp);
+        if(!(residence.isPresent())){
+            throw new Exception("there is no residence");
         }
+
+        user.setResidence(new ResidenceWrapper(residenceRepository.findById(client.getResidence()).get()));
+
         authResponse.setUser(user);
         return authResponse;
 

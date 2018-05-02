@@ -45,6 +45,14 @@ public class ResidenceController {
         return residence;
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/residence")
+    public String deleteAllResidence() {
+        residenceRepository.deleteAll();
+        //Optional<Client> client = clientRepository.findById(id);
+        //clientRepository.delete(client);
+        return "";
+    }
+
     @RequestMapping(method=RequestMethod.GET,value="/api/getMagasinsOfResidence/{residenceid}")
     public ArrayList<Magasin> findNearMagasinsByResidenceId(@PathVariable String id) {
         Optional<Residence> residenceOpt = residenceRepository.findById(id);
