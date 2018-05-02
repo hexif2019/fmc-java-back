@@ -10,6 +10,8 @@ import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -65,6 +67,7 @@ public class MagasinController {
         magasin.setMdp(mdp);
         magasin.setVille(marchand.getVille());
         magasin.setCodePostal(marchand.getCodePostal());
+        magasin.setProduitsList(new HashMap<String, Produit>());
         magasinRepository.save(magasin);
         RegistrationMarchandResponseWrapper registrationMarchandResponse = new RegistrationMarchandResponseWrapper();
         marchand.setId(magasin.getId());

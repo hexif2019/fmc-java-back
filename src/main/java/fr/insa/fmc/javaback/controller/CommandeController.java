@@ -35,6 +35,14 @@ public class CommandeController {
         return commande;
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/commande")
+    public String deleteAllCommande() {
+        commandeRepository.deleteAll();
+        //Optional<Client> client = clientRepository.findById(id);
+        //clientRepository.delete(client);
+        return "";
+    }
+
     @RequestMapping(method= RequestMethod.GET, value="/commande")
     public Iterable<Commande> findResidence() {
         return commandeRepository.findAll();
@@ -150,7 +158,7 @@ public class CommandeController {
     }
 
 
-    @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/{userid}",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/",consumes="application/json")
     public String updatePanier(@RequestBody CommandeWrapper commandeWrap){
         String userid = commandeWrap.getUserid();
 
