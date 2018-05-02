@@ -9,6 +9,6 @@ public class CasierDisponibilite {
     @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
     private Date date;
 
-    private enum enumEtatCasier{occupe,libre};
+    private enum enumEtatCasier{occupe,libre}
 
 }

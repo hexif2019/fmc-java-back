@@ -1,7 +1,5 @@
 package fr.insa.fmc.javaback.controller;
 
-import fr.insa.fmc.javaback.Exception.NoPasswordException;
-import fr.insa.fmc.javaback.Exception.SameEmailException;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
