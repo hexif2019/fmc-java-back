@@ -71,4 +71,6 @@ public class CommandeWrapper {
         this.userid = commande.getIdClient();
     }
 
+    public CommandeWrapper() {}
+
 }
