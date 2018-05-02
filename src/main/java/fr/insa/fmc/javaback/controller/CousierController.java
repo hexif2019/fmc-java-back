@@ -28,7 +28,7 @@ public class CousierController {
         String email = params.getEmail();
         String mdp = params.getPassword();
         Coursier coursier = coursierRepository.connectionQuery(email,mdp);
-        if(coursier==null) throw new NullPointerException("le compte est introuvable");
+        if(coursier==null) throw new NullPointerException("le coursier est introuvable");
         AuthentificationCoursierResponseWrapper authCoursierResponse = new AuthentificationCoursierResponseWrapper();
         String token = "token sama";
         authCoursierResponse.setToken(token);
