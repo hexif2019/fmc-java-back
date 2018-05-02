@@ -26,7 +26,7 @@ public class PaymentController {
     public String pay(@RequestBody Commande commande){
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
-            Payment payment = paypalService.createPayment(commande.getPrixTotal(),"Commande à régler",baseUrl+"cancel",baseUrl+"success");
+            Payment payment = paypalService.createPayment((double) commande.getPrixTotal(),"Commande ï¿½ rï¿½gler",baseUrl+"cancel",baseUrl+"success");
             for(Links links : payment.getLinks()){
                 if(links.getRel().equals("approval_url")){
                     return "redirect:" + links.getHref();
