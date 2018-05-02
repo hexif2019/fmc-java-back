@@ -63,16 +63,12 @@ public class CommandeController {
             commande.setPrixTotal(0);
             commande.setVolumeTotal(0);
             commande.setIdResidence(client.getResidence());
-            commande.setCasiers(new ArrayList<String>());
+            commande.setCasiers(new ArrayList<>());
 
-            Residence residence = residenceRepository.findById(client.getResidence()).get();
-            if(residence == null)
-                throw new NullPointerException("Residence introuvable");
-
-            commande.setPositionLivraison(residence.getPosition());
-
-            commande.setMagasinsCommande(new ArrayList<MagasinsCommande>());
-
+            Optional<Residence> residence = residenceRepository.findById(client.getResidence());
+            if(!residence.isPresent()) throw new NullPointerException("Residence introuvable");
+            commande.setPositionLivraison(residence.get().getPosition());
+            commande.setMagasinsCommande(new ArrayList<>());
             commandeRepository.save(commande);
 
             commandeWrap = new CommandeWrapper(commande);
@@ -87,11 +83,11 @@ public class CommandeController {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
-        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<CommandeWrapper>();
+        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<>();
 
         //verif si liste vide
 
-        ArrayList<Commande> commandesList = new ArrayList<Commande>(client.getCommandesCours().values());
+        ArrayList<Commande> commandesList = new ArrayList<>(client.getCommandesCours().values());
 
         for(int i = 0; i < commandesList.size(); i++) {
             commandeWrapList.add(new CommandeWrapper(commandesList.get(i)));
@@ -105,7 +101,7 @@ public class CommandeController {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
-        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<CommandeWrapper>();
+        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<>();
 
         //verif si liste vide ce que ca fait
 
@@ -116,7 +112,6 @@ public class CommandeController {
 
             commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(i.toString()).get()));
         }
-
         return commandeWrapList;
 
     }
@@ -126,13 +121,13 @@ public class CommandeController {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
 
-        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<CommandeWrapper>();
+        ArrayList<CommandeWrapper> commandeWrapList = new ArrayList<>();
 
         //verif si liste vide ce que ca fait
 
         //ArrayList<Long> commandesList = new ArrayList<Long>(client);
 
-        ArrayList<String> lastCommandesList = new ArrayList<String>(client.getCommandesFinis());
+        ArrayList<String> lastCommandesList = new ArrayList<>(client.getCommandesFinis());
 
         for(int i = lastCommandesList.size()-1; i >=0 && i >= lastCommandesList.size()-3; i--) {
             commandeWrapList.add(new CommandeWrapper(commandeRepository.findById(lastCommandesList.get(i)).get()));
@@ -165,7 +160,7 @@ public class CommandeController {
         //TODO: verifier le prix plus loin dans la mise a jour, pour chaque produit par rapport a la BDD, pour le total pour chaque magasin et pour le total de la commande
         commande.setIdClient(commandeWrap.getUserid());
 
-        ArrayList<MagasinsCommande> listMag = new ArrayList<MagasinsCommande>();
+        ArrayList<MagasinsCommande> listMag = new ArrayList<>();
 
         for(int i = 0; i<commandeWrap.getMagasins().size(); i++) {
 
@@ -229,8 +224,8 @@ public class CommandeController {
          //Map<Long, ProduitsCommande> map = new HashMap<>();
 
         //c.setMagasinsCommande(map);
-        String statue = "ok";
-        return statue;
+        String statut = "ok";
+        return statut;
     }
 
 }

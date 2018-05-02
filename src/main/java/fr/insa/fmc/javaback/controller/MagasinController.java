@@ -5,6 +5,7 @@ import fr.insa.fmc.javaback.entity.Produit;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.service.TokenGenerationService;
 import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class MagasinController {
             throw new Exception("you must assign a password");
         }
         MarchandWrapper marchand = params.getMarchand();
-        String token = "token";
+        String token = TokenGenerationService.GenerateToken();
         Magasin magasin = new Magasin();
         magasin.setId(marchand.getId());
         magasin.setAdresse(marchand.getAdresse());
@@ -75,7 +76,7 @@ public class MagasinController {
         }
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
         //todo : g�n�rer un vrai token
-        String token = "je suis le token";
+        String token = TokenGenerationService.GenerateToken();
         authResponse.setToken(token);
         MarchandWrapper marchand = new MarchandWrapper();
         marchand.setId(magasin.getId());

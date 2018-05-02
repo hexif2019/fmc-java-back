@@ -10,6 +10,7 @@ import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.service.PaymentCreationNotification;
 import fr.insa.fmc.javaback.service.PaymentExecuteNotification;
 import fr.insa.fmc.javaback.service.PaypalService;
+import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +27,18 @@ public class PaymentController {
     private PaypalService paypalService;
 
     @RequestMapping(method = RequestMethod.POST,value="api/pay",consumes = "application/json")
-    public PaymentCreationNotification pay(@RequestBody Commande commande){
+    public PaymentCreationNotification pay(@RequestBody CommandeWrapper commandeWrap){
         PaymentCreationNotification res = new PaymentCreationNotification();
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
+            Optional<Commande> commandeOpt = commandeRepository.findById(commandeWrap.getId());
+            Commande commande;
+            if(commandeOpt.isPresent()) commande = commandeOpt.get();
+            else throw new NullPointerException("commande introuvable");
             Payment payment = paypalService.createPayment((double) commande.getPrixTotal(),"Commande à régler",baseUrl+"cancel",baseUrl+"success");
             res.setPaymentID(payment.getId());
-            //todo : mettre à jour la date de la commande
+            //todo : mettre à jour la date de la commande, les casiers de la commande, le livreur et changer son etat et la sauvegarder en base
+
         }catch (PayPalRESTException e){
             System.err.println(e.getMessage());
         }
