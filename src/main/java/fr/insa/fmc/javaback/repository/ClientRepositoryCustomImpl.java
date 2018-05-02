@@ -23,14 +23,14 @@ public class ClientRepositoryCustomImpl implements ClientRepositoryCustom {
         return operations.findOne(query,Client.class);
         //Criteria c = Criteria.where("email").is(email).and("mdp").is(mdp);
         //return operations.find(Query.query(c),Client.class);
-
     }
-
     @Override
-
-    public void insert(Client client){
-        operations.insert(client,"ColClient");
+    public Client findClientByEmail(String email){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(email));
+        return operations.findOne(query,Client.class);
     }
+
 
 //    @Override
 //    @Query("select c from Client c where c.email=:email")

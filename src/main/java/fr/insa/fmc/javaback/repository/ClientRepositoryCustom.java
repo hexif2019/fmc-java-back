@@ -4,5 +4,5 @@ import fr.insa.fmc.javaback.entity.Client;
 
 public interface ClientRepositoryCustom {
     Client connectionQuery(String email, String mdp);
-    void insert(Client client);
+    Client findClientByEmail(String email);
 }

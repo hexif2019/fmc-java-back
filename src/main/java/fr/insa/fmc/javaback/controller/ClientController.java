@@ -1,6 +1,6 @@
 package fr.insa.fmc.javaback.controller;
 
-import com.sun.deploy.config.AutoUpdater;
+import fr.insa.fmc.javaback.Exception.SameEmailException;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
@@ -20,6 +20,8 @@ public class ClientController {
 
     @Autowired
     ResidenceRepository residenceRepository;
+
+
 
     @RequestMapping(method=RequestMethod.GET, value="/client")
     public Iterable<Client> findClient() {
@@ -62,7 +64,10 @@ public class ClientController {
         //client.setId(user.getId());
         client.setNom(user.getNom());
         client.setPrenom(user.getPrenom());
-        client.setEmail(user.getEmail());//TODO: verifier si il y a le meme adresse
+        if(clientRepository.findClientByEmail(user.getEmail())!=null){
+            throw new SameEmailException("email already existe");
+        }
+        client.setEmail(user.getEmail());
         client.setResidence(user.getResidence().getId());
         client.setMdp(mdp);
         clientRepository.save(client);
