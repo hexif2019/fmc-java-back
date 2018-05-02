@@ -8,10 +8,12 @@ import fr.insa.fmc.javaback.repository.CoursierRepository;
 import fr.insa.fmc.javaback.service.PaypalService;
 import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
 import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
+import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.LivreurWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
@@ -59,5 +61,47 @@ public class CousierController {
             return "failed:no such commande in db";
         }
         return "";
+    }
+
+    @RequestMapping(method=RequestMethod.POST,value="api/livreur/getCommandesEnCour/{userid}")
+    public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String coursierId){
+        Optional<Coursier> coursier = coursierRepository.findById(coursierId);
+        if(!coursier.isPresent())
+            throw new NullPointerException("Couriser introuvable");
+
+        ArrayList<CommandeWrapper> commandeWrap = new ArrayList<CommandeWrapper>();
+
+        for(String commandeId: coursier.get().getCommandesEnCours().keySet()) {
+            Optional<Commande> commandeTempo = commandeRepository.findById(commandeId);
+
+            if(!commandeTempo.isPresent())
+                throw new NullPointerException("Une commande est introuvable");
+
+            commandeWrap.add(new CommandeWrapper(commandeTempo.get()));
+        }
+
+        return commandeWrap;
+
+    }
+
+    @RequestMapping(method=RequestMethod.POST,value="api/livreur/getCommandesArchiver/{userid}")
+    public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable String coursierId){
+        Optional<Coursier> coursier = coursierRepository.findById(coursierId);
+        if(!coursier.isPresent())
+            throw new NullPointerException("Couriser introuvable");
+
+        ArrayList<CommandeWrapper> commandeWrap = new ArrayList<CommandeWrapper>();
+
+        for(String commandeId: coursier.get().getCommandesFinis()) {
+            Optional<Commande> commandeTempo = commandeRepository.findById(commandeId);
+
+            if(!commandeTempo.isPresent())
+                throw new NullPointerException("Une commande est introuvable");
+
+            commandeWrap.add(new CommandeWrapper(commandeTempo.get()));
+        }
+
+        return commandeWrap;
+
     }
 }
