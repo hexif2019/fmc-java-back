@@ -58,6 +58,7 @@ public class MagasinController {
         magasin.setAdresse(marchand.getAdresse());
         magasin.setDescription(marchand.getDescription());
         magasin.setEmail(marchand.getEmail());
+        magasin.setDenomination(marchand.getDenomination());
         if(magasinRepository.findMagasinByEmail(marchand.getEmail())!=null){
             throw new Exception("Cet adresse email existe deja");
         }
