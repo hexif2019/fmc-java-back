@@ -62,7 +62,7 @@ public class ResidenceController {
         List<Residence> residences = residenceRepository.findResidenceByCodePostal(codePostal);
 
         ArrayList<ResidenceWrapper> residenceWrapList = new ArrayList<ResidenceWrapper>();
-        
+
         //TODO: si liste vide, exception?
 
         for(Residence resid: residences){

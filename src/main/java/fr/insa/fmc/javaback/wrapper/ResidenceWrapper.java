@@ -46,4 +46,6 @@ public class ResidenceWrapper {
         this.codePostal = residence.getCodePostal();
         this.ville = residence.getVille();
     }
+
+    public ResidenceWrapper(){}
 }
