@@ -1,9 +1,13 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Produit;
 import fr.insa.fmc.javaback.entity.Residence;
+import fr.insa.fmc.javaback.entity.*;
+import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
+import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
@@ -40,7 +44,7 @@ public class MagasinController {
         return magasin;
     }
 
-    @RequestMapping(method= RequestMethod.GET, value="/api/getProduits/{id}")
+    @RequestMapping(method= RequestMethod.GET, value=GlobalURLs.MAGASIN_GETPRODUITS)
     public Iterable<Produit> findProduitByMagasinId(@PathVariable String id){
         Optional <Magasin> m = magasinRepository.findById(id);
         Magasin magasin = new Magasin();
@@ -52,7 +56,7 @@ public class MagasinController {
         return magasin.getProduitsList().values();
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getProduit/{marchandid}/{produitid}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.MAGASIN_GETPRODUITS_BYMAGASIN)
     public Produit findProduitByMagainIdAndProduitId(@PathVariable String marchandid, String produitid){
         Optional <Magasin> m = magasinRepository.findById(marchandid);
         Magasin magasin = new Magasin();
@@ -70,7 +74,7 @@ public class MagasinController {
 
 
 
-    @RequestMapping(method=RequestMethod.POST,value="api/registerMarchand",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_REGISTER,consumes="application/json")
     public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params) throws Exception{
         String mdp = params.getPassword();
         if(mdp.isEmpty()){
@@ -102,7 +106,68 @@ public class MagasinController {
 
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/authenticateMarchand",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value="/api/validation/{marchandid}/{commandeid}")
+    public boolean validationMarchand(@PathVariable String marchandId, @PathVariable String commandeId) throws Exception{
+
+        Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
+
+        if(!commandeOpt.isPresent()) {
+            throw new NullPointerException("commande introuvable");
+        }
+
+        Commande commande = commandeOpt.get();
+
+        if(commande.getMagasinsCommande().size() == 0) {
+            throw new Exception("Il n y a pas de magasin dans la commande");
+        }
+
+        int i = 0;
+        boolean magPresentCommande = false;
+
+        for(int j = 0; j < commande.getMagasinsCommande().size(); j++) {
+            if(commande.getMagasinsCommande().get(j).getIdMagasin().equals(marchandId)) {
+                i = j;
+                magPresentCommande = true;
+            }
+        }
+
+        if(!magPresentCommande) {
+            throw new Exception("Le magasin n est pas present dans cette commande");
+        }
+
+        MagasinsCommande magasinCommande = commande.getMagasinsCommande().get(i);
+        magasinCommande.setEtatMagasinCommande(enumEtatMagasinCommande.VALIDE_MAGASIN);
+        commande.setMagasinCommandeInList(i, magasinCommande);
+
+        boolean lastCommande = true;
+
+        for(int j = 0; j < commande.getMagasinsCommande().size(); j++) {
+            if(commande.getMagasinsCommande().get(j).getEtatMagasinCommande() != enumEtatMagasinCommande.VALIDE_MAGASIN) {
+                lastCommande = false;
+            }
+        }
+
+        if(lastCommande) {
+            commande.setEtat(enumEtatCommande.VALIDE_MAGASIN);
+        }
+
+        Optional<Magasin> magasinOpt = magasinRepository.findById(marchandId);
+
+        if(!magasinOpt.isPresent()) {
+            throw new NullPointerException("magasin introuvable");
+        }
+
+        Magasin magasin = magasinOpt.get();
+
+        magasin.deleteCommande(commandeId);
+
+        magasinRepository.save(magasin);
+        commandeRepository.save(commande);
+
+        return true;
+    }
+
+    @RequestMapping(method=RequestMethod.POST,value="/api/authenticateMarchand",consumes="application/json")
     public AuthentificationMarchandResponseWrapper connectionMarchand(@RequestBody AuthentificationWrapper params) throws Exception{
         String email = params.getEmail();
         String mdp = params.getPassword();
@@ -136,7 +201,7 @@ public class MagasinController {
         return authResponse;
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/updateproduit",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_UPDATEPRODUIT,consumes="application/json")
     public String updateProduit(@RequestBody ProduitMagWrapper params) {
         String magasinId = params.getIdMagasin();
 
@@ -187,8 +252,8 @@ public class MagasinController {
         return "ok";
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/api/deleteProduit/{marchandid}/{produitid}")
-    public String deleteProduit(@PathVariable String marchandid,String produitid) {
+    @RequestMapping(method=RequestMethod.DELETE, value=GlobalURLs.MAGASIN_DELETEPRODUIT_BYMAGASIN)
+    public String deleteProduit(@PathVariable String marchandid,@PathVariable String produitid) {
         Optional <Magasin> m = magasinRepository.findById(marchandid);
         Magasin magasin = new Magasin();
         if(m.isPresent()){

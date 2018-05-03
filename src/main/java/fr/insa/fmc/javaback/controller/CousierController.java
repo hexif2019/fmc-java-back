@@ -1,6 +1,7 @@
 package fr.insa.fmc.javaback.controller;
 
 import com.paypal.base.rest.PayPalRESTException;
+import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Coursier;
@@ -14,6 +15,7 @@ import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
 import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.LivreurWrapper;
+import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,13 +33,12 @@ public class CousierController {
     @Autowired
     PaypalService paypalService;
 
-    @RequestMapping(method=RequestMethod.POST, value="/coursier")
-    public Coursier saveCoursier(@RequestBody Coursier coursier) {
-        coursierRepository.save(coursier);
-        return coursier;
-    }
 
     @RequestMapping(method=RequestMethod.POST,value="api/livreur/authenticate",consumes="application/json")
+
+    //remote accessible methods
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.COURSIER_AUTHENTICATE,consumes="appplication/json")
+
     public AuthentificationCoursierResponseWrapper connectionCoursier(@RequestBody AuthentificationWrapper params){
         String email = params.getEmail();
         String mdp = params.getPassword();
@@ -57,7 +58,7 @@ public class CousierController {
         return authCoursierResponse;
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="api/livreur/terminerlivraison/{commandeId}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COURSIER_TERMINERLIVRAISON)
     public String terminerLivraison(@PathVariable String commandeId) throws PayPalRESTException {
         Optional<Commande> optCom = commandeRepository.findById(commandeId);
         if(optCom.isPresent()){
@@ -76,7 +77,7 @@ public class CousierController {
         return "";
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="api/livreur/getCommandesEnCour/{coursierId}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COURSIER_GETCOMMANDESENCOURS)
     public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String coursierId){
         Optional<Coursier> coursier = coursierRepository.findById(coursierId);
         if(!coursier.isPresent())
@@ -94,7 +95,7 @@ public class CousierController {
 
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="api/livreur/getCommandesArchiver/{userid}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COURSIER_GETCOMMANDESARCHIVEES)
     public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable String coursierId){
         Optional<Coursier> coursier = coursierRepository.findById(coursierId);
         if(!coursier.isPresent())
@@ -113,5 +114,12 @@ public class CousierController {
 
         return commandeWrap;
 
+    }
+
+    //internal methods
+    @RequestMapping(method=RequestMethod.POST, value="/coursier")
+    public Coursier saveCoursier(@RequestBody Coursier coursier) {
+        coursierRepository.save(coursier);
+        return coursier;
     }
 }

@@ -5,6 +5,7 @@ import com.paypal.api.payments.Authorization;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
@@ -39,7 +40,8 @@ public class PaymentController {
     @Autowired
     private PaypalService paypalService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "api/pay", consumes = "application/json")
+    //remote accessible methods
+    @RequestMapping(method = RequestMethod.POST, value = GlobalURLs.PAYPAL_PAY, consumes = "application/json")
     public PaymentCreationNotification pay(@RequestBody CommandeWrapper commandeWrap) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Date dateLivraisonFormatted;
@@ -107,20 +109,7 @@ public class PaymentController {
         return res;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "mock/pay", consumes = "application/json")
-    public PaymentCreationNotification payMock() {
-        PaymentCreationNotification res = new PaymentCreationNotification();
-        try {
-            String baseUrl = "client.fais-mes-courses.fr/api/pay/";
-            Payment payment = paypalService.createPayment(30.11, "Commande à régler", baseUrl + "cancel", baseUrl + "success");
-            res.setPaymentID(payment.getId());
-        } catch (PayPalRESTException e) {
-            System.err.println(e.getMessage());
-        }
-        return res;
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "api/pay/success", consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GlobalURLs.PAYPAL_PAYSUCCESS, consumes = "application/json")
     public String proceedPayment(@RequestBody PaymentExecuteNotification authorize) throws PayPalRESTException {
         Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getPaymentID(), authorize.getPayerID());
         if (authorization.getState().equals("authorized")) {
@@ -154,7 +143,7 @@ public class PaymentController {
 
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "api/pay/cancel", consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GlobalURLs.PAYPAL_PAYCANCEL, consumes = "application/json")
     public String cancelPayment(@RequestBody CommandeWrapper commandeWrap) {
         Optional<Commande> commandeOpt = commandeRepository.findById(commandeWrap.getId());
         if (!commandeOpt.isPresent()) throw new NullPointerException("commande introuvable");
@@ -184,5 +173,19 @@ public class PaymentController {
         coursierRepository.saveAll(coursiers);
         commandeRepository.save(commande);
         return "cancelled";
+    }
+
+    //internal methods
+    @RequestMapping(method = RequestMethod.POST, value = GlobalURLs.MOCK_PAYPAL_PAY, consumes = "application/json")
+    public PaymentCreationNotification payMock() {
+        PaymentCreationNotification res = new PaymentCreationNotification();
+        try {
+            String baseUrl = "client.fais-mes-courses.fr/api/pay/";
+            Payment payment = paypalService.createPayment(30.11, "Commande à régler", baseUrl + "cancel", baseUrl + "success");
+            res.setPaymentID(payment.getId());
+        } catch (PayPalRESTException e) {
+            System.err.println(e.getMessage());
+        }
+        return res;
     }
 }

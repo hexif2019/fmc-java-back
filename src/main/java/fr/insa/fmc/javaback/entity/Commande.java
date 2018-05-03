@@ -177,4 +177,9 @@ public class Commande {
     public void setMdpCoursier(String mdpCoursier) {
         this.mdpCoursier = mdpCoursier;
     }
+
+    public void setMagasinCommandeInList(int i, MagasinsCommande magasin) {
+        this.magasinsCommande.set(i, magasin);
+    }
+
 }
