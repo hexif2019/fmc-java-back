@@ -35,7 +35,7 @@ public class MagasinController {
         return magasin;
     }
 
-    @RequestMapping(method= RequestMethod.GET, value="/api/getItemMagasin/{id}")
+    @RequestMapping(method= RequestMethod.GET, value="/api/getProduits/{id}")
     public Iterable<Produit> findProduitByMagasinId(@PathVariable String id){
         Optional <Magasin> m = magasinRepository.findById(id);
         Magasin magasin = new Magasin();
@@ -46,6 +46,24 @@ public class MagasinController {
         }
         return magasin.getProduitsList().values();
     }
+
+    @RequestMapping(method=RequestMethod.GET,value="/api/getProduit/{idmagasin}/{idproduit}")
+    public Produit findProduitByMagainIdAndProduitId(@PathVariable String idmagasin, String idproduit){
+        Optional <Magasin> m = magasinRepository.findById(idmagasin);
+        Magasin magasin = new Magasin();
+        if(m.isPresent()){
+            magasin=m.get();
+        } else {
+            throw new NullPointerException("magasin introuvable");
+        }
+        Produit produit = magasin.getProduitsList().get(idproduit);
+        if(produit == null){
+            throw new NullPointerException("produit non trouvable");
+        }
+        return produit;
+    }
+
+
 
     @RequestMapping(method=RequestMethod.POST,value="api/registerMarchand",consumes="application/json")
     public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params) throws Exception{
