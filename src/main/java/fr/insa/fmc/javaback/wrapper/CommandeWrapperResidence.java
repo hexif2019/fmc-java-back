@@ -20,6 +20,14 @@ public class CommandeWrapperResidence {
     private Optional<UserWrapper> user;
     private ResidenceWrapper2 residence;
 
+    public ResidenceWrapper2 getResidence() {
+        return residence;
+    }
+
+    public void setResidence(ResidenceWrapper2 residence) {
+        this.residence = residence;
+    }
+
     public String getId() {
         return id;
     }
