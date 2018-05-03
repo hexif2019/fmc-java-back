@@ -90,4 +90,8 @@ public class Residence {
     public void setImg(String img) {
         this.img = img;
     }
+
+    public void addMagasin(String idMagasin){
+        this.idMagasins.add(idMagasin);
+    }
 }
