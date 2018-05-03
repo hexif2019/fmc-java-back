@@ -121,4 +121,13 @@ public class Magasin {
     public void addProduit(Produit produit){
         produitsList.put(produit.getId(), produit);
     }
+
+    public void deleteCommande(String idCommande) {
+        idCommandes.remove(idCommande);
+    }
+
+    public void addCommande(String idCommande) {
+        idCommandes.add(idCommande);
+    }
+
 }

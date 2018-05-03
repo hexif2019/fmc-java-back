@@ -1,5 +1,6 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
@@ -9,6 +10,7 @@ import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
 import fr.insa.fmc.javaback.wrapper.ProduitWrapper;
+import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,27 +30,8 @@ public class CommandeController {
     @Autowired
     ResidenceRepository residenceRepository;
 
-    @RequestMapping(method=RequestMethod.POST, value="/commande")
-    public Commande saveCommande(@RequestBody Commande commande) {
-        commandeRepository.save(commande);
-
-        return commande;
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/commande")
-    public String deleteAllCommande() {
-        commandeRepository.deleteAll();
-        //Optional<Client> client = clientRepository.findById(id);
-        //clientRepository.delete(client);
-        return "";
-    }
-
-    @RequestMapping(method= RequestMethod.GET, value="/commande")
-    public Iterable<Commande> findResidence() {
-        return commandeRepository.findAll();
-    }
-
-    @RequestMapping(method=RequestMethod.GET,value="/api/getPanier/{id}")
+    //remote accessible methods
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COMMANDE_GETPANIER)
     public CommandeWrapper getPanier(@PathVariable String id) {
 
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
@@ -95,7 +78,7 @@ public class CommandeController {
         return commandeWrap;
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesEnCour/{id}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COMMANDE_GETCOMMANDESENCOURS)
     public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String id) {
 
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
@@ -116,7 +99,7 @@ public class CommandeController {
         return commandeWrapList;
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getCommandesArchiver/{id}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COMMANDE_GETCOMMANDESARCHIVEES)
     public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
@@ -136,7 +119,7 @@ public class CommandeController {
 
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{id}")
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COMMANDE_GETLASTCOMMANDES)
     public ArrayList<CommandeWrapper> getLastCommandes(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
@@ -157,8 +140,7 @@ public class CommandeController {
 
     }
 
-
-    @RequestMapping(method=RequestMethod.POST,value="/api/updatePanier/",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.COMMANDE_UPDATEPANIER,consumes="application/json")
     public String updatePanier(@RequestBody CommandeWrapper commandeWrap){
         String userid = commandeWrap.getUserid();
 
@@ -246,6 +228,26 @@ public class CommandeController {
         //c.setMagasinsCommande(map);
         String statut = "ok";
         return statut;
+    }
+
+    //internal methods
+    @RequestMapping(method=RequestMethod.POST, value="/commande")
+    public Commande saveCommande(@RequestBody Commande commande) {
+        commandeRepository.save(commande);
+        return commande;
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/commande")
+    public String deleteAllCommande() {
+        commandeRepository.deleteAll();
+        //Optional<Client> client = clientRepository.findById(id);
+        //clientRepository.delete(client);
+        return "";
+    }
+
+    @RequestMapping(method= RequestMethod.GET, value="/commande")
+    public Iterable<Commande> findResidence() {
+        return commandeRepository.findAll();
     }
 
 }
