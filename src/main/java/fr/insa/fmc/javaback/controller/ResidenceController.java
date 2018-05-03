@@ -3,14 +3,11 @@ package fr.insa.fmc.javaback.controller;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import fr.insa.fmc.javaback.configuration.GlobalURLs;
-import fr.insa.fmc.javaback.entity.Casier;
-import fr.insa.fmc.javaback.entity.Magasin;
-import fr.insa.fmc.javaback.entity.MagasinsCommande;
-import fr.insa.fmc.javaback.entity.Residence;
-import fr.insa.fmc.javaback.repository.MagasinRepository;
-import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.entity.*;
+import fr.insa.fmc.javaback.repository.*;
 import fr.insa.fmc.javaback.wrapper.CasierDisponibilite;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
+import fr.insa.fmc.javaback.wrapper.MdpWrapper;
 import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
 import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,15 @@ public class ResidenceController {
 
     @Autowired
     MagasinRepository magasinRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
+
+    @Autowired
+    CoursierRepository coursierRepository;
+
+    @Autowired
+    CommandeRepository commandeRepository;
 
     @RequestMapping(method = RequestMethod.GET, value = GlobalURLs.RESIDENCE_FINDALL)
     public Iterable<Residence> findResidence() {
@@ -163,6 +169,18 @@ public class ResidenceController {
         return ret;
     }
 
+    @RequestMapping(method=RequestMethod.GET,value="/api/backdoor/getmdp/{commandeId}")
+    public MdpWrapper getPassword(@PathVariable String commandeId) throws Exception{
+        MdpWrapper mdpWrapper = new MdpWrapper();
+        Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
+        if(!commandeOpt.isPresent()){
+            throw new Exception("cannot find commande");
+        }
+        Commande commande = commandeOpt.get();
+        mdpWrapper.setMdpClient(commande.getMdpClient());
+        mdpWrapper.setMdpLivreur( commande.getMdpCoursier());
+        return mdpWrapper;
+    }
     @RequestMapping(method= RequestMethod.GET, value="/residence/{idResidence}/{idMagasin}")
     public String linkMagasinResidence(@PathVariable String idMagasin, @PathVariable String idResidence){
         Optional <Residence> resid = residenceRepository.findById(idResidence);
