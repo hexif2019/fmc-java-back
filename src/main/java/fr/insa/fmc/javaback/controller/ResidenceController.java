@@ -145,9 +145,9 @@ public class ResidenceController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/mock/addcasiertoresidence")
-    public String mockAddCasierToResidence() {
-        Optional<Residence> residenceOpt = residenceRepository.findById("5ae2ea30639e3eda239af33c");
+    @RequestMapping(method = RequestMethod.GET, value = "/mock/addcasiertoresidence/{residenceId}")
+    public String mockAddCasierToResidence(@PathVariable String residenceId) {
+        Optional<Residence> residenceOpt = residenceRepository.findById(residenceId);
         Residence residence = residenceOpt.get();
         Map<String, Casier> casiers = residence.getCasiers();
         for(int i = casiers.size();i<12;i++){
