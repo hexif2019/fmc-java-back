@@ -110,6 +110,8 @@ public class Client {
         this.commandeEnCreation = commandeEnCreation;
     }
 
+    public void addCommandeCours(String idCommandeCours, Commande CommandeCours) {this.commandesCours.put(idCommandeCours, CommandeCours);}
+
 
     public Client(String email, String nom, String prenom, String mdp) {
         this.email = email;
