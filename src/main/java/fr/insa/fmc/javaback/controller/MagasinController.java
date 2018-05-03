@@ -1,8 +1,10 @@
 package fr.insa.fmc.javaback.controller;
 
+import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Produit;
 import fr.insa.fmc.javaback.entity.Residence;
+import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,6 +26,8 @@ public class MagasinController {
     ProduitRepository produitRepository;
     @Autowired
     ResidenceRepository residenceRepository;
+    @Autowired
+    CommandeRepository commandeRepository;
 
     @RequestMapping(method=RequestMethod.GET, value="/magasin")
     public Iterable<Magasin> findClient() {
@@ -87,6 +92,7 @@ public class MagasinController {
         magasin.setVille(marchand.getVille());
         magasin.setCodePostal(marchand.getCodePostal());
         magasin.setProduitsList(new HashMap<String, Produit>());
+        magasin.setIdCommandes(new HashSet<String>());
         magasinRepository.save(magasin);
         RegistrationMarchandResponseWrapper registrationMarchandResponse = new RegistrationMarchandResponseWrapper();
         marchand.setId(magasin.getId());
@@ -97,7 +103,7 @@ public class MagasinController {
     }
 
     @RequestMapping(method=RequestMethod.POST,value="api/authenticateMarchand",consumes="application/json")
-    public AuthentificationMarchandResponseWrapper connectionMarchand(@RequestBody AuthentificationWrapper params){
+    public AuthentificationMarchandResponseWrapper connectionMarchand(@RequestBody AuthentificationWrapper params) throws Exception{
         String email = params.getEmail();
         String mdp = params.getPassword();
         Magasin magasin = magasinRepository.connectionQuery(email,mdp);
@@ -115,6 +121,17 @@ public class MagasinController {
         marchand.setEmail(magasin.getAdresse());
         marchand.setVille(magasin.getVille());
         marchand.setCodePostal(magasin.getCodePostal());
+        for(String commandeId: magasin.getIdCommandes()) {
+            Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
+            if(!commandeOpt.isPresent()) {
+                throw new Exception("Une commande n est pas presente en base");
+            }
+            marchand.addCommande(commandeOpt.get());
+        }
+        for(Produit produit: magasin.getProduitsList().values()) {
+            marchand.addProduit(produit);
+        }
+        //marchand.setCommandes(magasin.getIdCommandes());
         authResponse.setMarchand(marchand);
         return authResponse;
     }

@@ -1,5 +1,10 @@
 package fr.insa.fmc.javaback.wrapper;
 
+import fr.insa.fmc.javaback.entity.Commande;
+import fr.insa.fmc.javaback.entity.Produit;
+
+import java.util.ArrayList;
+
 public class MarchandWrapper {
     private String id;
     private String adresse;
@@ -8,6 +13,24 @@ public class MarchandWrapper {
     private String email;
     private String ville;
     private String codePostal;
+    private ArrayList<ProduitWrapper> produits;
+    private ArrayList<CommandeWrapper> commandes;
+
+    public ArrayList<ProduitWrapper> getProduits() {
+        return produits;
+    }
+
+    public void setProduits(ArrayList<ProduitWrapper> produits) {
+        this.produits = produits;
+    }
+
+    public ArrayList<CommandeWrapper> getCommandes() {
+        return commandes;
+    }
+
+    public void setCommandes(ArrayList<CommandeWrapper> commandes) {
+        this.commandes = commandes;
+    }
 
     public String getId() {
         return id;
@@ -64,4 +87,13 @@ public class MarchandWrapper {
     public void setCodePostal(String codePostal) {
         this.codePostal = codePostal;
     }
+
+    public void addCommande(Commande commande) {
+        this.commandes.add(new CommandeWrapper(commande));
+    }
+
+    public void addProduit(Produit produit) {
+        this.produits.add(new ProduitWrapper(produit));
+    }
+
 }
