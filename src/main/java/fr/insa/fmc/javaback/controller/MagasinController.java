@@ -198,7 +198,7 @@ public class MagasinController {
         return authResponse;
     }
 
-    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_GETMARCHAND)
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.MAGASIN_GETMARCHAND)
     public MarchandWrapper getMarchand(@PathVariable String idMarchand) throws Exception{
         Magasin magasin = magasinRepository.findById(idMarchand).get();
         if(magasin==null){
