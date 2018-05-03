@@ -1,5 +1,7 @@
 package fr.insa.fmc.javaback.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.google.gson.Gson;
 import fr.insa.fmc.javaback.entity.Casier;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
@@ -9,9 +11,17 @@ import fr.insa.fmc.javaback.repository.ResidenceRepository;
 import fr.insa.fmc.javaback.wrapper.CasierDisponibilite;
 import fr.insa.fmc.javaback.wrapper.MagasinWrapper;
 import fr.insa.fmc.javaback.wrapper.ResidenceWrapper;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.MessageFormat;
 import java.util.*;
 
 
@@ -80,6 +90,43 @@ public class ResidenceController {
 
         return nearMagasins;
     }
+
+    @RequestMapping(method=RequestMethod.GET, value="/residence/google/{address}")
+    public String findRealCoordinate(@PathVariable String address) throws Exception {
+        String ret = "";
+        if (address != null && !address.equals("")) {
+            try {
+                address = URLEncoder.encode(address, "UTF-8");
+            } catch (Exception e) {
+                throw new Exception(e.getMessage());
+            }
+            String[]  arr = new String[2];
+            arr[0] = address;
+            arr[1] = "AIzaSyAOSCBik6Kq_JXhYEaAmRr238iXxVq_qc4";
+            String url = MessageFormat.format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}",arr);
+            URL urlmy = null;
+
+            try {
+                urlmy = new URL(url);
+                HttpURLConnection con = (HttpURLConnection) urlmy.openConnection();
+                con.setFollowRedirects(true);
+                con.setInstanceFollowRedirects(false);
+                con.connect();
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+                String s = "";
+                StringBuffer sb = new StringBuffer("");
+                while ((s = br.readLine()) != null) {
+                    //System.out.println(s);
+                    sb.append(s + "\r\n");
+                }
+                ret = "" + sb;
+            } catch (Exception e) {
+                throw new Exception(e.getMessage());
+            }
+        }
+        return ret;
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/findResidenceFormCodePostal/{codePostal}")
     public ArrayList<ResidenceWrapper> findResidenceFormCodePostal(@PathVariable String codePostal) {
