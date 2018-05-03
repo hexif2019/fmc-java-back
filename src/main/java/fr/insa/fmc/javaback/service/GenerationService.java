@@ -26,7 +26,6 @@ public class GenerationService {
     }
     public static String GenerateId(){
         UUID id = UUID.randomUUID();
-        //System.out.println("UUID generated with timestamp : "+id.timestamp());
         return id.toString().replace("-","");
     }
 }

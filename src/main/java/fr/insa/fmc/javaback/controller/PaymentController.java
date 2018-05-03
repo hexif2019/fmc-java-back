@@ -126,7 +126,17 @@ public class PaymentController {
                 Commande in = commande.get();
                 in.setAuthorizationId(authorization.getId());
                 in.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
+
+                Optional<Client> clientOpt = clientRepository.findById(in.getIdClient());
+                if (!clientOpt.isPresent()) throw new NullPointerException("client introuvable");
+                Client client = clientOpt.get();
+                client.setCommandeEnCreation(null);
+                client.addCommandeCours(in.getId(), in);
+
+                clientRepository.save(client);
+
                 commandeRepository.save(in);
+
             }
             return "success";
         }

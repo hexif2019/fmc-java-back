@@ -1,6 +1,7 @@
 package fr.insa.fmc.javaback.controller;
 
 import fr.insa.fmc.javaback.entity.Client;
+import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
@@ -9,7 +10,10 @@ import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -72,6 +76,9 @@ public class ClientController {
         client.setEmail(user.getEmail());
         client.setResidence(user.getResidence().getId());
         client.setMdp(mdp);
+        client.setCommandesCours(new HashMap<String, Commande>());
+        client.setCommandesFinis(new HashSet<String>());
+        client.setAdresse(user.getResidence().getAdresse());
         clientRepository.save(client);
         RegistrationResponseWrapper registerResponse = new RegistrationResponseWrapper();
         registerResponse.setToken(token);
