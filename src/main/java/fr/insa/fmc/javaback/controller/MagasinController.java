@@ -53,8 +53,8 @@ public class MagasinController {
             throw new Exception("you must assign a password");
         }
         MarchandWrapper marchand = params.getMarchand();
-        //String token = GenerationService.GenerateToken();
-        String token = "je suis un token" ;
+        String token = GenerationService.GenerateToken();
+        //String token = "je suis un token" ;
         Magasin magasin = new Magasin();
         //magasin.setId(marchand.getId());
         magasin.setAdresse(marchand.getAdresse());
@@ -86,7 +86,6 @@ public class MagasinController {
             throw new NullPointerException("Le magasin est introuvable");
         }
         AuthentificationMarchandResponseWrapper authResponse = new AuthentificationMarchandResponseWrapper();
-        //todo : g�n�rer un vrai token
         String token = GenerationService.GenerateToken();
         authResponse.setToken(token);
         MarchandWrapper marchand = new MarchandWrapper();
