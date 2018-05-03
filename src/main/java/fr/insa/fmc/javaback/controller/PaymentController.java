@@ -75,10 +75,10 @@ public class PaymentController {
                         break;
                     }
                 }
-                commande.setCasiersId(casiersId);
-                residence.setCasiers(casiers);
-                residenceRepository.save(residence);
             }
+            commande.setCasiersId(casiersId);
+            residence.setCasiers(casiers);
+            residenceRepository.save(residence);
             if (!casierAddSuccess) return null;
 
             //recherche de livreur

@@ -278,7 +278,7 @@ public class MagasinController {
         magasinRepository.save(magasin);
 
 
-        return "ok";
+        return "\"ok\"";
     }
 
     @RequestMapping(method=RequestMethod.GET, value=GlobalURLs.MAGASIN_DELETEPRODUIT_BYMAGASIN)
