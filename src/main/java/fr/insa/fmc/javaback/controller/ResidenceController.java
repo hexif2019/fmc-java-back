@@ -29,7 +29,7 @@ public class ResidenceController {
         return residenceRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/residence")
+    @RequestMapping(method = RequestMethod.POST, value = "/residence",consumes="application/json")
     public Residence saveResidence(@RequestBody Residence residence) {
         residenceRepository.save(residence);
 
@@ -126,7 +126,7 @@ public class ResidenceController {
             throw new NullPointerException("Magasin introuvable");
         }
 
-        //residence.addMagasin(idMagasin);
+        residence.addMagasin(idMagasin);
 
         residenceRepository.save(residence);
 
