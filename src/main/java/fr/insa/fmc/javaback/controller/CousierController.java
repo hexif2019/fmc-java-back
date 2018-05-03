@@ -37,7 +37,7 @@ public class CousierController {
         return coursier;
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/authenticate",consumes="appplication/json")
+    @RequestMapping(method=RequestMethod.POST,value="api/livreur/authenticate",consumes="application/json")
     public AuthentificationCoursierResponseWrapper connectionCoursier(@RequestBody AuthentificationWrapper params){
         String email = params.getEmail();
         String mdp = params.getPassword();

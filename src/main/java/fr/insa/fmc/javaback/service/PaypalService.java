@@ -63,7 +63,7 @@ public class PaypalService {
         Authorization authorization = Authorization.get(apiContext,authorizationId);
         Amount amount = new Amount();
         amount.setCurrency(currency);
-        amount.setTotal(String.format("%.2f", total));
+        amount.setTotal(String.format("%.2f", total).replace(",","."));
         Capture capture = new Capture();
         capture.setAmount(amount);
         capture.setIsFinalCapture(true);
