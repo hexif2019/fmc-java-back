@@ -1,10 +1,14 @@
 package fr.insa.fmc.javaback.controller;
 
+import com.paypal.base.rest.PayPalRESTException;
+import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Coursier;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
+import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.CoursierRepository;
+import fr.insa.fmc.javaback.service.GenerationService;
 import fr.insa.fmc.javaback.service.PaypalService;
 import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
 import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
@@ -23,6 +27,8 @@ public class CousierController {
     @Autowired
     CommandeRepository commandeRepository;
     @Autowired
+    ClientRepository clientRepository;
+    @Autowired
     PaypalService paypalService;
 
     @RequestMapping(method=RequestMethod.POST, value="/coursier")
@@ -38,7 +44,7 @@ public class CousierController {
         Coursier coursier = coursierRepository.connectionQuery(email,mdp);
         if(coursier==null) throw new NullPointerException("le coursier est introuvable");
         AuthentificationCoursierResponseWrapper authCoursierResponse = new AuthentificationCoursierResponseWrapper();
-        String token = "token sama";
+        String token = GenerationService.GenerateToken();
         authCoursierResponse.setToken(token);
         LivreurWrapper livreur = new LivreurWrapper();
         livreur.setId(coursier.getId());
@@ -51,19 +57,26 @@ public class CousierController {
         return authCoursierResponse;
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/terminerlivraison/{commandeId}",consumes="application/json")
-    public String terminerLivraison(@PathVariable String commandeId){
+    @RequestMapping(method=RequestMethod.GET,value="api/livreur/terminerlivraison/{commandeId}")
+    public String terminerLivraison(@PathVariable String commandeId) throws PayPalRESTException {
         Optional<Commande> optCom = commandeRepository.findById(commandeId);
         if(optCom.isPresent()){
             Commande commande = optCom.get();
             commande.setEtat(enumEtatCommande.DANS_CASIER);
+            //capture de l'authorisation
+            paypalService.captureAuthorization(commande.getAuthorizationId(),PaypalService.ConvertIntToDouble(commande.getPrixTotal()));
+            commandeRepository.save(commande);
+            //sauvegarde de l'idCommande dans le client
+            Client client = clientRepository.findById(commande.getIdClient()).get();
+            client.getCommandesFinis().add(commandeId);
+            clientRepository.save(client);
         }else{
             return "failed:no such commande in db";
         }
         return "";
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/getCommandesEnCour/{coursierId}")
+    @RequestMapping(method=RequestMethod.GET,value="api/livreur/getCommandesEnCour/{coursierId}")
     public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String coursierId){
         Optional<Coursier> coursier = coursierRepository.findById(coursierId);
         if(!coursier.isPresent())
@@ -73,18 +86,15 @@ public class CousierController {
 
         for(String commandeId: coursier.get().getCommandesEnCours().keySet()) {
             Optional<Commande> commandeTempo = commandeRepository.findById(commandeId);
-
             if(!commandeTempo.isPresent())
                 throw new NullPointerException("Une commande est introuvable");
-
             commandeWrap.add(new CommandeWrapper(commandeTempo.get()));
         }
-
         return commandeWrap;
 
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/getCommandesArchiver/{userid}")
+    @RequestMapping(method=RequestMethod.GET,value="api/livreur/getCommandesArchiver/{userid}")
     public ArrayList<CommandeWrapper> getCommandesArchiver(@PathVariable String coursierId){
         Optional<Coursier> coursier = coursierRepository.findById(coursierId);
         if(!coursier.isPresent())

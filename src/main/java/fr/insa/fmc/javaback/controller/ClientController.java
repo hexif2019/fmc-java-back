@@ -3,17 +3,18 @@ package fr.insa.fmc.javaback.controller;
 import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Residence;
+import fr.insa.fmc.javaback.exception.AuthenticationFailException;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.service.AuthenticationService;
 import fr.insa.fmc.javaback.service.GenerationService;
+import fr.insa.fmc.javaback.service.TokenData;
 import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import javax.mail.AuthenticationFailedException;
+import java.util.*;
 
 
 @RestController
@@ -25,6 +26,8 @@ public class ClientController {
     @Autowired
     ResidenceRepository residenceRepository;
 
+    @Autowired
+    AuthenticationService authenticationService;
 
 
     @RequestMapping(method=RequestMethod.GET, value="/client")
@@ -42,7 +45,7 @@ public class ClientController {
         clientRepository.deleteAll();
         //Optional<Client> client = clientRepository.findById(id);
         //clientRepository.delete(client);
-        return "";
+        return "deleted all clients";
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/client/{id}")
@@ -50,7 +53,7 @@ public class ClientController {
         clientRepository.deleteById(id);
         //Optional<Client> client = clientRepository.findById(id);
         //clientRepository.delete(client);
-        return "";
+        return "client of id "+id+" deleted";
     }
     @RequestMapping(method=RequestMethod.GET, value="/client/{id}")
     public Optional<Client> findClientById(@PathVariable String id) {
@@ -62,7 +65,7 @@ public class ClientController {
     public RegistrationResponseWrapper register(@RequestBody RegisterWrapper params) throws Exception {
         String mdp = params.getPassword();
         if(mdp.isEmpty()){
-            throw new Exception("you must assign a password");
+            throw new Exception("vous devez donner un mot de passe");
         }
         UserWrapper user = params.getUser();
         String token = GenerationService.GenerateToken();
@@ -76,8 +79,8 @@ public class ClientController {
         client.setEmail(user.getEmail());
         client.setResidence(user.getResidence().getId());
         client.setMdp(mdp);
-        client.setCommandesCours(new HashMap<String, Commande>());
-        client.setCommandesFinis(new HashSet<String>());
+        client.setCommandesCours(new HashMap<>());
+        client.setCommandesFinis(new HashSet<>());
         client.setAdresse(user.getResidence().getAdresse());
         clientRepository.save(client);
         RegistrationResponseWrapper registerResponse = new RegistrationResponseWrapper();
@@ -88,10 +91,11 @@ public class ClientController {
         //TODO:exception
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/api/authenticateToken",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value="/api/authenticateToken",consumes="application/json")
     public UserWrapper anthentificationToken(@RequestBody AuthentificationTokenWrapper params)throws Exception{
         String email = params.getEmail();
         String token = params.getToken();
+        if(!authenticationService.getValidity(token)) throw new AuthenticationFailException("authentication with token failed");
         Client client = clientRepository.connectionQuery(email);
         if(client==null){
             throw new Exception("le client est introuvable");
@@ -104,7 +108,7 @@ public class ClientController {
         Optional<Residence> residence = residenceRepository.findById(client.getResidence());
 
         if(!(residence.isPresent())){
-            throw new Exception("there is no residence");
+            throw new Exception("residence est introuvable");
         }
         user.setResidence(new ResidenceWrapper(residenceRepository.findById(client.getResidence()).get()));
         return user;
@@ -138,6 +142,14 @@ public class ClientController {
         authResponse.setUser(user);
         return authResponse;
 
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/mock/authenticate")
+    public String authenticateClientMock(){
+        String token = GenerationService.GenerateToken();
+        Map<String,TokenData> tv = authenticationService.getTokenValidity();
+        boolean res = authenticationService.tryStoreToken(token,"abc");
+        return res ? "success":"fail";
     }
 }
 
