@@ -15,6 +15,7 @@ public interface ClientRepository extends CrudRepository<Client,String>, ClientR
     @Override
     Optional<Client> findById(String id);
 
+    Optional<Client> findByEmail(String email);
 
     //@Query("select c from Client c where c.email = :email")
    // Client findByEmail(@Param("email") String email);

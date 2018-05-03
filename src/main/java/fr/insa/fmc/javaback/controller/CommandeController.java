@@ -136,7 +136,7 @@ public class CommandeController {
 
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{id}",consumes="application/json")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getLastCommandes/{id}")
     public ArrayList<CommandeWrapper> getLastCommandes(@PathVariable String id) {
         //Verif si client est nul avec try catch ou sinon en 2 etapes avec Optional
         Client client = clientRepository.findById(id).get();
