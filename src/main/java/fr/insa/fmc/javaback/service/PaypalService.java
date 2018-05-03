@@ -71,4 +71,9 @@ public class PaypalService {
         System.out.println("Capture id = " + responseCapture.getId() + " and status = " + responseCapture.getState());
     }
 
+    public static double ConvertIntToDouble(int prix){
+        double prixDouble = (double) prix;
+        return prixDouble/100.0;
+    }
+
 }

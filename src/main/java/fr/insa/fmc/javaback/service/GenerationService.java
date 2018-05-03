@@ -4,7 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.UUID;
 
-public class TokenGenerationService {
+public class GenerationService {
 
     private static final String algo = "SHA1PRNG";
 
@@ -22,7 +22,11 @@ public class TokenGenerationService {
 
     public static String GenerateToken(){
         UUID id = UUID.randomUUID();
-        //System.out.println("UUID generated with timestamp : "+id.timestamp());
         return id.toString().replace("-",".");
+    }
+    public static String GenerateId(){
+        UUID id = UUID.randomUUID();
+        //System.out.println("UUID generated with timestamp : "+id.timestamp());
+        return id.toString().replace("-","");
     }
 }

@@ -74,7 +74,7 @@ public class CommandeController {
             commande.setPrixTotal(0);
             commande.setVolumeTotal(0);
             commande.setIdResidence(client.getResidence());
-            commande.setCasiers(new ArrayList<String>());
+            commande.setCasiersId(new ArrayList<>());
             commande.setIdClient(id);
 
             if(client.getResidence() == null) throw new NullPointerException("Client non relie a une residence");

@@ -2,15 +2,20 @@ package fr.insa.fmc.javaback.wrapper;
 
 import fr.insa.fmc.javaback.entity.Commande;
 import fr.insa.fmc.javaback.entity.Magasin;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class CommandeWrapper {
     private String id;
     private String etat;
     private int prix;
-    private ArrayList<MagasinWrapper> magasins;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private Date heureLivraison;
+    private List<MagasinWrapper> magasins;
     private String userid;
     private Optional<UserWrapper> user;
 
@@ -38,11 +43,11 @@ public class CommandeWrapper {
         this.prix = prix;
     }
 
-    public ArrayList<MagasinWrapper> getMagasins() {
+    public List<MagasinWrapper> getMagasins() {
         return magasins;
     }
 
-    public void setMagasins(ArrayList<MagasinWrapper> magasins) {
+    public void setMagasins(List<MagasinWrapper> magasins) {
         this.magasins = magasins;
     }
 
@@ -62,6 +67,14 @@ public class CommandeWrapper {
         this.user = user;
     }
 
+    public Date getHeureLivraison() {
+        return heureLivraison;
+    }
+
+    public void setHeureLivraison(Date heureLivraison) {
+        this.heureLivraison = heureLivraison;
+    }
+
     public CommandeWrapper(Commande commande) {
         this.id = commande.getId();
         this.etat = commande.getEtat().toString();
@@ -74,5 +87,7 @@ public class CommandeWrapper {
     }
 
     public CommandeWrapper() {}
+
+
 
 }

@@ -16,7 +16,7 @@ public class Coursier {
     private int rayon;
     private Position position;
     private Map<String, Commande> commandesEnCours;
-    private Set<String> listResidences;
+    private String residenceId;
     private Set<String> commandesFinis;
     private String nom;
     private String prenom;
@@ -69,14 +69,6 @@ public class Coursier {
         this.commandesEnCours = commandesEnCours;
     }
 
-    public Set<String> getListResidences() {
-        return listResidences;
-    }
-
-    public void setListResidences(Set<String> listResidences) {
-        this.listResidences = listResidences;
-    }
-
     public Set<String> getCommandesFinis() {
         return commandesFinis;
     }
@@ -99,5 +91,13 @@ public class Coursier {
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    public String getResidenceId() {
+        return residenceId;
+    }
+
+    public void setResidenceId(String residenceId) {
+        this.residenceId = residenceId;
     }
 }

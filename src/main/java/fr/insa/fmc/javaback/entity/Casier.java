@@ -3,6 +3,7 @@ package fr.insa.fmc.javaback.entity;
 import fr.insa.fmc.javaback.wrapper.CasierDisponibilite;
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
 import java.util.Queue;
 
 public class Casier {
@@ -12,7 +13,7 @@ public class Casier {
     private int longueur;
     private int largeur;
     private int hauteur;
-    private Queue<CasierDisponibilite> disponibilites;
+    private List<CasierDisponibilite> disponibilites;
 
     public String getId() {
         return id;
@@ -34,7 +35,7 @@ public class Casier {
         return hauteur;
     }
 
-    public Queue<CasierDisponibilite> getDisponibilites() {
+    public List<CasierDisponibilite> getDisponibilites() {
         return disponibilites;
     }
 
@@ -58,7 +59,7 @@ public class Casier {
         this.hauteur = hauteur;
     }
 
-    public void setDisponibilites(Queue<CasierDisponibilite> disponibilites) {
+    public void setDisponibilites(List<CasierDisponibilite> disponibilites) {
         this.disponibilites = disponibilites;
     }
 }
