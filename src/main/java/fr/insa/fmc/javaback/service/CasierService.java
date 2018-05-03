@@ -20,6 +20,7 @@ public class CasierService {
         }
         if(!hasDate){
             CasierDisponibilite cd = new CasierDisponibilite(date);
+            cd.setEtat(enumEtatCasier.OCCUPE);
             entry.add(cd);
             return entry;
         }else return null;
