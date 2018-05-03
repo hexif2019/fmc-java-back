@@ -20,7 +20,7 @@ public class GlobalURLs {
 
 
 
-    public static final String COMMANDE_GETPANIER = BASE+"/authenticate";
+    public static final String COMMANDE_GETPANIER = BASE+"/getPanier/{id}";
     public static final String COMMANDE_GETCOMMANDESENCOURS = BASE+"/getCommandesEnCour/{id}";
     public static final String COMMANDE_GETCOMMANDESARCHIVEES = BASE+"/getCommandesArchiver/{id}";
     public static final String COMMANDE_GETLASTCOMMANDES = BASE+"/getLastCommandes/{id}";
