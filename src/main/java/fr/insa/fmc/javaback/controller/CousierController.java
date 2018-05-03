@@ -34,10 +34,9 @@ public class CousierController {
     PaypalService paypalService;
 
 
-    @RequestMapping(method=RequestMethod.POST,value="api/livreur/authenticate",consumes="application/json")
 
     //remote accessible methods
-    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.COURSIER_AUTHENTICATE,consumes="appplication/json")
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.COURSIER_AUTHENTICATE,consumes="application/json")
 
     public AuthentificationCoursierResponseWrapper connectionCoursier(@RequestBody AuthentificationWrapper params){
         String email = params.getEmail();
