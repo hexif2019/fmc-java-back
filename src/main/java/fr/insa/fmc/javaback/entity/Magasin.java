@@ -126,4 +126,8 @@ public class Magasin {
         idCommandes.remove(idCommande);
     }
 
+    public void addCommande(String idCommande) {
+        idCommandes.add(idCommande);
+    }
+
 }
