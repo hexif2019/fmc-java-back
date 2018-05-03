@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class CousierController {
+public class CoursierController {
     @Autowired
     CoursierRepository coursierRepository;
     @Autowired
@@ -120,12 +120,9 @@ public class CousierController {
 
     @RequestMapping(method = RequestMethod.GET,value=GlobalURLs.COURSIER_ONMAGASIN)
     public String updateCheckpointMagasins(@PathVariable String commandeId,@PathVariable String marchandId){
-        Optional<Magasin> magasinOpt = magasinRepository.findById(marchandId);
         Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
         boolean firstTimePassage = true;
-        if(!magasinOpt.isPresent()) throw new NullPointerException("marchand introuvable");
         if(!commandeOpt.isPresent()) throw new NullPointerException("coursier introuvable");
-        Magasin magasin = magasinOpt.get();
         Commande commande = commandeOpt.get();
         List<MagasinsCommande> magasinsCommandes = commande.getMagasinsCommande();
         for(MagasinsCommande mc : magasinsCommandes){
@@ -133,6 +130,8 @@ public class CousierController {
             if(mc.getIdMagasin().equals(marchandId)) mc.setEtatMagasinCommande(enumEtatMagasinCommande.EN_COURS_DE_LIVRAISON);
         }
         if(firstTimePassage) commande.setEtat(enumEtatCommande.EN_COURS_DE_LIVRAISON);
+        commande.setMagasinsCommande(magasinsCommandes);
+        commandeRepository.save(commande);
         return "success";
     }
     //internal methods
