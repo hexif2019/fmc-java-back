@@ -85,7 +85,7 @@ public class ClientController {
         return user;
     }
 
-    @RequestMapping(method=RequestMethod.POST, value=GlobalURLs.BASE,consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST, value=GlobalURLs.CLIENT_AUTHENTICATE,consumes="application/json")
     public AuthentificationResponseWrapper connection(@RequestBody AuthentificationWrapper params)throws Exception{
         String email = params.getEmail();
         String mdp = params.getPassword();
@@ -115,7 +115,7 @@ public class ClientController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = GlobalURLs.CLIENT_AUTHENTICATE)
+    @RequestMapping(method = RequestMethod.GET,value = GlobalURLs.MOCK_CLIENT_AUTHENTICATE)
     public String authenticateClientMock(){
         String token = GenerationService.GenerateToken();
         Map<String,TokenData> tv = authenticationService.getTokenValidity();
