@@ -146,6 +146,17 @@ public class MagasinController {
             commande.setEtat(enumEtatCommande.VALIDE_MAGASIN);
         }
 
+        Optional<Magasin> magasinOpt = magasinRepository.findById(marchandId);
+
+        if(!magasinOpt.isPresent()) {
+            throw new NullPointerException("magasin introuvable");
+        }
+
+        Magasin magasin = magasinOpt.get();
+
+        magasin.deleteCommande(commandeId);
+
+        magasinRepository.save(magasin);
         commandeRepository.save(commande);
 
         return true;
