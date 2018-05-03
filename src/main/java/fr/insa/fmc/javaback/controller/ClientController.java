@@ -78,7 +78,7 @@ public class ClientController {
         client.setMdp(mdp);
         client.setCommandesCours(new HashMap<String, Commande>());
         client.setCommandesFinis(new HashSet<String>());
-        client.setAdresse("a");
+        client.setAdresse(user.getResidence().getAdresse());
         clientRepository.save(client);
         RegistrationResponseWrapper registerResponse = new RegistrationResponseWrapper();
         registerResponse.setToken(token);
