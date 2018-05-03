@@ -10,7 +10,7 @@ public class GlobalURLs {
     public static final String MAGASIN_GETPRODUITS_BYMAGASIN = BASE+"/getProduits/{marchandid}/{produitid}";
     public static final String MAGASIN_REGISTER = BASE+"/registerMarchand";
     public static final String MAGASIN_AUTHMARCHAND = BASE+"/authenticateMarchand";
-    public static final String MAGASIN_UPDATEPRODUIT = BASE+"/updateproduit";
+    public static final String MAGASIN_UPDATEPRODUIT = BASE+"/updateProduit";
     public static final String MAGASIN_DELETEPRODUIT_BYMAGASIN = BASE+"/deleteProduit/{marchandid}/{produitid}";
     public static final String MAGASIN_VALIDERCOMMANDE = BASE+"/validation/{marchandId}/{commandeId}";
 
