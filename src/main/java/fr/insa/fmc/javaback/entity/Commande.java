@@ -7,29 +7,32 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Document(collection="ColCommande")
 public class Commande {
     @Id
     private String id;
-    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date heureCommande;
-    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date heureLivraison;
-    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date heureRecuperationParClient;
     private int poidsTotal;
     private int prixTotal;
     private int volumeTotal;
     private enumEtatCommande etat;
     private String idResidence;
-    private ArrayList<String> casiers;
+    private List<String> casiersId;
     private String idCoursier;
     private String idClient;
     private Position positionLivraison;
     private ArrayList<MagasinsCommande> magasinsCommande;
     private String paymentId;
     private String authorizationId;
+    private String mdpClient;
+    private String mdpCoursier;
 
     public String getId() {
         return id;
@@ -103,14 +106,6 @@ public class Commande {
         this.idResidence = idResidence;
     }
 
-    public ArrayList<String> getCasiers() {
-        return casiers;
-    }
-
-    public void setCasiers(ArrayList<String> casiers) {
-        this.casiers = casiers;
-    }
-
     public String getIdCoursier() {
         return idCoursier;
     }
@@ -157,5 +152,29 @@ public class Commande {
 
     public void setAuthorizationId(String authorizationId) {
         this.authorizationId = authorizationId;
+    }
+
+    public List<String> getCasiersId() {
+        return casiersId;
+    }
+
+    public void setCasiersId(List<String> casiersId) {
+        this.casiersId = casiersId;
+    }
+
+    public String getMdpClient() {
+        return mdpClient;
+    }
+
+    public void setMdpClient(String mdpClient) {
+        this.mdpClient = mdpClient;
+    }
+
+    public String getMdpCoursier() {
+        return mdpCoursier;
+    }
+
+    public void setMdpCoursier(String mdpCoursier) {
+        this.mdpCoursier = mdpCoursier;
     }
 }

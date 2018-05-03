@@ -4,7 +4,7 @@ import fr.insa.fmc.javaback.entity.Client;
 import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
-import fr.insa.fmc.javaback.service.TokenGenerationService;
+import fr.insa.fmc.javaback.service.GenerationService;
 import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,6 @@ public class ClientController {
     @RequestMapping(method=RequestMethod.POST, value="/client")
     public Client saveClient(@RequestBody Client client) {
         clientRepository.save(client);
-
         return client;
     }
     @RequestMapping(method=RequestMethod.DELETE, value="/client")
@@ -62,7 +61,7 @@ public class ClientController {
             throw new Exception("you must assign a password");
         }
         UserWrapper user = params.getUser();
-        String token = TokenGenerationService.GenerateToken();
+        String token = GenerationService.GenerateToken();
         Client client = new Client();
         //client.setId(user.getId());
         client.setNom(user.getNom());
@@ -113,7 +112,7 @@ public class ClientController {
         if(client == null) {
             throw new Exception("le client est introuvable");
         }
-        String token = TokenGenerationService.GenerateToken();
+        String token = GenerationService.GenerateToken();
         authResponse.setToken(token);
         UserWrapper user = new UserWrapper();
         user.setId(client.getId());
