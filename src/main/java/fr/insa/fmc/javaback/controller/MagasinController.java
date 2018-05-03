@@ -47,16 +47,16 @@ public class MagasinController {
         return magasin.getProduitsList().values();
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/api/getProduit/{idmagasin}/{idproduit}")
-    public Produit findProduitByMagainIdAndProduitId(@PathVariable String idmagasin, String idproduit){
-        Optional <Magasin> m = magasinRepository.findById(idmagasin);
+    @RequestMapping(method=RequestMethod.GET,value="/api/getProduit/{marchandid}/{produitid}")
+    public Produit findProduitByMagainIdAndProduitId(@PathVariable String marchandid, String produitid){
+        Optional <Magasin> m = magasinRepository.findById(marchandid);
         Magasin magasin = new Magasin();
         if(m.isPresent()){
             magasin=m.get();
         } else {
             throw new NullPointerException("magasin introuvable");
         }
-        Produit produit = magasin.getProduitsList().get(idproduit);
+        Produit produit = magasin.getProduitsList().get(produitid);
         if(produit == null){
             throw new NullPointerException("produit non trouvable");
         }
@@ -168,5 +168,25 @@ public class MagasinController {
 
 
         return "ok";
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/api/deleteProduit/{marchandid}/{produitid}")
+    public String deleteProduit(@PathVariable String marchandid,String produitid) {
+        Optional <Magasin> m = magasinRepository.findById(marchandid);
+        Magasin magasin = new Magasin();
+        if(m.isPresent()){
+            magasin=m.get();
+        } else {
+            throw new NullPointerException("magasin introuvable");
+        }
+        Produit produit = magasin.getProduitsList().get(produitid);
+        if(produit == null){
+            throw new NullPointerException("produit introuvable");
+        }
+        produitRepository.delete(produit);
+
+        //Optional<Client> client = clientRepository.findById(id);
+        //clientRepository.delete(client);
+        return "produit deleted";
     }
 }
