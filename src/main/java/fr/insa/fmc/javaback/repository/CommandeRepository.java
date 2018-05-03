@@ -19,6 +19,8 @@ public interface CommandeRepository extends CrudRepository<Commande,String>{
     <S extends Commande> S save(S entity);
 
     List<Commande> findByIdResidence(String idResidence);
+
+    List<Commande> findByPaymentId(String paymentId);
 }
 
 

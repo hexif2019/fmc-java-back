@@ -121,26 +121,26 @@ public class PaymentController {
 
     @RequestMapping(method = RequestMethod.POST, value = "api/pay/success", consumes = "application/json")
     public String proceedPayment(@RequestBody PaymentExecuteNotification authorize) throws PayPalRESTException {
-        Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getAuthorizationId(), authorize.getPayerId());
-        if (authorization.getState().equals("success")) {
-            Optional<Commande> commande = commandeRepository.findById(authorize.getCommandeId());
-            if (commande.isPresent()) {
-                Commande in = commande.get();
-                in.setAuthorizationId(authorization.getId());
-                in.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
-
-                Optional<Client> clientOpt = clientRepository.findById(in.getIdClient());
+        Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getPaymentID(), authorize.getPayerID());
+        if (authorization.getState().equals("authorized")) {
+            Commande commande = null;
+            if(authorize.getCommandeId()==null){
+                List<Commande> commandes = commandeRepository.findByPaymentId(authorize.getPaymentID());
+                if(!commandes.isEmpty()) commande = commandes.get(0);
+            }
+            else commande = commandeRepository.findById(authorize.getCommandeId()).get();
+            if (commande!=null) {
+                commande.setAuthorizationId(authorization.getId());
+                commande.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
+                Optional<Client> clientOpt = clientRepository.findById(commande.getIdClient());
                 if (!clientOpt.isPresent()) throw new NullPointerException("client introuvable");
                 Client client = clientOpt.get();
                 client.setCommandeEnCreation(null);
-                client.addCommandeCours(in.getId(), in);
-
+                client.addCommandeCours(commande.getId(), commande);
                 clientRepository.save(client);
-
-                commandeRepository.save(in);
-
+                commandeRepository.save(commande);
             }
-            return "success";
+            return "\"success\"";
         }
         return "redirect:/";
 
