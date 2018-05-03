@@ -7,7 +7,7 @@ public class GlobalURLs {
 
     public static final String CASIER_OPEN = BASE+"/casier/open";
     public static final String MAGASIN_GETPRODUITS = BASE+"/getProduits/{id}";
-    public static final String MAGASIN_GETPRODUITS_BYMAGASIN = BASE+"/getProduit/{marchandid}/{produitid}";
+    public static final String MAGASIN_GETPRODUITS_BYMAGASIN = BASE+"/getProduits/{marchandid}/{produitid}";
     public static final String MAGASIN_REGISTER = BASE+"/registerMarchand";
     public static final String MAGASIN_AUTHMARCHAND = BASE+"/authenticateMarchand";
     public static final String MAGASIN_UPDATEPRODUIT = BASE+"/updateproduit";

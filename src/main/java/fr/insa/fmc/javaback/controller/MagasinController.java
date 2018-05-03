@@ -54,7 +54,7 @@ public class MagasinController {
     }
 
     @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.MAGASIN_GETPRODUITS_BYMAGASIN)
-    public Produit findProduitByMagainIdAndProduitId(@PathVariable String marchandid, String produitid){
+    public Produit findProduitByMagainIdAndProduitId(@PathVariable String marchandid, @PathVariable String produitid){
         Optional <Magasin> m = magasinRepository.findById(marchandid);
         Magasin magasin = new Magasin();
         if(m.isPresent()){
