@@ -101,7 +101,7 @@ public class MagasinController {
 
     }
 
-    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_VALIDERCOMMANDE)
+    @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.MAGASIN_VALIDERCOMMANDE)
     public boolean validationMarchand(@PathVariable String marchandId, @PathVariable String commandeId) throws Exception{
 
         Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
