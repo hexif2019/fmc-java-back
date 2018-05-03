@@ -18,6 +18,15 @@ public class MagasinWrapper {
     private String codePostal;
     private String img;
     private Position position;
+    private String etat;
+
+    public String getEtat() {
+        return etat;
+    }
+
+    public void setEtat(String etat) {
+        this.etat = etat;
+    }
 
     public MagasinWrapper(MagasinsCommande magasinsCommande) {
         this.id = magasinsCommande.getIdMagasin();
@@ -33,6 +42,7 @@ public class MagasinWrapper {
         this.codePostal = magasinsCommande.getCodePostal();
         this.img = magasinsCommande.getImg();
         this.position = magasinsCommande.getPosition();
+        this.etat = magasinsCommande.getEtatMagasinCommande().toString();
     }
 
     public MagasinWrapper(Magasin magasin) {

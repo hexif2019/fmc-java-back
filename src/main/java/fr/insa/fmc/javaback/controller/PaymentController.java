@@ -8,6 +8,7 @@ import com.paypal.base.rest.PayPalRESTException;
 import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
+import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.CoursierRepository;
@@ -121,6 +122,12 @@ public class PaymentController {
             if (commande!=null) {
                 commande.setAuthorizationId(authorization.getId());
                 commande.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
+                ArrayList<MagasinsCommande> magasinsCommandes = new ArrayList<MagasinsCommande>();
+                for(MagasinsCommande magasinCommande: commande.getMagasinsCommande()) {
+                    magasinCommande.setEtatMagasinCommande(enumEtatMagasinCommande.PAYEMENT_EFFECTUE);
+                    magasinsCommandes.add(magasinCommande);
+                }
+                commande.setMagasinsCommande(magasinsCommandes);
                 Optional<Client> clientOpt = clientRepository.findById(commande.getIdClient());
                 if (!clientOpt.isPresent()) throw new NullPointerException("client introuvable");
                 Client client = clientOpt.get();
