@@ -131,13 +131,13 @@ public class MagasinController {
         }
 
         MagasinsCommande magasinCommande = commande.getMagasinsCommande().get(i);
-        magasinCommande.setEtatMagasinCommande(enumEtatMagasinCommande.VALIDE_MAGASIN);
+        magasinCommande.setEtatMagasinCommande(enumEtatMagasinCommande.ATTRIBUE_A_COURSIER);
         commande.setMagasinCommandeInList(i, magasinCommande);
 
         boolean lastCommande = true;
 
         for(int j = 0; j < commande.getMagasinsCommande().size(); j++) {
-            if(commande.getMagasinsCommande().get(j).getEtatMagasinCommande() != enumEtatMagasinCommande.VALIDE_MAGASIN) {
+            if(commande.getMagasinsCommande().get(j).getEtatMagasinCommande() != enumEtatMagasinCommande.ATTRIBUE_A_COURSIER) {
                 lastCommande = false;
             }
         }
@@ -249,7 +249,7 @@ public class MagasinController {
         return "ok";
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value=GlobalURLs.MAGASIN_DELETEPRODUIT_BYMAGASIN)
+    @RequestMapping(method=RequestMethod.GET, value=GlobalURLs.MAGASIN_DELETEPRODUIT_BYMAGASIN)
     public String deleteProduit(@PathVariable String marchandid,@PathVariable String produitid) {
         Optional <Magasin> m = magasinRepository.findById(marchandid);
         Magasin magasin = new Magasin();
@@ -262,10 +262,13 @@ public class MagasinController {
         if(produit == null){
             throw new NullPointerException("produit introuvable");
         }
-        produitRepository.delete(produit);
+        Map<String, Produit> listProduct = magasin.getProduitsList();
+        listProduct.remove(produit.getId());
+        magasin.setProduitsList(listProduct);
+        magasinRepository.save(magasin);
 
         //Optional<Client> client = clientRepository.findById(id);
         //clientRepository.delete(client);
-        return "produit deleted";
+        return "\"produit deleted\"";
     }
 }

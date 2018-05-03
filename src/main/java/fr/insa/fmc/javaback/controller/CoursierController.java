@@ -131,7 +131,7 @@ public class CoursierController {
         if(firstTimePassage) commande.setEtat(enumEtatCommande.EN_COURS_DE_LIVRAISON);
         commande.setMagasinsCommande(magasinsCommandes);
         commandeRepository.save(commande);
-        return "success";
+        return "\"success\"";
     }
     //internal methods
     @RequestMapping(method=RequestMethod.POST, value="/coursier")
