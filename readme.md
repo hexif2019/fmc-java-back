@@ -1,4 +1,5 @@
-README
+README projet fais-mes-courses back-end Java
+[![Build Status](https://travis-ci.org/hexif2019/SMART-WebLivreur.svg?branch=master)](https://travis-ci.org/hexif2019/SMART-WebLivreur)
 ====
 Installation back-end
 ----
