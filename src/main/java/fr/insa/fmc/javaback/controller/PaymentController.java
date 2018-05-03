@@ -9,10 +9,7 @@ import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
-import fr.insa.fmc.javaback.repository.ClientRepository;
-import fr.insa.fmc.javaback.repository.CommandeRepository;
-import fr.insa.fmc.javaback.repository.CoursierRepository;
-import fr.insa.fmc.javaback.repository.ResidenceRepository;
+import fr.insa.fmc.javaback.repository.*;
 import fr.insa.fmc.javaback.service.*;
 import fr.insa.fmc.javaback.wrapper.CasierDisponibilite;
 import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
@@ -37,6 +34,8 @@ public class PaymentController {
     private CoursierRepository coursierRepository;
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private MagasinRepository magasinsRepository;
     @Autowired
     private PaypalService paypalService;
 
@@ -123,9 +122,15 @@ public class PaymentController {
                 commande.setAuthorizationId(authorization.getId());
                 commande.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
                 ArrayList<MagasinsCommande> magasinsCommandes = new ArrayList<MagasinsCommande>();
+                ArrayList<Magasin> magasins = new ArrayList<Magasin>();
                 for(MagasinsCommande magasinCommande: commande.getMagasinsCommande()) {
                     magasinCommande.setEtatMagasinCommande(enumEtatMagasinCommande.PAYEMENT_EFFECTUE);
                     magasinsCommandes.add(magasinCommande);
+                    Optional<Magasin> magOptTempo = magasinsRepository.findById(magasinCommande.getIdMagasin());
+                    if(!magOptTempo.isPresent()) throw new NullPointerException("Un magasin introuvable");
+                    Magasin magTempo = magOptTempo.get();
+                    magTempo.addCommande(commande.getId());
+                    magasins.add(magTempo);
                 }
                 commande.setMagasinsCommande(magasinsCommandes);
                 Optional<Client> clientOpt = clientRepository.findById(commande.getIdClient());
@@ -133,6 +138,13 @@ public class PaymentController {
                 Client client = clientOpt.get();
                 client.setCommandeEnCreation(null);
                 client.addCommandeCours(commande.getId(), commande);
+
+                for(Magasin mag: magasins) {
+
+                    magasinsRepository.save(mag);
+
+                }
+
                 clientRepository.save(client);
                 commandeRepository.save(commande);
             }
