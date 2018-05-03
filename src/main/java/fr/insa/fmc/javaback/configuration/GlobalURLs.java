@@ -13,6 +13,7 @@ public class GlobalURLs {
     public static final String MAGASIN_UPDATEPRODUIT = BASE+"/updateProduit";
     public static final String MAGASIN_DELETEPRODUIT_BYMAGASIN = BASE+"/deleteProduit/{marchandid}/{produitid}";
     public static final String MAGASIN_VALIDERCOMMANDE = BASE+"/validation/{marchandId}/{commandeId}";
+    public static final String MAGASIN_GETMARCHAND = BASE+"/getMarchand/{idMarchand}";
 
     public static final String CLIENT_REGISTER = BASE+"/register";
     public static final String CLIENT_AUTHENTICATE_TOKEN = BASE+"/authenticateToken";

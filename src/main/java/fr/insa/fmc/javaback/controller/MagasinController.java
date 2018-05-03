@@ -198,6 +198,38 @@ public class MagasinController {
         return authResponse;
     }
 
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_GETMARCHAND)
+    public MarchandWrapper getMarchand(@PathVariable String idMarchand) throws Exception{
+        Magasin magasin = magasinRepository.findById(idMarchand).get();
+        if(magasin==null){
+            throw new NullPointerException("Le magasin est introuvable");
+        }
+        MarchandWrapper marchand = new MarchandWrapper();
+        marchand.setId(magasin.getId());
+        marchand.setAdresse(magasin.getAdresse());
+        marchand.setDescription(magasin.getDescription());
+        marchand.setDenomination(magasin.getDenomination());
+        marchand.setEmail(magasin.getAdresse());
+        marchand.setVille(magasin.getVille());
+        marchand.setCodePostal(magasin.getCodePostal());
+        marchand.setCommandes(new ArrayList<CommandeWrapper>());
+        marchand.setProduits(new ArrayList<ProduitWrapper>());
+        for(String commandeId: magasin.getIdCommandes()) {
+            Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
+            if(!commandeOpt.isPresent()) {
+                throw new Exception("Une commande n est pas presente en base");
+            }
+            marchand.addCommande(commandeOpt.get());
+        }
+        for(Produit produit: magasin.getProduitsList().values()) {
+            marchand.addProduit(produit);
+        }
+        //marchand.setCommandes(magasin.getIdCommandes());
+        return marchand;
+    }
+
+
+
     @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_UPDATEPRODUIT,consumes="application/json")
     public String updateProduit(@RequestBody ProduitMagWrapper params) {
         String magasinId = params.getIdMagasin();
