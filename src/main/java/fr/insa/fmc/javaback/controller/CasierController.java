@@ -28,7 +28,7 @@ public class CasierController {
         List<String> casiersAOuvrir = new ArrayList<>();
         List<Commande> commandes = commandeRepository.findByIdResidence(openCasier.getResidenceId());
         for(Commande c : commandes){
-            if(c.getMdpCoursier().equals(openCasier.getPassword())){
+            if(c.getMdpCoursier()!= null && c.getMdpCoursier().equals(openCasier.getPassword())){
                 casiersAOuvrir = c.getCasiersId();
                 c.setMdpCoursier(null);
                 for(MagasinsCommande mc : c.getMagasinsCommande()){
@@ -38,7 +38,7 @@ public class CasierController {
                 commandeRepository.save(c);
                 break;
             }
-            if(c.getMdpClient().equals(openCasier.getPassword())){
+            if(c.getMdpClient()!= null && c.getMdpClient().equals(openCasier.getPassword())){
                 if(c.getMdpCoursier()==null){
                     for(MagasinsCommande mc : c.getMagasinsCommande()){
                         mc.setEtatMagasinCommande(enumEtatMagasinCommande.RECUPERE_CLIENT);
