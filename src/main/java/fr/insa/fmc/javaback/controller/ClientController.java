@@ -151,6 +151,12 @@ public class ClientController {
         boolean res = authenticationService.tryStoreToken(token,"abc");
         return res ? "success":"fail";
     }
+
+    @RequestMapping(method=RequestMethod.GET,value="/mock/searchclient/{email}")
+    public Client searchClient(@PathVariable String email){
+        Client a= clientRepository.findByEmail(email).get();
+        return a;
+    }
 }
 
 

@@ -34,7 +34,7 @@ public class ResidenceController {
     @Autowired
     MagasinRepository magasinRepository;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/residence")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/residence")
     public Iterable<Residence> findResidence() {
         return residenceRepository.findAll();
     }
