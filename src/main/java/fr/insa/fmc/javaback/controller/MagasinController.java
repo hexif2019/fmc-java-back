@@ -2,6 +2,7 @@ package fr.insa.fmc.javaback.controller;
 
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.Produit;
+import fr.insa.fmc.javaback.entity.Residence;
 import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.repository.ProduitRepository;
 import fr.insa.fmc.javaback.repository.ResidenceRepository;
@@ -147,6 +148,23 @@ public class MagasinController {
 
         magasinRepository.save(magasin);
 
+
+        return "ok";
+    }
+
+    @RequestMapping(method= RequestMethod.GET, value="/magasin/{idMagasin}/{idResidence}")
+    public String linkMagasinResidence(@PathVariable String idMagasin, @PathVariable String idResidence){
+        Optional <Residence> resid = residenceRepository.findById(idResidence);
+        Residence residence;
+        if(resid.isPresent()){
+            residence = resid.get();
+        } else {
+            throw new NullPointerException("Magasin introuvable");
+        }
+
+        //residence.addMagasin(idMagasin);
+
+        residenceRepository.save(residence);
 
         return "ok";
     }
