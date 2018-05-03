@@ -17,10 +17,7 @@ import fr.insa.fmc.javaback.wrapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class MagasinController {
@@ -184,6 +181,8 @@ public class MagasinController {
         marchand.setEmail(magasin.getAdresse());
         marchand.setVille(magasin.getVille());
         marchand.setCodePostal(magasin.getCodePostal());
+        marchand.setCommandes(new ArrayList<CommandeWrapper>());
+        marchand.setProduits(new ArrayList<ProduitWrapper>());
         for(String commandeId: magasin.getIdCommandes()) {
             Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
             if(!commandeOpt.isPresent()) {

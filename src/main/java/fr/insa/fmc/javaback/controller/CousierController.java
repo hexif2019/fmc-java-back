@@ -5,16 +5,10 @@ import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
 import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
-import fr.insa.fmc.javaback.repository.ClientRepository;
-import fr.insa.fmc.javaback.repository.CommandeRepository;
-import fr.insa.fmc.javaback.repository.CoursierRepository;
-import fr.insa.fmc.javaback.repository.MagasinRepository;
+import fr.insa.fmc.javaback.repository.*;
 import fr.insa.fmc.javaback.service.GenerationService;
 import fr.insa.fmc.javaback.service.PaypalService;
-import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
-import fr.insa.fmc.javaback.wrapper.AuthentificationWrapper;
-import fr.insa.fmc.javaback.wrapper.CommandeWrapper;
-import fr.insa.fmc.javaback.wrapper.LivreurWrapper;
+import fr.insa.fmc.javaback.wrapper.*;
 import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +27,8 @@ public class CousierController {
     ClientRepository clientRepository;
     @Autowired
     MagasinRepository magasinRepository;
+    @Autowired
+    ResidenceRepository residenceRepository;
     @Autowired
     PaypalService paypalService;
 
@@ -80,18 +76,21 @@ public class CousierController {
     }
 
     @RequestMapping(method=RequestMethod.GET,value=GlobalURLs.COURSIER_GETCOMMANDESENCOURS)
-    public ArrayList<CommandeWrapper> getCommandesEnCour(@PathVariable String coursierId){
+    public ArrayList<CommandeWrapperResidence> getCommandesEnCour(@PathVariable String coursierId){
         Optional<Coursier> coursier = coursierRepository.findById(coursierId);
         if(!coursier.isPresent())
             throw new NullPointerException("Couriser introuvable");
 
-        ArrayList<CommandeWrapper> commandeWrap = new ArrayList<CommandeWrapper>();
+        ArrayList<CommandeWrapperResidence> commandeWrap = new ArrayList<CommandeWrapperResidence>();
 
         for(String commandeId: coursier.get().getCommandesEnCours().keySet()) {
             Optional<Commande> commandeTempo = commandeRepository.findById(commandeId);
             if(!commandeTempo.isPresent())
                 throw new NullPointerException("Une commande est introuvable");
-            commandeWrap.add(new CommandeWrapper(commandeTempo.get()));
+            Optional<Residence> residenceTempo = residenceRepository.findById(commandeTempo.get().getIdResidence());
+            if(!residenceTempo.isPresent())
+                throw new NullPointerException("Une residence est introuvable");
+            commandeWrap.add(new CommandeWrapperResidence(commandeTempo.get(), residenceTempo.get()));
         }
         return commandeWrap;
 
