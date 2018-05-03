@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
+import java.util.Set;
 
 @Document(collection="ColMagasin")
 public class Magasin {
@@ -19,6 +20,15 @@ public class Magasin {
     private String ville;
     private String codePostal;
     private String img;
+    private Set<String> idCommandes;
+
+    public Set<String> getIdCommandes() {
+        return idCommandes;
+    }
+
+    public void setIdCommandes(Set<String> idCommandes) {
+        this.idCommandes = idCommandes;
+    }
 
     public String getId() {
         return id;

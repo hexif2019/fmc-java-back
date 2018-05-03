@@ -3,23 +3,23 @@ package fr.insa.fmc.javaback.service;
 public class PaymentExecuteNotification {
 
     private String commandeId;
-    private String authorizationId;
-    private String payerId;
+    private String paymentID;
+    private String payerID;
 
-    public String getAuthorizationId() {
-        return authorizationId;
+    public String getPaymentID() {
+        return paymentID;
     }
 
-    public void setAuthorizationId(String authorizationId) {
-        this.authorizationId = authorizationId;
+    public void setPaymentID(String authorizationId) {
+        this.paymentID = authorizationId;
     }
 
-    public String getPayerId() {
-        return payerId;
+    public String getPayerID() {
+        return payerID;
     }
 
-    public void setPayerId(String payerId) {
-        this.payerId = payerId;
+    public void setPayerID(String payerId) {
+        this.payerID = payerId;
     }
 
     public String getCommandeId() {

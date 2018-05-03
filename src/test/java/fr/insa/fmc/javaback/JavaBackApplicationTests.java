@@ -6,6 +6,10 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class JavaBackApplicationTests {
@@ -15,11 +19,13 @@ public class JavaBackApplicationTests {
 	}
 	@Test
 	public void testGenerationCode(){
-		String a = GenerationService.GenerateCode();
-		String b = GenerationService.GenerateCode();
-		System.out.println(a);
-		System.out.println(b);
-		assert(!a.equals(b));
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		try {
+			Date date = format.parse("2018-05-03T22:00:00.000Z");
+			System.out.println(date.toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 

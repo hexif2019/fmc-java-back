@@ -40,9 +40,11 @@ public class PaymentController {
 
     @RequestMapping(method = RequestMethod.POST, value = "api/pay", consumes = "application/json")
     public PaymentCreationNotification pay(@RequestBody CommandeWrapper commandeWrap) throws ParseException {
-        //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        //Date dateLivraisonFormatted = format.parse(commandeWrap.);
-        if (commandeWrap.getHeureLivraison().getDay() < new Date().getDay()) return null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date dateLivraisonFormatted;
+        if(commandeWrap.getHeureLivraison() == null) dateLivraisonFormatted = new Date();
+        else dateLivraisonFormatted = format.parse(commandeWrap.getHeureLivraison());
+        if (dateLivraisonFormatted.getDay() < new Date().getDay()) return null;
         PaymentCreationNotification res = new PaymentCreationNotification();
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
@@ -61,7 +63,7 @@ public class PaymentController {
             int volumeAAttributer = commande.getVolumeTotal();
             List<String> casiersId = new ArrayList<>();
             for (Map.Entry<String, Casier> e : casiers.entrySet()) {
-                List<CasierDisponibilite> lcd = CasierService.SetCasierToOccupe(commandeWrap.getHeureLivraison(), e.getValue().getDisponibilites());
+                List<CasierDisponibilite> lcd = CasierService.SetCasierToOccupe(dateLivraisonFormatted, e.getValue().getDisponibilites());
                 if (lcd != null) {
                     e.getValue().setDisponibilites(lcd);
                     volumeAAttributer -= e.getValue().getVolume();
@@ -85,19 +87,19 @@ public class PaymentController {
             int index = CoursierService.attributeCommandeToCoursier(coursiers);
             coursiers.get(index).getCommandesEnCours().put(commande.getId(), commande);
             commande.setIdCoursier(coursiers.get(index).getId());
-            coursierRepository.save(coursiers.get(index));
             //LIVREUR ATTRIBUE
             //set des mdps
             commande.setMdpCoursier(GenerationService.GenerateCode());
             commande.setMdpClient(GenerationService.GenerateCode());
             //mise a jour des dates
-            commande.setHeureLivraison(commandeWrap.getHeureLivraison());
+            commande.setHeureLivraison(dateLivraisonFormatted);
             commande.setHeureCommande(new Date());
             commande.setEtat(enumEtatCommande.ATTRIBUE_A_COURSIER);
-            Payment payment = paypalService.createPayment((double) commande.getPrixTotal()+5.0, "Commande à régler", baseUrl + "cancel", baseUrl + "success");
+            Payment payment = paypalService.createPayment(PaypalService.ConvertIntToDouble((commande.getPrixTotal()))+5.0, "Commande à régler", baseUrl + "cancel", baseUrl + "success");
             res.setPaymentID(payment.getId());
             commande.setPaymentId(payment.getId());
             commandeRepository.save(commande);
+            coursierRepository.save(coursiers.get(index));
         } catch (PayPalRESTException e) {
             System.err.println(e.getMessage());
         }
@@ -109,7 +111,7 @@ public class PaymentController {
         PaymentCreationNotification res = new PaymentCreationNotification();
         try {
             String baseUrl = "client.fais-mes-courses.fr/api/pay/";
-            Payment payment = paypalService.createPayment(31.11, "Commande à régler", baseUrl + "cancel", baseUrl + "success");
+            Payment payment = paypalService.createPayment(30.11, "Commande à régler", baseUrl + "cancel", baseUrl + "success");
             res.setPaymentID(payment.getId());
         } catch (PayPalRESTException e) {
             System.err.println(e.getMessage());
@@ -119,26 +121,26 @@ public class PaymentController {
 
     @RequestMapping(method = RequestMethod.POST, value = "api/pay/success", consumes = "application/json")
     public String proceedPayment(@RequestBody PaymentExecuteNotification authorize) throws PayPalRESTException {
-        Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getAuthorizationId(), authorize.getPayerId());
-        if (authorization.getState().equals("success")) {
-            Optional<Commande> commande = commandeRepository.findById(authorize.getCommandeId());
-            if (commande.isPresent()) {
-                Commande in = commande.get();
-                in.setAuthorizationId(authorization.getId());
-                in.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
-
-                Optional<Client> clientOpt = clientRepository.findById(in.getIdClient());
+        Authorization authorization = paypalService.executePaymentAndGetAuthorization(authorize.getPaymentID(), authorize.getPayerID());
+        if (authorization.getState().equals("authorized")) {
+            Commande commande = null;
+            if(authorize.getCommandeId()==null){
+                List<Commande> commandes = commandeRepository.findByPaymentId(authorize.getPaymentID());
+                if(!commandes.isEmpty()) commande = commandes.get(0);
+            }
+            else commande = commandeRepository.findById(authorize.getCommandeId()).get();
+            if (commande!=null) {
+                commande.setAuthorizationId(authorization.getId());
+                commande.setEtat(enumEtatCommande.PAYEMENT_EFFECTUE);
+                Optional<Client> clientOpt = clientRepository.findById(commande.getIdClient());
                 if (!clientOpt.isPresent()) throw new NullPointerException("client introuvable");
                 Client client = clientOpt.get();
                 client.setCommandeEnCreation(null);
-                client.addCommandeCours(in.getId(), in);
-
+                client.addCommandeCours(commande.getId(), commande);
                 clientRepository.save(client);
-
-                commandeRepository.save(in);
-
+                commandeRepository.save(commande);
             }
-            return "success";
+            return "\"success\"";
         }
         return "redirect:/";
 

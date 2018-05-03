@@ -13,8 +13,7 @@ public class CommandeWrapper {
     private String id;
     private String etat;
     private int prix;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date heureLivraison;
+    private String heureLivraison;
     private List<MagasinWrapper> magasins;
     private String userid;
     private Optional<UserWrapper> user;
@@ -67,11 +66,11 @@ public class CommandeWrapper {
         this.user = user;
     }
 
-    public Date getHeureLivraison() {
+    public String getHeureLivraison() {
         return heureLivraison;
     }
 
-    public void setHeureLivraison(Date heureLivraison) {
+    public void setHeureLivraison(String heureLivraison) {
         this.heureLivraison = heureLivraison;
     }
 
