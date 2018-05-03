@@ -151,21 +151,4 @@ public class MagasinController {
 
         return "ok";
     }
-
-    @RequestMapping(method= RequestMethod.GET, value="/magasin/{idMagasin}/{idResidence}")
-    public String linkMagasinResidence(@PathVariable String idMagasin, @PathVariable String idResidence){
-        Optional <Residence> resid = residenceRepository.findById(idResidence);
-        Residence residence;
-        if(resid.isPresent()){
-            residence = resid.get();
-        } else {
-            throw new NullPointerException("Magasin introuvable");
-        }
-
-        //residence.addMagasin(idMagasin);
-
-        residenceRepository.save(residence);
-
-        return "ok";
-    }
 }
