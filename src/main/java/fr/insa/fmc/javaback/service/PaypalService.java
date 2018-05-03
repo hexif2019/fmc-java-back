@@ -59,7 +59,7 @@ public class PaypalService {
         return createdAuthPayment.getTransactions().get(0).getRelatedResources().get(0).getAuthorization();
     }
 
-    public void captureAuthorization(APIContext apiContext,String authorizationId, Double total) throws PayPalRESTException {
+    public void captureAuthorization(String authorizationId, Double total) throws PayPalRESTException {
         Authorization authorization = Authorization.get(apiContext,authorizationId);
         Amount amount = new Amount();
         amount.setCurrency(currency);

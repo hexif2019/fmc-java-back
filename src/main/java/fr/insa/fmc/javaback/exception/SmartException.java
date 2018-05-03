@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.AuthenticationFailedException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -65,5 +66,14 @@ public class SmartException extends ResponseEntityExceptionHandler {
         ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return MessageDeRetour;
     }
+
+    @ResponseBody
+    @ExceptionHandler(AuthenticationFailException.class)
+    public ResponseEntity<ExceptionMessage> authenticationFailedException(HttpServletRequest request, AuthenticationFailException exception) {
+        ExceptionMessage message = new ExceptionMessage(exception.getMessage(),exception.getClass().getName(), request.getRequestURI(),LocalDateTime.now().format(formatter),HttpStatus.UNAUTHORIZED.toString());
+        ResponseEntity<ExceptionMessage> MessageDeRetour = new ResponseEntity<>(message,HttpStatus.UNAUTHORIZED);
+        return MessageDeRetour;
+    }
+
 
 }
