@@ -2,6 +2,7 @@ package fr.insa.fmc.javaback.controller;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
+import fr.insa.fmc.javaback.configuration.GlobalURLs;
 import fr.insa.fmc.javaback.entity.Casier;
 import fr.insa.fmc.javaback.entity.Magasin;
 import fr.insa.fmc.javaback.entity.MagasinsCommande;
@@ -34,9 +35,67 @@ public class ResidenceController {
     @Autowired
     MagasinRepository magasinRepository;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/residence")
+    @RequestMapping(method = RequestMethod.GET, value = GlobalURLs.RESIDENCE_FINDALL)
     public Iterable<Residence> findResidence() {
         return residenceRepository.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GlobalURLs.RESIDENCE_FINDBYZIP)
+    public ArrayList<ResidenceWrapper> findResidenceFormCodePostal(@PathVariable String codePostal) {
+
+        List<Residence> residences = residenceRepository.findResidenceByCodePostal(codePostal);
+
+        ArrayList<ResidenceWrapper> residenceWrapList = new ArrayList<ResidenceWrapper>();
+
+        //TODO: si liste vide, exception?
+
+        for (Residence resid : residences) {
+            residenceWrapList.add(new ResidenceWrapper(resid));
+        }
+
+        return residenceWrapList;
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GlobalURLs.RESIDENCE_FINDBYID)
+    public ArrayList<MagasinWrapper> findNearMagasinsByResidenceId(@PathVariable String id) throws Exception {
+        Optional<Residence> residenceOpt = residenceRepository.findById(id);
+        Residence residence = new Residence();
+        if (residenceOpt.isPresent()) {
+            residence = residenceOpt.get();
+        } else {
+            throw new Exception("cannot find residence by id");
+        }
+        Set<String> magasinsId = residence.getIdMagasins();
+        ArrayList<MagasinWrapper> nearMagasins = new ArrayList<MagasinWrapper>();
+        for (String magId : magasinsId) {
+            Optional<Magasin> magasinTempo = magasinRepository.findById(magId);
+            if (magasinTempo.isPresent()) {
+                nearMagasins.add(new MagasinWrapper(magasinTempo.get()));
+            } else {
+                throw new NullPointerException("Magasin de la residence introuvable");
+            }
+        }
+
+        return nearMagasins;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GlobalURLs.MOCK_RESIDENCE_ADDCASIER)
+    public String mockAddCasierToResidence(@PathVariable String residenceId) {
+        Optional<Residence> residenceOpt = residenceRepository.findById(residenceId);
+        Residence residence = residenceOpt.get();
+        Map<String, Casier> casiers = residence.getCasiers();
+        for(int i = casiers.size();i<12;i++){
+            Casier casier = new Casier();
+            LinkedList<CasierDisponibilite> casierDispo = new LinkedList<>();
+            casierDispo.add(new CasierDisponibilite(new Date()));
+            casier.setDisponibilites(casierDispo);
+            casier.setId(String.valueOf(casiers.size()));
+            casiers.put(casier.getId(), casier);
+        }
+        residence.setCasiers(casiers);
+        residenceRepository.save(residence);
+        return "ok";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/residence",consumes="application/json")
@@ -66,29 +125,6 @@ public class ResidenceController {
         //Optional<Client> client = clientRepository.findById(id);
         //clientRepository.delete(client);
         return "";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/api/getMagasinsOfResidence/{id}")
-    public ArrayList<MagasinWrapper> findNearMagasinsByResidenceId(@PathVariable String id) throws Exception {
-        Optional<Residence> residenceOpt = residenceRepository.findById(id);
-        Residence residence = new Residence();
-        if (residenceOpt.isPresent()) {
-            residence = residenceOpt.get();
-        } else {
-            throw new Exception("cannot find residence by id");
-        }
-        Set<String> magasinsId = residence.getIdMagasins();
-        ArrayList<MagasinWrapper> nearMagasins = new ArrayList<MagasinWrapper>();
-        for (String magId : magasinsId) {
-            Optional<Magasin> magasinTempo = magasinRepository.findById(magId);
-            if (magasinTempo.isPresent()) {
-                nearMagasins.add(new MagasinWrapper(magasinTempo.get()));
-            } else {
-                throw new NullPointerException("Magasin de la residence introuvable");
-            }
-        }
-
-        return nearMagasins;
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/residence/google/{address}")
@@ -127,43 +163,7 @@ public class ResidenceController {
         return ret;
     }
 
-
-    @RequestMapping(method = RequestMethod.GET, value = "/api/findResidenceFormCodePostal/{codePostal}")
-    public ArrayList<ResidenceWrapper> findResidenceFormCodePostal(@PathVariable String codePostal) {
-
-        List<Residence> residences = residenceRepository.findResidenceByCodePostal(codePostal);
-
-        ArrayList<ResidenceWrapper> residenceWrapList = new ArrayList<ResidenceWrapper>();
-
-        //TODO: si liste vide, exception?
-
-        for (Residence resid : residences) {
-            residenceWrapList.add(new ResidenceWrapper(resid));
-        }
-
-        return residenceWrapList;
-
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/mock/addcasiertoresidence/{residenceId}")
-    public String mockAddCasierToResidence(@PathVariable String residenceId) {
-        Optional<Residence> residenceOpt = residenceRepository.findById(residenceId);
-        Residence residence = residenceOpt.get();
-        Map<String, Casier> casiers = residence.getCasiers();
-        for(int i = casiers.size();i<12;i++){
-            Casier casier = new Casier();
-            LinkedList<CasierDisponibilite> casierDispo = new LinkedList<>();
-            casierDispo.add(new CasierDisponibilite(new Date()));
-            casier.setDisponibilites(casierDispo);
-            casier.setId(String.valueOf(casiers.size()));
-            casiers.put(casier.getId(), casier);
-        }
-        residence.setCasiers(casiers);
-        residenceRepository.save(residence);
-        return "ok";
-    }
-
-    @RequestMapping(method= RequestMethod.GET, value="/residence/{idResidence}/{idMagasin}/")
+    @RequestMapping(method= RequestMethod.GET, value="/residence/{idResidence}/{idMagasin}")
     public String linkMagasinResidence(@PathVariable String idMagasin, @PathVariable String idResidence){
         Optional <Residence> resid = residenceRepository.findById(idResidence);
         Residence residence;

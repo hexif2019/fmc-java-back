@@ -2,13 +2,13 @@ package fr.insa.fmc.javaback.controller;
 
 import com.paypal.base.rest.PayPalRESTException;
 import fr.insa.fmc.javaback.configuration.GlobalURLs;
-import fr.insa.fmc.javaback.entity.Client;
-import fr.insa.fmc.javaback.entity.Commande;
-import fr.insa.fmc.javaback.entity.Coursier;
+import fr.insa.fmc.javaback.entity.*;
 import fr.insa.fmc.javaback.entity.enums.enumEtatCommande;
+import fr.insa.fmc.javaback.entity.enums.enumEtatMagasinCommande;
 import fr.insa.fmc.javaback.repository.ClientRepository;
 import fr.insa.fmc.javaback.repository.CommandeRepository;
 import fr.insa.fmc.javaback.repository.CoursierRepository;
+import fr.insa.fmc.javaback.repository.MagasinRepository;
 import fr.insa.fmc.javaback.service.GenerationService;
 import fr.insa.fmc.javaback.service.PaypalService;
 import fr.insa.fmc.javaback.wrapper.AuthentificationCoursierResponseWrapper;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +31,8 @@ public class CousierController {
     CommandeRepository commandeRepository;
     @Autowired
     ClientRepository clientRepository;
+    @Autowired
+    MagasinRepository magasinRepository;
     @Autowired
     PaypalService paypalService;
 
@@ -113,6 +116,23 @@ public class CousierController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET,value=GlobalURLs.COURSIER_ONMAGASIN)
+    public String updateCheckpointMagasins(@PathVariable String commandeId,@PathVariable String marchandId){
+        Optional<Magasin> magasinOpt = magasinRepository.findById(marchandId);
+        Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
+        boolean firstTimePassage = true;
+        if(!magasinOpt.isPresent()) throw new NullPointerException("marchand introuvable");
+        if(!commandeOpt.isPresent()) throw new NullPointerException("coursier introuvable");
+        Magasin magasin = magasinOpt.get();
+        Commande commande = commandeOpt.get();
+        List<MagasinsCommande> magasinsCommandes = commande.getMagasinsCommande();
+        for(MagasinsCommande mc : magasinsCommandes){
+            if(mc.getEtatMagasinCommande()== enumEtatMagasinCommande.EN_COURS_DE_LIVRAISON) firstTimePassage = false;
+            if(mc.getIdMagasin().equals(marchandId)) mc.setEtatMagasinCommande(enumEtatMagasinCommande.EN_COURS_DE_LIVRAISON);
+        }
+        if(firstTimePassage) commande.setEtat(enumEtatCommande.EN_COURS_DE_LIVRAISON);
+        return "success";
+    }
     //internal methods
     @RequestMapping(method=RequestMethod.POST, value="/coursier")
     public Coursier saveCoursier(@RequestBody Coursier coursier) {

@@ -72,8 +72,6 @@ public class MagasinController {
         return produit;
     }
 
-
-
     @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_REGISTER,consumes="application/json")
     public RegistrationMarchandResponseWrapper registerMarchand(@RequestBody RegisterMarchandWrapper params) throws Exception{
         String mdp = params.getPassword();
@@ -106,7 +104,7 @@ public class MagasinController {
 
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="/api/validation/{marchandid}/{commandeid}")
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_VALIDERCOMMANDE)
     public boolean validationMarchand(@PathVariable String marchandId, @PathVariable String commandeId) throws Exception{
 
         Optional<Commande> commandeOpt = commandeRepository.findById(commandeId);
@@ -148,7 +146,7 @@ public class MagasinController {
         }
 
         if(lastCommande) {
-            commande.setEtat(enumEtatCommande.VALIDE_MAGASIN);
+            commande.setEtat(enumEtatCommande.ATTRIBUE_A_COURSIER);
         }
 
         Optional<Magasin> magasinOpt = magasinRepository.findById(marchandId);
@@ -167,7 +165,7 @@ public class MagasinController {
         return true;
     }
 
-    @RequestMapping(method=RequestMethod.POST,value="/api/authenticateMarchand",consumes="application/json")
+    @RequestMapping(method=RequestMethod.POST,value=GlobalURLs.MAGASIN_AUTHMARCHAND,consumes="application/json")
     public AuthentificationMarchandResponseWrapper connectionMarchand(@RequestBody AuthentificationWrapper params) throws Exception{
         String email = params.getEmail();
         String mdp = params.getPassword();

@@ -115,7 +115,7 @@ public class ClientController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = GlobalURLs.MOCK_CLIENT_AUTHENTICATE)
+    @RequestMapping(method = RequestMethod.GET,value = GlobalURLs.CLIENT_AUTHENTICATE)
     public String authenticateClientMock(){
         String token = GenerationService.GenerateToken();
         Map<String,TokenData> tv = authenticationService.getTokenValidity();

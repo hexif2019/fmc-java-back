@@ -28,7 +28,7 @@ public class Commande {
     private String idCoursier;
     private String idClient;
     private Position positionLivraison;
-    private ArrayList<MagasinsCommande> magasinsCommande;
+    private List<MagasinsCommande> magasinsCommande;
     private String paymentId;
     private String authorizationId;
     private String mdpClient;
@@ -130,11 +130,11 @@ public class Commande {
         this.positionLivraison = positionLivraison;
     }
 
-    public ArrayList<MagasinsCommande> getMagasinsCommande() {
+    public List<MagasinsCommande> getMagasinsCommande() {
         return magasinsCommande;
     }
 
-    public void setMagasinsCommande(ArrayList<MagasinsCommande> magasinsCommande) {
+    public void setMagasinsCommande(List<MagasinsCommande> magasinsCommande) {
         this.magasinsCommande = magasinsCommande;
     }
 
