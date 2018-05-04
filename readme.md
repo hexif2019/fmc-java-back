@@ -1,5 +1,5 @@
 README fais-mes-courses back-end
-[![Build Status](https://travis-ci.org/hexif2019/SMART-WebLivreur.svg?branch=master)](https://travis-ci.org/hexif2019/SMART-WebLivreur)
+[![Build Status](https://travis-ci.org/hexif2019/fmc-java-back.svg?branch=master)](https://travis-ci.org/hexif2019/fmc-java-back)
 ====
 
 Livrables présents dans ce répertoire
