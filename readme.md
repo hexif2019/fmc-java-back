@@ -1,6 +1,13 @@
 README fais-mes-courses back-end
 [![Build Status](https://travis-ci.org/hexif2019/SMART-WebLivreur.svg?branch=master)](https://travis-ci.org/hexif2019/SMART-WebLivreur)
 ====
+
+Livrables présents dans ce répertoire
+----
+Vous pouvez trouver le fichier fmc-Slides.pdf et fmc-Bilan.pdf : la présentation lors de la soutenance et le dossier bilan du projet.
+
+Vidéo teaser : https://youtu.be/gYTNkpxJKCc
+
 Installation back-end
 ----
 # 1.
