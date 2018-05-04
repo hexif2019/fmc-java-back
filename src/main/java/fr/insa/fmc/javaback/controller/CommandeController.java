@@ -226,7 +226,7 @@ public class CommandeController {
          //Map<Long, ProduitsCommande> map = new HashMap<>();
 
         //c.setMagasinsCommande(map);
-        String statut = "ok";
+        String statut = "\"ok\"";
         return statut;
     }
 

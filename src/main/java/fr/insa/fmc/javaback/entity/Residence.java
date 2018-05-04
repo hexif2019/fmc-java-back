@@ -94,4 +94,8 @@ public class Residence {
     public void addMagasin(String idMagasin){
         this.idMagasins.add(idMagasin);
     }
+
+    public void addClient(String clientId){
+        this.idClient.add(clientId);
+    }
 }

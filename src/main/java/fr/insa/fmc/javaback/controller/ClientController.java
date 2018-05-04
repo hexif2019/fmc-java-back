@@ -53,7 +53,18 @@ public class ClientController {
         client.setCommandesCours(new HashMap<>());
         client.setCommandesFinis(new HashSet<>());
         client.setAdresse(user.getResidence().getAdresse());
+
+        Optional<Residence> residenceOpt = residenceRepository.findById(user.getResidence().getId());
+        if(!residenceOpt.isPresent()) {
+            throw new NullPointerException("residence introuvable");
+        }
+
         clientRepository.save(client);
+
+        Residence residence = residenceOpt.get();
+        residence.addClient(client.getId());
+        residenceRepository.save(residence);
+
         RegistrationResponseWrapper registerResponse = new RegistrationResponseWrapper();
         registerResponse.setToken(token);
         user.setId(client.getId());
